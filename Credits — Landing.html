@@ -1,0 +1,2604 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Credits · Sport XT</title>
+
+  <style>
+    /* ── Averta (Ticketmaster CDN) ─────────────────── */
+    @font-face {
+      font-family: "Averta"; font-style: normal; font-weight: 400; font-display: swap;
+      src: local("Averta Regular"),
+           url(https://www.ticketmaster.com/static/fonts/averta/averta-regular.woff2) format("woff2"),
+           url(https://www.ticketmaster.com/static/fonts/averta/averta-regular.woff) format("woff");
+    }
+    @font-face {
+      font-family: "Averta"; font-style: normal; font-weight: 600; font-display: swap;
+      src: local("Averta Semibold"),
+           url(https://www.ticketmaster.com/static/fonts/averta/averta-semibold.woff2) format("woff2"),
+           url(https://www.ticketmaster.com/static/fonts/averta/averta-semibold.woff) format("woff");
+    }
+    @font-face {
+      font-family: "Averta"; font-style: normal; font-weight: 700; font-display: swap;
+      src: local("Averta Bold"),
+           url(https://www.ticketmaster.com/static/fonts/averta/averta-bold.woff2) format("woff2"),
+           url(https://www.ticketmaster.com/static/fonts/averta/averta-bold.woff) format("woff");
+    }
+
+    /* ── GDS-E V2 Design Tokens ─────────────────────── */
+    :root {
+      --neptune:    #024DDF;
+      --cosmos:     #121212;
+      --granite:    #646464;
+      --spotlight:  #FFFFFF;
+      --earth:      #048851;
+      --mars:       #EB0000;
+      --jupiter:    #FFB932;
+      --slate:      #949494;
+      --moonrock:   #BFBFBF;
+      --ammonite:   #D6D6D6;
+      --diatomite:  #EBEBEB;
+      --lunar:      #F6F6F6;
+
+      --sp-1:  4px;  --sp-2:  8px;  --sp-3:  12px; --sp-4:  16px;
+      --sp-5:  20px; --sp-6:  24px; --sp-8:  32px;  --sp-10: 40px;
+      --sp-12: 48px; --sp-16: 64px;
+
+      --lounge: 4px; --club: 8px; --hall: 12px; --auditorium: 16px;
+      --theatre: 20px; --amphitheatre: 24px; --arena: 32px;
+      --stadium: 48px; --dome: 64px;
+
+      --radius-xs: 0px; --radius-sm: 4px; --radius-md: 8px;
+      --radius-lg: 12px; --radius-xl: 16px; --radius-full: 9999px;
+
+      --elev-01: 0px 2px 4px rgba(0,0,0,0.08);
+      --elev-02: 0px 4px 8px rgba(0,0,0,0.12);
+      --elev-03: 0px 8px 16px rgba(0,0,0,0.16);
+      --elev-04: 0px 16px 32px rgba(0,0,0,0.20);
+
+      --btn-h-md: 40px; --btn-h-sm: 32px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      height: 100%;
+      font-family: "Averta", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-size: 14px;
+      line-height: 1.5;
+      color: var(--cosmos);
+      background: var(--lunar);
+    }
+
+    /* ════════════════════════════════════════════════
+       APP SHELL
+    ════════════════════════════════════════════════ */
+    .app-shell { display: flex; min-height: 100vh; }
+
+    /* ════════════════════════════════════════════════
+       SIDENAV
+    ════════════════════════════════════════════════ */
+    .l2-nav {
+      width: 208px;
+      flex-shrink: 0;
+      background: var(--spotlight);
+      border-right: 1px solid var(--diatomite);
+      position: fixed;
+      left: 0; top: 0; bottom: 0;
+      z-index: 200;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: width 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .l2-nav.collapsed { width: 56px; }
+    .canvas { transition: margin-left 0.22s cubic-bezier(0.4, 0, 0.2, 1); }
+
+    .l2-logo-row {
+      height: 54px; display: flex; align-items: center;
+      padding: 0 16px; flex-shrink: 0;
+    }
+    .l2-nav.collapsed .l2-logo-row { justify-content: center; padding: 0; }
+
+    .l2-logo-btn {
+      display: flex; flex-direction: column; justify-content: center;
+      align-items: center; padding: 4px 0; gap: 8px;
+      width: 40px; height: 36px; border-radius: 2px;
+      background: none; border: none; cursor: pointer; flex-shrink: 0;
+      transition: background 0.12s;
+    }
+    .l2-logo-btn:hover { background: var(--lunar); }
+
+    .l2-tiles {
+      display: flex; flex-direction: column; gap: 4px;
+      padding: 0 12px 24px; flex: 1;
+    }
+
+    .l2-tile {
+      background: var(--lunar); border-radius: 4px;
+      display: flex; flex-direction: row; align-items: center;
+      padding: 6px 8px; gap: 8px; height: 44px; min-height: 44px;
+      cursor: pointer; border: none; width: 100%;
+      text-align: left; font-family: inherit;
+      white-space: nowrap; overflow: hidden;
+    }
+    .l2-tile:hover { background: #E8E8E8; }
+
+    .l2-tile-expanded {
+      background: var(--lunar); border-radius: 4px;
+      display: flex; flex-direction: column; overflow: hidden;
+    }
+
+    .l2-tile-header {
+      display: flex; flex-direction: row; align-items: center;
+      padding: 6px 8px; gap: 8px; height: 44px; min-height: 44px;
+      border-radius: 4px 4px 0 0; white-space: nowrap;
+      cursor: pointer; transition: background 0.12s;
+    }
+    .l2-tile-header:hover { background: #E8E8E8; }
+
+    .l2-tile-icon {
+      width: 32px; height: 32px; min-width: 32px;
+      border-radius: 999px; display: flex;
+      align-items: center; justify-content: center; flex-shrink: 0;
+    }
+    .l2-tile-icon img { width: 16px; height: 16px; display: block; }
+    .l2-tile-icon svg { display: block; }
+    .l2-tile-icon--active svg { filter: brightness(0) invert(1); }
+    .l2-tile-icon--inactive { background: var(--lunar); }
+    .l2-tile-icon--active   { background: var(--neptune); }
+
+    .l2-tile-label {
+      flex: 1; font-size: 12px; font-weight: 600;
+      letter-spacing: 1.6px; text-transform: uppercase;
+      color: #050505; line-height: 12px;
+      white-space: nowrap; overflow: hidden;
+      opacity: 1; transition: opacity 0.15s;
+    }
+    .l2-tile-chevron { width: 16px; height: 16px; min-width: 16px; flex-shrink: 0; }
+
+    .l2-tile-subnav { padding: 0 8px 8px; border-radius: 0 0 4px 4px; }
+
+    .l2-sublink {
+      display: flex; align-items: center; height: 36px;
+      padding: 0 12px; font-size: 12px; font-weight: 600;
+      letter-spacing: 0.01em; color: #050505;
+      text-decoration: none; border-left: 2px solid transparent;
+      cursor: pointer; transition: background 0.12s;
+      white-space: nowrap; overflow: hidden;
+    }
+    .l2-sublink:hover { background: rgba(0,0,0,0.04); border-radius: 0 4px 4px 0; }
+    .l2-sublink--active {
+      background: rgba(2,78,255,0.10);
+      border-left-color: var(--neptune);
+      color: var(--neptune);
+    }
+    .l2-sublink--active:hover { background: rgba(2,78,255,0.14); }
+
+    /* Collapsed state */
+    .l2-nav.collapsed .l2-tile-label,
+    .l2-nav.collapsed .l2-tile-chevron,
+    .l2-nav.collapsed .l2-tile-subnav,
+    .l2-nav.collapsed .l2-account-creds,
+    .l2-nav.collapsed .l2-account-meatball,
+    .l2-nav.collapsed .l2-help-label,
+    .l2-nav.collapsed .l2-help-chevron,
+    .l2-nav.collapsed .l2-collapse-label { display: none; }
+
+    .l2-nav.collapsed .l2-tiles { padding-left: 0; padding-right: 0; }
+    .l2-nav.collapsed .l2-tile { background: none; justify-content: center; padding-left: 0; padding-right: 0; }
+    .l2-nav.collapsed .l2-tile:hover { background: none; }
+    .l2-nav.collapsed .l2-tile:hover .l2-tile-icon--inactive { background: #E2E2E2; }
+    .l2-nav.collapsed .l2-tile-header:hover .l2-tile-icon--inactive { background: #E2E2E2; }
+    .l2-nav.collapsed .l2-tile-expanded { background: none; }
+    .l2-nav.collapsed .l2-tile-header { background: none; justify-content: center; padding-left: 0; padding-right: 0; }
+    .l2-nav.collapsed .l2-help-row { justify-content: center; margin-left: 0; margin-right: 0; padding-left: 0; padding-right: 0; }
+    .l2-nav.collapsed .l2-account-row { justify-content: center; border: none; background: none; margin-left: 0; margin-right: 0; padding-left: 0; padding-right: 0; }
+    .l2-nav.collapsed .l2-collapse-btn { justify-content: center; margin-left: 0; margin-right: 0; padding-left: 0; padding-right: 0; width: 100%; }
+    .l2-nav.collapsed .l2-collapse-icon { transform: scaleX(-1); }
+
+    .l2-bottom { flex-shrink: 0; padding-bottom: 12px; }
+    .l2-bottom-sep { height: 1px; background: var(--diatomite); }
+
+    .l2-help-row {
+      display: flex; align-items: center; padding: 10px 8px;
+      gap: 10px; height: 44px; margin: 0 12px; border-radius: 4px;
+      cursor: pointer; transition: background 0.12s;
+      white-space: nowrap; overflow: hidden;
+    }
+    .l2-help-row:hover { background: var(--lunar); }
+    .l2-help-row img { width: 24px; height: 24px; flex-shrink: 0; }
+    .l2-help-label { flex: 1; font-size: 14px; font-weight: 600; letter-spacing: 0.01em; color: #050505; transition: opacity 0.15s; }
+    .l2-help-chevron { width: 16px; height: 16px; flex-shrink: 0; transition: opacity 0.15s; }
+
+    .l2-account-row {
+      display: flex; align-items: center; padding: 6px 10px 6px 6px;
+      gap: 8px; height: 44px; margin: 4px 12px;
+      background: var(--spotlight); border: 1px solid var(--ammonite);
+      border-radius: 6px; cursor: pointer;
+      white-space: nowrap; overflow: hidden;
+    }
+    .l2-account-avatar {
+      width: 32px; height: 32px; min-width: 32px; border-radius: 4px;
+      background: rgba(2,78,255,0.10); border: 1px solid #8F8F8F;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 12px; font-weight: 700; letter-spacing: 1px;
+      text-transform: uppercase; color: #050505; flex-shrink: 0;
+    }
+    .l2-account-creds {
+      display: flex; flex-direction: column; gap: 2px;
+      flex: 1; min-width: 0; overflow: hidden; transition: opacity 0.15s;
+    }
+    .l2-account-name { font-size: 12px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: #050505; line-height: 12px; }
+    .l2-account-org  { font-size: 12px; color: #767676; line-height: 12px; }
+    .l2-account-meatball { flex-shrink: 0; transition: opacity 0.15s; }
+
+    .l2-collapse-btn {
+      display: flex; align-items: center; padding: 10px 8px;
+      gap: 10px; height: 44px; margin: 4px 12px 0;
+      border-radius: 4px; background: none; border: none;
+      cursor: pointer; width: calc(100% - 24px);
+      font-family: inherit; transition: background 0.12s;
+      white-space: nowrap; overflow: hidden;
+    }
+    .l2-collapse-btn:hover { background: var(--lunar); }
+    .l2-collapse-btn img { width: 24px; height: 24px; flex-shrink: 0; }
+    .l2-collapse-label { font-size: 12px; font-weight: 600; letter-spacing: 0.15em; text-transform: uppercase; color: #050505; transition: opacity 0.15s; }
+    .l2-nav.collapsed .l2-collapse-icon { transform: scaleX(-1); }
+
+    /* ════════════════════════════════════════════════
+       CANVAS
+    ════════════════════════════════════════════════ */
+    .canvas {
+      margin-left: 208px;
+      flex: 1;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ════════════════════════════════════════════════
+       OBJECT HEADER
+    ════════════════════════════════════════════════ */
+    .obj-header {
+      background: #1D2537;
+      height: 76px;
+      border-radius: 0 0 var(--radius-md) var(--radius-md);
+      display: flex;
+      align-items: center;
+      gap: var(--sp-4);
+      padding: 0 var(--sp-4) 0 var(--sp-4);
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      flex-shrink: 0;
+    }
+
+    .back-btn {
+      width: 44px; height: 76px;
+      display: flex; align-items: center; justify-content: center;
+      background: none; border: none; cursor: pointer;
+      color: rgba(255,255,255,0.7);
+      border-radius: 0 0 0 var(--radius-md);
+      flex-shrink: 0;
+      transition: background 0.12s, color 0.12s;
+      text-decoration: none;
+    }
+    .back-btn:hover { background: rgba(255,255,255,0.07); color: var(--spotlight); }
+
+    .obj-header-left { display: flex; align-items: center; gap: 0; flex: 1; min-width: 0; }
+
+    .obj-header-title-stack {
+      display: flex; flex-direction: column;
+      justify-content: center; min-width: 0; gap: 2px;
+    }
+
+    .obj-context-bar {
+      display: flex; align-items: center; gap: 0;
+      font-size: 14px; font-weight: 600;
+      color: rgba(255,255,255,0.85);
+      line-height: 1.3; white-space: nowrap;
+      overflow: hidden;
+    }
+    .obj-context-sep {
+      display: inline-block; width: 4px; height: 4px;
+      border-radius: 50%; background: #767676;
+      flex-shrink: 0; margin: 0 8px; vertical-align: middle;
+    }
+
+    .obj-title-wrap { display: inline-flex; flex-direction: column; gap: 3px; min-width: 0; }
+
+    .obj-title {
+      font-size: 20px; font-weight: 900; color: var(--spotlight);
+      text-transform: uppercase; letter-spacing: 0.012em;
+      line-height: 1.06; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .obj-title-underline { height: 2px; background: var(--neptune); border-radius: 1px; width: 100%; }
+
+    .obj-header-right { display: flex; align-items: center; gap: var(--sp-2); flex-shrink: 0; }
+
+    .obj-btn {
+      height: 40px; padding: 0 var(--sp-4); border-radius: var(--radius-sm);
+      font-family: inherit; font-size: 14px; font-weight: 600; cursor: pointer;
+      display: inline-flex; align-items: center; gap: var(--sp-2);
+      white-space: nowrap; transition: background 0.12s;
+    }
+    .obj-btn--primary { background: var(--neptune); color: var(--spotlight); border: none; }
+    .obj-btn--primary:hover { background: #0d4de0; }
+    .obj-btn--outline { background: transparent; color: var(--spotlight); border: 1px solid rgba(255,255,255,0.5); }
+    .obj-btn--outline:hover { background: rgba(255,255,255,0.07); border-color: var(--spotlight); }
+
+    /* Kebab menu */
+    .kebab-wrap { position: relative; }
+    .kebab-btn {
+      width: 40px; height: 40px; border-radius: var(--radius-sm);
+      background: transparent; border: 1px solid rgba(255,255,255,0.5);
+      color: var(--spotlight); cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: background 0.12s, border-color 0.12s;
+    }
+    .kebab-btn:hover { background: rgba(255,255,255,0.07); border-color: var(--spotlight); }
+    .kebab-menu {
+      display: none; position: absolute; top: calc(100% + 6px); right: 0;
+      min-width: 180px; background: var(--spotlight);
+      border: 1px solid var(--ammonite); border-radius: var(--radius-md);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+      z-index: 200; padding: 4px 0;
+    }
+    .kebab-wrap.open .kebab-menu { display: block; }
+    .kebab-item {
+      display: flex; align-items: center; gap: 8px;
+      padding: 10px 16px; font-size: 14px; color: #050505;
+      cursor: pointer; transition: background 0.1s;
+      white-space: nowrap;
+    }
+    .kebab-item:hover { background: var(--lunar); }
+
+    /* Activity drawer */
+    .activity-overlay {
+      display: none; position: fixed; inset: 0;
+      background: rgba(5,5,5,0.7); z-index: 300;
+    }
+    .activity-overlay.open { display: block; }
+    .activity-drawer {
+      position: fixed; top: 0; right: -480px; width: 480px; height: 100%;
+      background: var(--spotlight); z-index: 301; display: flex; flex-direction: column;
+      transition: right 0.25s ease;
+      box-shadow: -4px 0 24px rgba(0,0,0,0.12);
+    }
+    .activity-drawer.open { right: 0; }
+
+    /* Drawer header */
+    .act-header {
+      display: flex; align-items: center; gap: 8px;
+      padding: 8px; flex-shrink: 0;
+      border-bottom: 1px solid var(--diatomite);
+    }
+    .act-header-content {
+      display: flex; align-items: center; gap: 8px;
+      flex: 1; min-height: 48px; padding: 16px 0 16px 16px;
+    }
+    .act-title {
+      font-size: 24px; font-weight: 900; text-transform: uppercase;
+      letter-spacing: -0.012em; color: #050505; flex: 1;
+    }
+    .act-export-btn {
+      height: 32px; padding: 0 12px; border-radius: 2px;
+      background: transparent; border: 1px solid #050505;
+      font-family: inherit; font-size: 12px; font-weight: 600;
+      color: #050505; cursor: pointer; display: inline-flex;
+      align-items: center; gap: 4px; white-space: nowrap;
+      transition: background 0.12s;
+    }
+    .act-export-btn:hover { background: var(--lunar); }
+    .act-close-btn {
+      width: 32px; height: 32px; border-radius: 2px;
+      background: transparent; border: none;
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      color: #050505; flex-shrink: 0; transition: background 0.12s;
+    }
+    .act-close-btn:hover { background: var(--lunar); }
+
+    /* Drawer search bar */
+    .act-searchbar {
+      display: flex; align-items: center; gap: 8px;
+      padding: 12px 24px; flex-shrink: 0; border-bottom: 1px solid var(--diatomite);
+    }
+    .act-search-wrap { position: relative; flex: 1; }
+    .act-search-wrap svg {
+      position: absolute; left: 10px; top: 50%; transform: translateY(-50%);
+      pointer-events: none;
+    }
+    .act-search-input {
+      width: 100%; height: 40px; padding: 0 12px 0 36px;
+      border: 1px solid #8F8F8F; border-radius: 4px;
+      background: var(--spotlight); font-family: inherit; font-size: 14px;
+      color: #050505; outline: none; transition: border-color 0.12s;
+    }
+    .act-search-input::placeholder { color: #9B9B9B; }
+    .act-search-input:hover  { border-color: #5D5D5D; }
+    .act-search-input:focus  { border-color: #050505; }
+    .act-filter-btn {
+      width: 40px; height: 40px; border-radius: 4px;
+      background: transparent; border: 1px solid #050505;
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; transition: background 0.12s;
+    }
+    .act-filter-btn:hover { background: var(--lunar); }
+
+    /* Drawer meta row */
+    .act-meta {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 6px 24px; flex-shrink: 0;
+    }
+    .act-meta-left {
+      display: flex; align-items: center; gap: 6px;
+      font-size: 12px; color: #767676;
+    }
+    .act-meta-dot {
+      width: 4px; height: 4px; border-radius: 50%; background: #767676; flex-shrink: 0;
+    }
+    .act-refresh-btn {
+      background: none; border: none; padding: 0 12px;
+      font-family: inherit; font-size: 12px; font-weight: 600;
+      color: var(--neptune); cursor: pointer; text-decoration: underline;
+      display: inline-flex; align-items: center; gap: 4px;
+    }
+    .act-refresh-btn:hover { color: #0049F4; }
+
+    /* Drawer body (scrollable) */
+    .act-body {
+      flex: 1; overflow-y: auto; padding: 0 24px 24px;
+    }
+
+    /* Date group heading */
+    .act-date-heading {
+      padding-top: 16px; padding-bottom: 0;
+      font-size: 14px; font-weight: 600; color: #050505;
+      letter-spacing: 0.014em;
+    }
+
+    /* Log entry */
+    .log-entry {
+      display: flex; align-items: flex-start; gap: 8px;
+      padding: 12px 0;
+      border-bottom: 1px solid #E5E5E5;
+    }
+    .log-content { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 8px; }
+    .log-meta-row {
+      display: flex; align-items: center; gap: 8px;
+    }
+    .log-category { font-size: 12px; color: #767676; }
+    .log-badge {
+      display: inline-flex; align-items: center;
+      border-radius: 4px; padding: 2px 6px;
+      font-size: 11px; font-weight: 600; letter-spacing: 0.02em; text-transform: uppercase;
+      line-height: 1.4;
+    }
+    /* System actions — light/pastel */
+    .log-badge--held     { background: #FFF3CD; color: #7A5800; }
+    .log-badge--released { background: #F0FDF4; color: #166534; }
+    .log-badge--used     { background: #EEF4FF; color: #024DDF; }
+    .log-badge--refunded { background: #E8F5E9; color: #048851; }
+    .log-badge--failure  { background: #FFE3E3; color: #A50000; }
+    .log-badge--neutral  { background: var(--diatomite); color: #494949; }
+    /* User actions — filled/dark */
+    .log-badge--created       { background: var(--neptune); color: var(--spotlight); }
+    .log-badge--adjusted-up   { background: var(--earth); color: var(--spotlight); }
+    .log-badge--adjusted-down { background: #A50000; color: var(--spotlight); }
+    .log-action { font-size: 14px; color: #050505; line-height: 1.5; }
+    .log-kc { color: var(--neptune); text-decoration: none; font-weight: 600; }
+    .log-kc:hover { text-decoration: underline; }
+    .log-req {
+      font-size: 11px; font-weight: 700; color: #494949;
+      text-decoration: none; font-family: "SF Mono", "Fira Code", monospace;
+      background: var(--lunar); border-radius: 3px; padding: 1px 5px;
+      letter-spacing: 0.01em;
+    }
+    .log-req:hover { background: var(--diatomite); color: #050505; }
+    .log-sep { color: #B0B0B0; }
+    .log-val { font-weight: 700; }
+    .log-detail-sentence {
+      display: none; font-size: 13px; color: #505050; line-height: 1.5;
+      border-left: 2px solid #ABABAB; padding-left: 10px; margin-top: 2px;
+    }
+    .log-detail-sentence.open { display: block; }
+    .log-detail-sentence a { color: var(--neptune); text-decoration: none; }
+    .log-detail-sentence a:hover { text-decoration: underline; }
+    .log-footer {
+      display: flex; align-items: center; gap: 8px;
+    }
+    .log-user { font-size: 12px; color: #767676; }
+    .log-details-toggle {
+      background: none; border: none; padding: 0;
+      font-family: inherit; font-size: 12px; font-weight: 600;
+      color: var(--neptune); cursor: pointer;
+      white-space: nowrap; display: inline-flex; align-items: center; gap: 2px;
+    }
+    .log-chevron { font-size: 10px; transition: transform 0.15s; display: inline-block; }
+    .log-details-toggle.open .log-chevron { transform: rotate(180deg); }
+    .log-time {
+      flex-shrink: 0; font-size: 12px; color: #767676;
+      text-align: right; width: 46px; padding-top: 1px;
+    }
+    .activity-drawer :focus-visible {
+      outline: 2px solid #050505; outline-offset: 2px; border-radius: 2px;
+    }
+
+    /* ════════════════════════════════════════════════
+       CANVAS BODY
+    ════════════════════════════════════════════════ */
+    .canvas-body { padding: var(--sp-6) var(--sp-4) var(--sp-8); flex: 1; }
+
+    /* ════════════════════════════════════════════════
+       STAT BAR
+    ════════════════════════════════════════════════ */
+    .stat-bar {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: var(--sp-3);
+    }
+
+    .stat-card {
+      background: var(--spotlight);
+      border-radius: var(--radius-md);
+      border: 1px solid transparent;
+      box-shadow: var(--elev-01);
+      padding: var(--sp-5);
+      display: flex;
+      flex-direction: column;
+      gap: var(--sp-2);
+      min-height: 148px;
+    }
+
+    .stat-card--action {
+      border-color: var(--neptune);
+    }
+
+    .stat-delta {
+      font-size: 12px;
+      font-weight: 600;
+      color: #04814D; /* color/feedback/text/success */
+    }
+    .stat-card--action .stat-delta { color: var(--neptune); }
+
+    .stat-hero-row {
+      display: flex;
+      align-items: baseline;
+      gap: var(--sp-2);
+    }
+
+    .stat-number {
+      font-size: 44px;
+      font-weight: 900;
+      color: #050505; /* color/text/primary */
+      line-height: 1;
+      letter-spacing: -0.02em;
+    }
+
+    .stat-unit {
+      font-size: 13px;
+      font-weight: 700;
+      color: #767676; /* color/text/secondary */
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .stat-label {
+      font-size: 13px;
+      font-weight: 700;
+      color: #050505; /* color/text/primary */
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    .stat-context {
+      font-size: 12px;
+      color: #767676; /* color/text/secondary */
+      margin-top: auto;
+    }
+
+    /* Mini progress bar */
+    .stat-progress { margin-top: auto; }
+    .stat-progress-track {
+      height: 4px;
+      background: var(--ammonite); /* color/border/secondary */
+      border-radius: 2px;
+      overflow: hidden;
+      margin-bottom: 4px;
+    }
+    .stat-progress-fill {
+      height: 100%;
+      background: #04814D; /* color/feedback/text/success */
+      border-radius: 2px;
+    }
+    .stat-card--action .stat-progress-fill { background: var(--neptune); }
+    .stat-progress-label {
+      font-size: 11px;
+      color: #767676;
+    }
+
+    /* Stat delta variants */
+    .stat-delta--warn  { color: #D06010 !important; }
+    .stat-progress-fill--alert { background: #D06010 !important; }
+
+    /* Mini sparkline chart inside stat card */
+    .stat-chart { margin-top: auto; }
+    .stat-chart svg { width: 100%; height: auto; display: block; }
+    .stat-chart-legend { display: flex; gap: var(--sp-3); margin-top: 5px; }
+    .stat-chart-legend-item { display: flex; align-items: center; gap: 4px; font-size: 10px; color: #767676; }
+    .stat-chart-legend-line { width: 16px; height: 2px; border-radius: 1px; flex-shrink: 0; }
+
+    /* ════════════════════════════════════════════════
+       HERO BAR
+    ════════════════════════════════════════════════ */
+    /* ── Hero state switcher (prototype only) ── */
+    .hero-state-bar {
+      display: flex; align-items: center; gap: 6px;
+      margin-bottom: 10px;
+    }
+    .hero-state-btn {
+      height: 26px; padding: 0 10px; border-radius: var(--radius-full);
+      border: 1.5px solid var(--ammonite); background: var(--spotlight);
+      font-family: inherit; font-size: 11px; font-weight: 600;
+      color: #767676; cursor: pointer; white-space: nowrap;
+      transition: border-color 0.12s, background 0.12s, color 0.12s;
+    }
+    .hero-state-btn:hover { border-color: #8F8F8F; color: #050505; }
+    .hero-state-btn.active { background: #1D2537; border-color: #1D2537; color: #FFFFFF; }
+    .hero-state-label {
+      font-size: 11px; color: var(--moonrock); font-style: italic; margin-left: 4px;
+    }
+
+    /* ── Hero bar ── */
+    .hero-bar {
+      display: none; /* shown via JS */
+      align-items: stretch;
+      background: var(--spotlight);
+      border-radius: var(--radius-md);
+      box-shadow: var(--elev-01);
+      border: 1px solid var(--diatomite);
+      margin-bottom: var(--sp-6);
+      overflow: hidden;
+    }
+    .hero-bar.visible { display: flex; }
+
+    .hero-divider {
+      width: 1px; background: var(--diatomite);
+      flex-shrink: 0; margin: 20px 0;
+    }
+
+    /* Phase panel — left anchor, always dark */
+    .hero-phase {
+      display: flex; flex-direction: column;
+      justify-content: center; gap: 4px;
+      padding: 20px 28px; min-width: 196px; flex-shrink: 0;
+    }
+    .hero-phase--open    { background: #1D2537; }
+    .hero-phase--pre     { background: #1D2537; }
+    .hero-phase--closed  { background: #494949; }
+
+    .hero-phase-eyebrow {
+      font-size: 10px; font-weight: 700;
+      letter-spacing: 0.1em; text-transform: uppercase;
+    }
+    .hero-phase--open   .hero-phase-eyebrow,
+    .hero-phase--pre    .hero-phase-eyebrow { color: rgba(255,255,255,0.45); }
+    .hero-phase--closed .hero-phase-eyebrow { color: rgba(255,255,255,0.45); }
+
+    .hero-phase-name {
+      font-size: 18px; font-weight: 900;
+      color: var(--spotlight); letter-spacing: -0.01em; line-height: 1.1;
+    }
+    .hero-phase-sub {
+      font-size: 12px; color: rgba(255,255,255,0.55); margin-top: 2px;
+    }
+    .hero-phase-days--warn   { color: var(--jupiter); font-weight: 600; }
+    .hero-phase-days--ok     { color: rgba(255,255,255,0.8); }
+    .hero-phase-days--closed { color: rgba(255,255,255,0.45); }
+
+    /* Stats */
+    .hero-stat {
+      display: flex; flex-direction: column;
+      justify-content: center; gap: 4px;
+      padding: 20px 28px; flex: 1;
+    }
+
+    .hero-stat-number {
+      font-size: 32px; font-weight: 900;
+      color: #050505; letter-spacing: -0.03em; line-height: 1;
+    }
+    .hero-stat-number--muted { color: var(--moonrock); }
+    .hero-stat-denom { font-size: 18px; font-weight: 400; color: var(--moonrock); letter-spacing: 0; }
+    .hero-stat-unit  { font-size: 18px; font-weight: 700; color: #767676; letter-spacing: 0; }
+
+    .hero-stat-label {
+      font-size: 11px; font-weight: 700;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      color: #767676; margin-top: 2px;
+    }
+    .hero-stat-sub { font-size: 12px; color: #767676; }
+    .hero-stat-sub--warn   { color: #C55B0F; font-weight: 600; }
+    .hero-stat-sub--action { color: var(--neptune); font-weight: 600; cursor: pointer; }
+    .hero-stat-sub--action:hover { text-decoration: underline; }
+    .hero-stat-sub--high   { color: #A50000; font-weight: 600; }
+    .hero-stat-sub--low    { color: #C55B0F; font-weight: 600; }
+    .hero-stat-sub--high:hover, .hero-stat-sub--low:hover,
+    .hero-stat-sub--warn:hover { text-decoration: underline; }
+
+    .hero-attention-chips {
+      display: flex; align-items: center; gap: 6px; margin-top: 4px;
+    }
+    .hero-chip {
+      display: inline-flex; align-items: center;
+      padding: 2px 8px; border-radius: 4px;
+      font-size: 11px; font-weight: 600; letter-spacing: 0.02em;
+    }
+    .hero-chip--high { background: #FFE3E3; color: #A50000; }
+    .hero-chip--low  { background: #FEF3E2; color: #C55B0F; }
+    .hero-chip--reset { background: var(--diatomite); color: #494949; }
+
+    /* ════════════════════════════════════════════════
+       CLIENT LIST — section header + view toggle
+    ════════════════════════════════════════════════ */
+    .section-header {
+      display: flex; align-items: center; justify-content: space-between;
+      margin: var(--sp-6) 0 var(--sp-3);
+    }
+    .section-title {
+      font-size: 13px; font-weight: 700; color: #050505;
+      text-transform: uppercase; letter-spacing: 0.08em;
+    }
+    .section-count {
+      font-size: 13px; font-weight: 400; color: #767676;
+      margin-left: var(--sp-2);
+    }
+
+    /* Search + filter toolbar */
+    .list-toolbar {
+      display: flex; align-items: center; gap: var(--sp-3);
+      margin-bottom: var(--sp-3);
+    }
+
+    .search-wrap {
+      position: relative; flex-shrink: 0; width: 240px;
+    }
+    .search-wrap svg {
+      position: absolute; left: 10px; top: 50%; transform: translateY(-50%);
+      pointer-events: none;
+    }
+    .search-input {
+      width: 100%; height: 40px; padding: 0 var(--sp-4) 0 36px;
+      border: 1px solid #8F8F8F; border-radius: var(--radius-sm);
+      background: var(--spotlight); font-family: inherit; font-size: 14px;
+      color: #050505; outline: none; transition: border-color 0.12s;
+    }
+    .search-input::placeholder { color: #9B9B9B; }
+    .search-input:hover  { border-color: #5D5D5D; }
+    .search-input:focus  { border-color: #050505; }
+
+    .filter-dropdowns { display: flex; align-items: center; gap: var(--sp-2); flex: 1; flex-wrap: wrap; }
+
+    /* Segment filter chips */
+    .seg-chip {
+      display: inline-flex; align-items: center;
+      height: 32px; padding: 0 12px;
+      border: 1.5px solid var(--ammonite); border-radius: var(--radius-full);
+      background: var(--spotlight); font-family: inherit; font-size: 13px; font-weight: 600;
+      color: #050505; cursor: pointer; white-space: nowrap;
+      transition: border-color 0.12s, background 0.12s, color 0.12s;
+    }
+    .seg-chip:hover { border-color: #8F8F8F; background: #FAFAFA; }
+    .seg-chip.active { background: #1D2537; border-color: #1D2537; color: #FFFFFF; }
+
+    .chip-separator {
+      width: 1px; height: 20px;
+      background: var(--ammonite);
+      flex-shrink: 0;
+      margin: 0 4px;
+    }
+
+    /* Reset button */
+    .reset-btn {
+      height: 40px; padding: 0 var(--sp-3);
+      background: none; border: none; cursor: pointer;
+      font-family: inherit; font-size: 13px; font-weight: 600;
+      color: var(--neptune); white-space: nowrap;
+      display: none; align-items: center; gap: 5px;
+      transition: color 0.12s;
+    }
+    .reset-btn:hover { color: #0045E8; }
+    .reset-btn.visible { display: inline-flex; }
+
+    /* Empty state */
+    .list-empty {
+      display: none; padding: var(--sp-8) var(--sp-4);
+      text-align: center; font-size: 14px; color: #767676;
+      grid-column: 1 / -1;
+    }
+
+
+    .view-toggle {
+      display: flex; border: 1px solid var(--ammonite);
+      border-radius: var(--radius-sm); overflow: hidden;
+    }
+    .toggle-btn {
+      width: 36px; height: 36px; background: var(--spotlight); border: none;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; transition: background 0.12s; color: #767676;
+    }
+    .toggle-btn:first-child { border-right: 1px solid var(--ammonite); }
+    .toggle-btn:hover { background: var(--lunar); color: #050505; }
+    .toggle-btn--active { background: var(--lunar); color: #050505; }
+
+    /* Manage button */
+    .manage-btn-wrap { position: relative; display: none; }
+    .manage-btn-wrap.visible { display: block; }
+    .manage-btn {
+      display: inline-flex; align-items: center; gap: var(--sp-2);
+      height: 36px; padding: 0 var(--sp-3);
+      background: var(--spotlight); border: 1px solid var(--ammonite);
+      border-radius: var(--radius-sm); font-size: 13px; font-weight: 600;
+      color: var(--cosmos); cursor: pointer; font-family: inherit;
+      transition: background 0.12s;
+    }
+    .manage-btn:hover { background: var(--lunar); }
+    .manage-btn svg { transition: transform 0.15s; }
+    .manage-btn.open svg { transform: rotate(180deg); }
+    .manage-dropdown {
+      display: none; position: absolute; top: calc(100% + 4px); right: 0;
+      background: var(--spotlight); border: 1px solid var(--diatomite);
+      border-radius: var(--radius-md); box-shadow: var(--elev-02);
+      min-width: 160px; z-index: 100; overflow: hidden;
+    }
+    .manage-dropdown.open { display: block; }
+    .manage-dropdown__item {
+      display: block; width: 100%; padding: var(--sp-2) var(--sp-4);
+      background: none; border: none; text-align: left;
+      font-size: 13px; font-family: inherit; color: var(--cosmos);
+      cursor: pointer; transition: background 0.1s;
+    }
+    .manage-dropdown__item:hover { background: var(--lunar); }
+    .manage-dropdown__sep { height: 1px; background: var(--diatomite); }
+    .manage-dropdown__item--danger { color: var(--mars); }
+
+    /* Reset modal */
+    .reset-backdrop {
+      display: none; position: fixed; inset: 0;
+      background: rgba(0,0,0,0.4); z-index: 500;
+      align-items: center; justify-content: center;
+    }
+    .reset-backdrop.open { display: flex; }
+    .reset-modal {
+      background: var(--spotlight); border-radius: var(--radius-xl);
+      box-shadow: var(--elev-04); padding: var(--sp-6);
+      width: 420px; max-width: 90vw;
+    }
+    .reset-modal__title { font-size: 16px; font-weight: 700; margin-bottom: var(--sp-2); }
+    .reset-modal__body { font-size: 13px; color: var(--granite); margin-bottom: var(--sp-4); line-height: 1.5; }
+    .reset-modal__clients {
+      background: var(--lunar); border-radius: var(--radius-md);
+      padding: var(--sp-3) var(--sp-4); margin-bottom: var(--sp-5);
+      font-size: 13px; max-height: 160px; overflow-y: auto;
+    }
+    .reset-modal__client { padding: 2px 0; color: var(--cosmos); }
+    .reset-modal__actions { display: flex; justify-content: flex-end; gap: var(--sp-2); }
+    .reset-modal__cancel {
+      height: 36px; padding: 0 var(--sp-4);
+      background: none; border: 1px solid var(--ammonite);
+      border-radius: var(--radius-sm); font-size: 13px;
+      font-family: inherit; cursor: pointer; color: var(--cosmos);
+    }
+    .reset-modal__confirm {
+      height: 36px; padding: 0 var(--sp-4);
+      background: var(--mars); border: none;
+      border-radius: var(--radius-sm); font-size: 13px;
+      font-family: inherit; font-weight: 600; cursor: pointer; color: var(--spotlight);
+    }
+    .reset-modal__confirm:hover { filter: brightness(0.9); }
+
+    /* Toast */
+    .landing-toast {
+      position: fixed; bottom: var(--sp-6); left: 50%; transform: translateX(-50%) translateY(12px);
+      background: var(--cosmos); color: var(--spotlight);
+      padding: var(--sp-3) var(--sp-5); border-radius: var(--radius-full);
+      font-size: 13px; font-weight: 500; box-shadow: var(--elev-03);
+      opacity: 0; transition: opacity 0.2s, transform 0.2s; pointer-events: none; z-index: 600;
+    }
+    .landing-toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+    /* ════════════════════════════════════════════════
+       LIST VIEW
+    ════════════════════════════════════════════════ */
+    .client-table {
+      background: var(--spotlight); border-radius: var(--radius-md);
+      box-shadow: var(--elev-01); overflow: hidden;
+    }
+    .client-table.hidden { display: none; }
+
+    .table-head {
+      display: grid;
+      grid-template-columns: 1.6fr 1fr 1fr 0.9fr;
+      padding: 0 var(--sp-4); height: 36px;
+      align-items: center;
+      border-bottom: 1px solid var(--diatomite); background: #FAFAFA;
+    }
+    .th {
+      font-size: 11px; font-weight: 700;
+      letter-spacing: 0.08em; text-transform: uppercase; color: #767676;
+    }
+    .th--sortable {
+      background: none; border: none; padding: 0; cursor: pointer;
+      display: flex; align-items: center; gap: 5px;
+      font-size: 11px; font-weight: 700;
+      letter-spacing: 0.08em; text-transform: uppercase; color: #767676;
+      font-family: inherit;
+    }
+    .th--sortable:hover { color: #050505; }
+    .th--sortable:hover .sort-caret { visibility: visible; }
+    .th--sortable.th--sorted { color: var(--neptune); }
+    .sort-caret { transition: transform 0.15s; color: var(--moonrock); flex-shrink: 0; visibility: hidden; }
+    .th--sorted .sort-caret { color: var(--neptune); }
+    .sort-caret--asc { transform: rotate(180deg); }
+
+    /* Usage badge */
+    .usage-badge {
+      display: inline-flex; align-items: center;
+      padding: 2px 6px; border-radius: 4px;
+      font-size: 11px; font-weight: 600; letter-spacing: 0.02em; line-height: 1.4;
+    }
+    .usage-badge--high          { background: #FFE3E3; color: #A50000; }
+    .usage-badge--normal        { background: #DBFEEF; color: #047A49; }
+    .usage-badge--low           { background: #FEF3E2; color: #C55B0F; }
+    .usage-badge--not-configured { background: var(--diatomite); color: #767676; }
+
+    /* Status badge */
+    .status-badge {
+      display: inline-flex; align-items: center; gap: 4px;
+      padding: 2px 6px; border-radius: 4px;
+      font-size: 11px; font-weight: 600; letter-spacing: 0.02em; line-height: 1.4;
+    }
+    .status-badge::before {
+      content: ''; width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0;
+    }
+    .status-badge--configured    { background: #DBFEEF; color: #047A49; }
+    .status-badge--configured::before    { background: #047A49; }
+    .status-badge--not-configured { background: var(--diatomite); color: #767676; }
+    .status-badge--not-configured::before { background: var(--moonrock); }
+
+    /* Hero chip active/clickable state */
+    .hero-chip--clickable {
+      cursor: pointer; transition: opacity 0.12s, box-shadow 0.12s;
+    }
+    .hero-chip--clickable:hover { opacity: 0.8; }
+    .hero-chip--clickable.hero-chip--active {
+      box-shadow: 0 0 0 2px currentColor;
+    }
+
+    /* Hero filter active indicator in toolbar */
+    .hero-filter-active {
+      display: none; align-items: center; gap: 6px;
+      font-size: 12px; color: #050505; font-weight: 600;
+    }
+    .hero-filter-active.visible { display: inline-flex; }
+    .hero-filter-clear {
+      background: none; border: none; padding: 0;
+      font-family: inherit; font-size: 12px; color: var(--neptune);
+      cursor: pointer; font-weight: 600;
+    }
+    .hero-filter-clear:hover { text-decoration: underline; }
+
+    /* Card grid: not-configured state */
+    .cc--not-configured {
+      background: #FAFAFA; border-color: var(--diatomite) !important;
+      cursor: default; pointer-events: none;
+    }
+    .cc--not-configured .cc-logo { color: var(--moonrock); background: #F0F0F0; border-color: var(--diatomite); }
+    .cc--not-configured .cc-name { color: #767676; }
+    .cc--not-configured .cc-segment { color: var(--moonrock); }
+
+
+    /* Info tooltip on Usage column header */
+    .th-info-wrap { display: inline-flex; align-items: center; gap: 5px; }
+    .th-info-btn {
+      width: 14px; height: 14px; border-radius: 50%;
+      background: none; border: 1px solid var(--moonrock); color: var(--slate);
+      font-size: 9px; font-weight: 700; font-family: inherit;
+      display: inline-flex; align-items: center; justify-content: center;
+      cursor: default; flex-shrink: 0; line-height: 1;
+      position: relative;
+    }
+    .th-info-btn:hover { border-color: #767676; color: #494949; }
+    .th-info-tooltip {
+      display: none; position: absolute; top: calc(100% + 6px); left: 50%;
+      transform: translateX(-50%);
+      background: #1D2537; color: #FFFFFF;
+      font-size: 12px; font-weight: 400; line-height: 1.5;
+      letter-spacing: 0; text-transform: none;
+      padding: 8px 10px; border-radius: 4px;
+      width: 240px; white-space: normal; z-index: 200;
+      pointer-events: none;
+    }
+    .th-info-tooltip::after {
+      content: ''; position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%);
+      border: 5px solid transparent; border-bottom-color: #1D2537;
+    }
+    .th-info-btn:hover .th-info-tooltip { display: block; }
+
+    .table-row {
+      display: grid;
+      grid-template-columns: 1.6fr 1fr 1fr 0.9fr;
+      padding: 0 var(--sp-4); height: 68px;
+      align-items: center;
+      border-bottom: 1px solid var(--lunar);
+      cursor: pointer; transition: background 0.1s; text-decoration: none; color: inherit;
+    }
+    .table-row--unconfigured { background: #FAFAFA; }
+    .table-row--unconfigured:hover { background: #F5F5F5; }
+    .table-row--unconfigured .ci-name { color: #767676; }
+    .table-row--unconfigured .ci-segment { color: var(--moonrock); }
+    .table-row--unconfigured .ci-logo { color: var(--moonrock); border-color: var(--diatomite); background: #F5F5F5; }
+    .setup-credit-link {
+      font-size: 12px; font-weight: 500;
+      color: var(--neptune, #024DFF);
+      text-decoration: none;
+      white-space: nowrap;
+    }
+    .setup-credit-link:hover { text-decoration: underline; }
+
+    /* Bulk selection */
+    .row-check {
+      width: 15px; height: 15px; flex-shrink: 0;
+      cursor: pointer; accent-color: var(--neptune, #024DFF);
+    }
+    .bulk-select-row {
+      display: flex; align-items: center; gap: var(--sp-3);
+      padding: var(--sp-2) var(--sp-4);
+      background: #F0F4FF; border-bottom: 1px solid #C7D7FF;
+      font-size: 12px; color: var(--neptune);
+    }
+    .bulk-select-clear {
+      background: none; border: none; font: inherit; color: var(--neptune);
+      cursor: pointer; text-decoration: underline; padding: 0; margin-left: var(--sp-2);
+    }
+    .table-row:last-child { border-bottom: none; }
+    .table-row:hover { background: #FAFAFA; }
+
+    /* Identity cell */
+    .ci { display: flex; align-items: center; gap: var(--sp-3); }
+    .ci-logo {
+      width: 40px; height: 40px; border-radius: var(--radius-sm);
+      background: #F2F2F2; border: 1px solid var(--diatomite);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px; font-weight: 800; letter-spacing: 0.04em;
+      color: #050505; flex-shrink: 0; overflow: hidden;
+    }
+    .ci-name { font-size: 14px; font-weight: 600; color: #050505; }
+    .ci-segment { font-size: 12px; color: #767676; margin-top: 1px; }
+
+    .ci-pin {
+      display: none; align-items: center;
+      font-size: 10px; font-weight: 700; letter-spacing: 0.06em;
+      text-transform: uppercase; color: var(--jupiter); gap: 3px; margin-top: 2px;
+    }
+    .ci-pin svg { flex-shrink: 0; }
+    .table-row--pinned .ci-pin { display: inline-flex; }
+    .table-row--pinned { border-left: 3px solid var(--jupiter); }
+
+
+    /* Checkbox+logo label wrapper — display:contents keeps flex layout intact */
+    .ci-logo-label { display: contents; cursor: pointer; }
+
+    /* Credit cell */
+    .credit-cell { display: flex; flex-direction: column; gap: 4px; }
+    .credit-remaining { font-size: 15px; font-weight: 700; color: #050505; }
+    .credit-bar-wrap { display: flex; flex-direction: column; gap: 3px; }
+    .credit-bar-track {
+      width: 70%; height: 4px; background: var(--ammonite);
+      border-radius: 2px; overflow: hidden;
+    }
+    .credit-bar-fill { height: 100%; border-radius: 2px; }
+    .credit-bar-fill--ok      { background: #04814D; }
+    .credit-bar-fill--warn    { background: #D06010; }
+    .credit-bar-fill--low     { background: var(--mars); }
+    .credit-bar-label { font-size: 11px; color: #767676; white-space: nowrap; }
+
+
+
+    /* ════════════════════════════════════════════════
+       GRID VIEW
+    ════════════════════════════════════════════════ */
+    .client-grid {
+      display: none;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: var(--sp-3);
+    }
+    .client-grid.active { display: grid; }
+
+    .cc {
+      background: var(--spotlight); border-radius: var(--radius-md);
+      box-shadow: var(--elev-01); border: 1px solid var(--diatomite);
+      overflow: hidden; cursor: pointer;
+      display: flex; flex-direction: column;
+      text-decoration: none; color: inherit;
+      transition: box-shadow 0.12s, border-color 0.12s;
+      min-height: 180px;
+    }
+    .cc:hover { border-color: var(--ammonite); box-shadow: 0 2px 8px rgba(0,0,0,0.10); }
+    .cc--not-configured { opacity: 0.72; }
+
+    /* Top third — identity */
+    .cc-identity {
+      padding: 14px 16px 12px;
+      display: flex; flex-direction: column; gap: 8px;
+      border-bottom: 1px solid var(--lunar);
+    }
+    .cc-identity-top { display: flex; align-items: center; justify-content: space-between; }
+    .cc-identity-meta { min-width: 0; }
+    .cc-logo {
+      width: 36px; height: 36px; border-radius: var(--radius-sm);
+      background: #F2F2F2; border: 1px solid var(--diatomite);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 12px; font-weight: 800; color: #050505; flex-shrink: 0;
+    }
+    .cc-name { font-size: 14px; font-weight: 700; color: #050505; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .cc-segment { font-size: 11px; color: var(--slate); margin-top: 1px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+    /* Bottom two thirds — amount */
+    .cc-amount {
+      padding: 16px 16px 14px;
+      display: flex; flex-direction: column; justify-content: flex-end;
+      flex: 1;
+    }
+    .cc-remaining {
+      font-size: 32px; font-weight: 900; color: #050505;
+      letter-spacing: -0.03em; line-height: 1;
+      margin-bottom: 4px;
+    }
+    .cc-remaining--empty { color: var(--ammonite); }
+    .cc-footer { display: flex; justify-content: space-between; align-items: center; }
+    .cc-allocated { font-size: 11px; color: var(--slate); }
+
+  </style>
+</head>
+<body>
+
+<div class="app-shell">
+
+  <!-- ═══════════════════════════════════
+       SIDENAV
+  ════════════════════════════════════ -->
+  <nav id="sidenav" class="l2-nav" aria-label="Sport XT navigation">
+
+    <div>
+      <!-- Logo row -->
+      <div class="l2-logo-row">
+        <button class="l2-logo-btn" aria-label="tm/1 home">
+          <svg width="32" height="28" viewBox="0 0 32 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <g clip-path="url(#clip0_15238_7288)">
+              <path fill-rule="evenodd" clip-rule="evenodd" d="M25.205 0.101958L19.3718 28L18.884 27.898L24.7172 -4.00543e-05L25.205 0.101958Z" fill="#050505"/>
+              <path d="M4.82587 11.0638L4.64729 11.9422H2.67458L1.49095 17.4138C1.40166 17.7897 1.38297 18.0783 1.38297 18.5082C1.38297 19.1 1.74221 19.2806 2.24473 19.2806C2.60398 19.2806 2.97983 19.1727 3.33907 19.0294L3.24978 19.9451C2.83655 20.1071 2.3714 20.1777 1.93948 20.1777C1.07772 20.1777 0.396618 19.6212 0.396618 18.6161C0.396618 18.1323 0.431919 17.7191 0.539899 17.2519L1.68822 11.9422H0L0.197271 11.0638H1.86681L2.29665 8.9997L3.35568 8.65915L2.85316 11.0638H4.82587ZM18.0492 13.0552C18.0492 13.3064 18.0139 13.5764 17.96 13.8276L16.6683 19.9825H15.682L16.9196 14.027C16.9736 13.757 17.0089 13.4705 17.0089 13.2026C17.0089 12.2329 16.5064 11.7843 15.5553 11.7843C13.8505 11.7843 12.7562 13.5785 12.4509 15.0673L11.4292 19.9825H10.4429L11.6805 14.027C11.7345 13.757 11.7698 13.4705 11.7698 13.2026C11.7698 12.1976 11.232 11.7843 10.2622 11.7843C8.5574 11.7843 7.51706 13.5972 7.21181 15.0673L6.19015 19.9825H5.2038L6.62207 13.1818C6.76535 12.4821 6.90863 11.7823 6.98131 11.0638H7.87837L7.62711 12.6066C8.3809 11.585 9.29665 10.8852 10.6942 10.8852C11.7698 10.8852 12.6856 11.6577 12.6856 12.7686C13.3314 11.7096 14.515 10.8852 15.79 10.8852C17.1356 10.8852 18.0513 11.6743 18.0513 13.0552H18.0492Z" fill="#050505"/>
+              <path d="M25.7387 11.9069L24.6443 10.202L28.841 7.45684H31.121L28.4112 19.9804H25.8985L28.0332 10.31L25.7387 11.9069Z" fill="#050505"/>
+            </g>
+            <defs>
+              <clipPath id="clip0_15238_7288">
+                <rect width="31.121" height="28" fill="white"/>
+              </clipPath>
+            </defs>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Nav tiles -->
+      <div class="l2-tiles">
+
+        <button class="l2-tile">
+          <div class="l2-tile-icon l2-tile-icon--inactive">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path fill-rule="evenodd" clip-rule="evenodd" d="M15.6326 9.73662L12.3879 7.7043L8.7759 8.97399L7.51655 12.5896L9.55814 15.8285L13.3633 16.2517L16.0667 13.5406L15.6326 9.73662ZM9.15858 12.4022L9.9462 10.1409L12.2052 9.34686L14.2345 10.6179L14.506 12.9969L12.8152 14.6925L10.4354 14.4278L9.15858 12.4022Z" fill="#050505"/><path fill-rule="evenodd" clip-rule="evenodd" d="M3.56123 4.97368L4.80108 7.54555L4.04244 9.12087L1.265 9.77231L1.26489 14.2669L4.0474 14.8831L4.79739 16.4404L3.53755 18.9932L7.08196 21.8253L9.30811 20.0413L11.008 20.4293L12.2542 23L16.6229 21.9944V19.1467L17.9829 18.0621L20.7638 18.7092L22.7193 14.645L20.4859 12.8676V11.1348L22.7324 9.38143L20.777 5.31768L17.99 5.93719L16.6229 4.84698V1.99494L12.2391 1L11.0052 3.56496L9.30432 3.95318L7.07135 2.17921L3.56123 4.97368ZM5.41883 5.39807L7.07232 4.0817L8.93822 5.56406L12.0361 4.85699L13.0666 2.7147L15.1339 3.18389V5.56406L17.6182 7.54521L19.9473 7.02748L20.8704 8.94584L18.9969 10.4081V13.5856L20.8623 15.0702L19.9393 16.9885L17.6182 16.4484L15.1339 18.4296V20.8092L13.0765 21.2828L12.0361 19.1366L8.93822 18.4296L7.0806 19.9182L5.40303 18.5778L6.45393 16.4484L5.07526 13.5856L2.75394 13.0715L2.75399 10.9525L5.07526 10.4081L6.45393 7.54521L5.41883 5.39807Z" fill="#050505"/></svg>
+          </div>
+          <span class="l2-tile-label">System</span>
+        </button>
+
+        <button class="l2-tile">
+          <div class="l2-tile-icon l2-tile-icon--inactive">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path fill-rule="evenodd" clip-rule="evenodd" d="M12 1C8.96026 1 6.5 3.46026 6.5 6.5C6.5 9.53974 8.96026 12 12 12C15.0397 12 17.5 9.53974 17.5 6.5C17.5 3.46026 15.0397 1 12 1ZM8 6.5C8 4.28869 9.78869 2.5 12 2.5C14.2113 2.5 16 4.28869 16 6.5C16 8.71131 14.2113 10.5 12 10.5C9.78869 10.5 8 8.71131 8 6.5Z" fill="#050505"/><path fill-rule="evenodd" clip-rule="evenodd" d="M18.4868 13H5.4345L1 16.9066V23H23V16.8789L18.4868 13ZM2.5 17.5842L6.00099 14.5H17.9308L21.5 17.5676V21.5H2.5V17.5842Z" fill="#050505"/></svg>
+          </div>
+          <span class="l2-tile-label">Accounts</span>
+        </button>
+
+        <button class="l2-tile">
+          <div class="l2-tile-icon l2-tile-icon--inactive">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M14.1811 15.6157L16.4692 17.8308L14.8647 20.4614L11.4144 19.2293L11.2509 16.6582L14.1811 15.6157Z" fill="#050505"/><path d="M17.8304 12.713L14.5912 13.6739L12.319 11.4724L14.1693 8.49136L17.4751 9.47572L17.8304 12.713Z" fill="#050505"/><path fill-rule="evenodd" clip-rule="evenodd" d="M6.77924 10.9396C6.52532 10.9794 6.26507 11 6 11C3.23858 11 1 8.76142 1 6C1 3.23858 3.23858 1 6 1C8.76142 1 11 3.23858 11 6C11 6.26504 10.9794 6.52527 10.9397 6.77916C12.0226 6.27892 13.2287 5.99984 14.5 5.99984C19.1944 5.99984 23 9.80542 23 14.4998C23 19.1943 19.1944 22.9998 14.5 22.9998C9.80556 22.9998 5.99998 19.1943 5.99998 14.4998C5.99998 13.2286 6.27904 12.0226 6.77924 10.9396ZM3.98982 8.86553C4.55866 9.26531 5.25192 9.5 6 9.5C7.933 9.5 9.5 7.933 9.5 6C9.5 5.50496 9.39722 5.03392 9.21184 4.60705C8.99631 4.58503 8.74293 4.57987 8.48097 4.61727C8.14193 4.66568 7.80407 4.78277 7.50724 5.01359C7.21488 5.24095 6.91996 5.61126 6.71147 6.23666C6.42734 7.08894 6.01797 7.71063 5.52507 8.1419C5.03078 8.57439 4.49041 8.78209 3.99829 8.86413L3.98982 8.86553ZM2.76434 7.33675C2.59399 6.92488 2.5 6.47342 2.5 6C2.5 4.067 4.067 2.5 6 2.5C6.76896 2.5 7.48 2.74798 8.05752 3.16833C7.57838 3.26337 7.06244 3.45932 6.58643 3.82949C6.03505 4.25827 5.57997 4.88783 5.28846 5.76227C5.07258 6.40983 4.79445 6.78806 4.53735 7.01301C4.28164 7.23674 4.00951 7.34156 3.75163 7.38455C3.48705 7.42866 3.23542 7.40742 3.04436 7.37162C2.95051 7.35403 2.87615 7.33384 2.82843 7.31926C2.80471 7.31202 2.78802 7.30629 2.77928 7.30319L2.77241 7.30069L2.77375 7.30121L2.77567 7.30196L2.77766 7.30275C2.77766 7.30275 2.77776 7.3028 2.76434 7.33675ZM14.5 21.4998C11.2813 21.4998 8.56999 19.3275 7.75229 16.3689L10.0214 15.1922L10.3969 11.8054L8.98525 10.188C10.2666 8.55153 12.2605 7.49984 14.5 7.49984C17.9136 7.49984 20.7566 9.94337 21.3751 13.1768L18.9136 13.7405L18.5081 17.8276L19.7444 19.1364C18.4618 20.5859 16.5876 21.4998 14.5 21.4998Z" fill="#050505"/><path d="M22 3.5C22 4.88071 20.8807 6 19.5 6C18.1193 6 17 4.88071 17 3.5C17 2.11929 18.1193 1 19.5 1C20.8807 1 22 2.11929 22 3.5Z" fill="#050505"/></svg>
+          </div>
+          <span class="l2-tile-label">Tournament</span>
+        </button>
+
+        <button class="l2-tile">
+          <div class="l2-tile-icon l2-tile-icon--inactive">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path fill-rule="evenodd" clip-rule="evenodd" d="M3.25 1.72401L4.22763 1L9.40763 2.67167L9.40134 4.12168L4.75 5.57725V7.45224L5.69211 7.04317H16.25V1.72401L17.2276 1L22.4076 2.67167L22.4013 4.12168L17.75 5.57725V7.04317H18.3079L23 9.08049V10.792V11.5912V20.6385L19.2123 23H4.78772L1 20.6385V11.5912V10.792V9.08049L3.25 8.10354V1.72401ZM2.5 12.2425V14.0024L5.65687 15.4016H9.25V15.4015H15.25V15.4016H18.3431L21.5 14.0023V12.2425L18.5909 13.5057L18 13.6285H5.69211L2.5 12.2425ZM2.5 17.0417V15.6611L5.3431 16.9213H9.25V18.441H5.65687L2.5 17.0417ZM2.5 18.7005V19.7893L5.21228 21.4803H9.25V19.9607H5.3431L2.5 18.7005ZM10.75 21.4803V16.9213H13.75V21.4803H10.75ZM15.25 18.441V16.9213H18.5L18.8006 16.8576L21.5 15.6611V17.0417L18.3431 18.441H15.25ZM15.25 19.9607V21.4803H18.7877L21.5 19.7893V18.7005L18.8006 19.897L18.5 19.9607H15.25ZM4.75 3.98671L6.67433 3.38452L4.75 2.76351V3.98671ZM17.75 3.98671L19.6743 3.38452L17.75 2.76351V3.98671ZM18 12.1088H6L2.5 10.5891V10.0826L6 8.56287H18L21.5 10.0826V10.5891L18 12.1088Z" fill="#050505"/></svg>
+          </div>
+          <span class="l2-tile-label">Venue</span>
+        </button>
+
+        <!-- Key Clients — active, expanded -->
+        <div class="l2-tile-expanded" id="kc-tile">
+          <button class="l2-tile-header" id="kc-tile-btn" onclick="toggleTile()" aria-expanded="true" aria-controls="kc-subnav" style="background:none;border:none;width:100%;font-family:inherit;text-align:left;">
+            <div class="l2-tile-icon l2-tile-icon--active">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M11.25 14.75H5.25V13.25H11.25V14.75Z" fill="#D06010"/><path d="M11.25 9.25H7.75V7.75H11.25V9.25Z" fill="#D06010"/><path fill-rule="evenodd" clip-rule="evenodd" d="M13.75 5.25H5.25V11.75H13.75V5.25ZM6.75 10.25V6.75H12.25V10.25H6.75Z" fill="#D06010"/><path fill-rule="evenodd" clip-rule="evenodd" d="M2.75 1H16.25V3.75H19V6.25H21.25V19.7905L18.3312 22.9925L7.75 23.0007V20.5H5.5V17.75H2.75V1ZM7 17.75V19H15.14L17.5 16.524V5.25H16.25V14.3743L13.2646 17.5065L13.0385 17.75H7ZM4.25 2.5V16.25H12.39L14.75 13.774V2.5H4.25ZM19 17.1243V7.75H19.75V19.2095L17.6688 21.4925L9.25 21.4993V20.5H15.7885L16.0146 20.2565L19 17.1243Z" fill="#D06010"/></svg>
+            </div>
+            <span class="l2-tile-label">Key Clients</span>
+            <svg class="l2-tile-chevron" id="kc-chevron" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#050505" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="transition:transform 0.2s;"><path d="M4 10l4-4 4 4"/></svg>
+          </button>
+          <div class="l2-tile-subnav" id="kc-subnav">
+            <a class="l2-sublink" href="#">Stakeholders</a>
+            <a class="l2-sublink" href="#">Entitlements</a>
+            <a class="l2-sublink l2-sublink--active" href="#" aria-current="page">Credits</a>
+            <a class="l2-sublink" href="#">Requests</a>
+            <a class="l2-sublink" href="#">Reports</a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Bottom: help + account + collapse -->
+    <div class="l2-bottom">
+      <div class="l2-bottom-sep"></div>
+
+      <div class="l2-help-row" role="button" tabindex="0">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M12.2531 8.0003L12.2505 8.00024L12.2469 8.00033C12.2374 8.00065 12.2201 8.0014 12.196 8.00312C12.1476 8.00658 12.0735 8.01386 11.9827 8.029C11.7974 8.05987 11.5619 8.12023 11.3354 8.23346C11.1119 8.34522 10.9112 8.50109 10.7647 8.72085C10.6213 8.93592 10.5 9.25638 10.5 9.75014H9C9 8.9939 9.19121 8.37686 9.51659 7.8888C9.83883 7.40544 10.2631 7.09256 10.6646 6.89182C11.0631 6.69255 11.4526 6.59666 11.7361 6.54941C11.8796 6.52549 12.0008 6.51324 12.0891 6.50693C12.1334 6.50377 12.1698 6.50207 12.1969 6.50117C12.2105 6.50071 12.2218 6.50046 12.2307 6.50031L12.2422 6.50017L12.2466 6.50015L12.2484 6.50014L12.2507 6.50014L12.253 6.50015L12.2569 6.50017L12.2672 6.50028L12.2975 6.50096C12.3218 6.50168 12.3545 6.50303 12.3942 6.50555C12.4735 6.51059 12.5824 6.52037 12.7115 6.53949C12.9658 6.57716 13.3176 6.6539 13.6796 6.81478C14.0423 6.97598 14.4404 7.23314 14.7484 7.64389C15.0634 8.06388 15.25 8.59938 15.25 9.25014C15.25 10.4731 14.5819 11.2802 14.0679 11.9012C14.0295 11.9477 13.9919 11.9931 13.9555 12.0376C13.4143 12.6989 13 13.2744 13 14.2501H11.5C11.5 12.7259 12.2107 11.8013 12.7945 11.0877L12.8343 11.0391C13.4123 10.333 13.75 9.92047 13.75 9.25014C13.75 8.9009 13.6553 8.6864 13.5484 8.54389C13.4346 8.39214 13.2702 8.2743 13.0704 8.1855C12.8699 8.09638 12.6592 8.04812 12.4917 8.02329C12.4098 8.01116 12.3429 8.00532 12.2992 8.00254C12.2774 8.00116 12.2617 8.00056 12.2531 8.0003Z" fill="#050505"/><path d="M11.5 17V15.5H13V17H11.5Z" fill="#050505"/><path fill-rule="evenodd" clip-rule="evenodd" d="M1 12C0.999995 5.92488 5.92486 1 12 1C18.0751 1 23 5.92487 23 12C23 18.0751 18.0751 23 12 23C5.92487 23 1.00001 18.0751 1 12ZM21.5 12C21.5 17.2467 17.2467 21.5 12 21.5C6.7533 21.5 2.50001 17.2467 2.5 12C2.5 6.7533 6.75329 2.5 12 2.5C17.2467 2.5 21.5 6.7533 21.5 12Z" fill="#050505"/></svg>
+        <span class="l2-help-label">Help</span>
+        <svg class="l2-help-chevron" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#050505" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 4l4 4-4 4"/></svg>
+      </div>
+
+      <div class="l2-account-row">
+        <div class="l2-account-avatar">MT</div>
+        <div class="l2-account-creds">
+          <span class="l2-account-name">Mayank T.</span>
+          <span class="l2-account-org">Sport XT</span>
+        </div>
+        <svg class="l2-account-meatball" width="16" height="16" viewBox="0 0 16 16" fill="none">
+          <circle cx="3" cy="8" r="1.2" fill="#050505"/>
+          <circle cx="8" cy="8" r="1.2" fill="#050505"/>
+          <circle cx="13" cy="8" r="1.2" fill="#050505"/>
+        </svg>
+      </div>
+
+      <button id="collapse-btn" class="l2-collapse-btn" onclick="toggleNav()" aria-label="Collapse navigation">
+        <svg class="l2-collapse-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#050505" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0">
+          <line x1="4" y1="5" x2="4" y2="19"/>
+          <path d="M20 12H9"/>
+          <path d="M13 8l-4 4 4 4"/>
+        </svg>
+        <span class="l2-collapse-label">Collapse</span>
+      </button>
+    </div>
+
+  </nav>
+
+  <!-- ═══════════════════════════════════
+       CANVAS
+  ════════════════════════════════════ -->
+  <div class="canvas" id="canvas">
+
+    <!-- OBJECT HEADER -->
+    <header class="obj-header">
+
+      <!-- Left: context + title -->
+      <div class="obj-header-left">
+        <div class="obj-header-title-stack">
+          <div class="obj-context-bar">
+            <span>Key Clients</span>
+            <span class="obj-context-sep"></span>
+            <span>RWC 2027</span>
+          </div>
+          <div class="obj-title-wrap">
+            <h1 class="obj-title">Credits</h1>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: primary action + kebab -->
+      <div class="obj-header-right">
+        <a href="Credits — Set up Credit.html" class="obj-btn obj-btn--primary" style="text-decoration:none;">Set up credit</a>
+
+        <div class="kebab-wrap" id="kebab-wrap">
+          <button class="kebab-btn" onclick="toggleKebab()" aria-label="More actions">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+              <circle cx="8" cy="3" r="1.4"/><circle cx="8" cy="8" r="1.4"/><circle cx="8" cy="13" r="1.4"/>
+            </svg>
+          </button>
+          <div class="kebab-menu">
+            <div class="kebab-item" onclick="openActivity()">
+              <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 4h10M3 8h7M3 12h5"/>
+              </svg>
+              Activity log
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </header>
+
+    <!-- Activity overlay + drawer -->
+    <div class="activity-overlay" id="activity-overlay" onclick="closeActivity()"></div>
+    <div class="activity-drawer" id="activity-drawer">
+
+      <!-- Drawer header -->
+      <div class="act-header">
+        <div class="act-header-content">
+          <span class="act-title">Activity</span>
+          <button class="act-export-btn">
+            <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10 3h3v3M13 3l-5 5M7 4H4a1 1 0 0 0-1 1v7a1 1 0 0 0 1 1h7a1 1 0 0 0 1-1V9"/></svg>
+            Export
+          </button>
+        </div>
+        <button class="act-close-btn" onclick="closeActivity()" aria-label="Close">
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M3 3l10 10M13 3L3 13"/></svg>
+        </button>
+      </div>
+
+      <!-- Search + filter -->
+      <div class="act-searchbar">
+        <div class="act-search-wrap">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#9B9B9B" stroke-width="1.5" stroke-linecap="round"><circle cx="7" cy="7" r="4"/><path d="M10.5 10.5l2.5 2.5"/></svg>
+          <input class="act-search-input" type="text" placeholder="Search by user">
+        </div>
+        <button class="act-filter-btn" aria-label="Filter">
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 4h12M5 8h6M7 12h2"/></svg>
+        </button>
+      </div>
+
+      <!-- Meta: last updated + refresh -->
+      <div class="act-meta">
+        <div class="act-meta-left">
+          <span>Data last updated:</span>
+          <div class="act-meta-dot"></div>
+          <span id="act-last-updated">1:07 PM GMT</span>
+        </div>
+        <button class="act-refresh-btn" onclick="refreshActivity()">
+          <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8a5 5 0 1 0 1.5-3.5"/><path d="M3 4v4h4"/></svg>
+          Refresh
+        </button>
+      </div>
+
+      <!-- Scrollable log body -->
+      <div class="act-body">
+
+        <div class="act-date-heading">Wednesday, 21 Apr 2027</div>
+
+        <article class="log-entry" aria-label="Credit adjusted for Mastercard">
+          <div class="log-content">
+            <div class="log-meta-row">
+              <span class="log-category">Credit</span>
+              <span class="log-badge log-badge--adjusted-up">ADJUSTED</span>
+              <a class="log-req" href="#">REQ-4821</a>
+            </div>
+            <div class="log-action">
+              <a class="log-kc" href="#">Mastercard</a><span class="log-sep" aria-hidden="true"> · </span>Balance adjusted<span class="log-sep" aria-hidden="true"> · </span><span class="log-val">$75,000 → $82,500 AUD</span>
+            </div>
+            <div class="log-detail-sentence" id="ld1" aria-live="polite">
+              <a href="#">Mastercard</a>'s credit was topped up from <strong>$75,000</strong> to <strong>$82,500 AUD</strong> (8 seats × 4 matches) following a contract amendment ahead of Phase 2.
+            </div>
+            <div class="log-footer">
+              <span class="log-user">Sarah Mitchell</span>
+              <button class="log-details-toggle" aria-expanded="false" aria-controls="ld1" onclick="toggleLogDetail('ld1', this)">
+                Details <span class="log-chevron" aria-hidden="true">▾</span>
+              </button>
+            </div>
+          </div>
+          <span class="log-time" aria-label="Logged at 9.14am">9.14am</span>
+        </article>
+
+        <article class="log-entry" aria-label="Credit adjusted for Emirates">
+          <div class="log-content">
+            <div class="log-meta-row">
+              <span class="log-category">Credit</span>
+              <span class="log-badge log-badge--adjusted-down">ADJUSTED</span>
+              <a class="log-req" href="#">REQ-4817</a>
+            </div>
+            <div class="log-action">
+              <a class="log-kc" href="#">Emirates</a><span class="log-sep" aria-hidden="true"> · </span>Balance adjusted<span class="log-sep" aria-hidden="true"> · </span><span class="log-val">$40,000 → $34,800 AUD</span>
+            </div>
+            <div class="log-detail-sentence" id="ld2" aria-live="polite">
+              <a href="#">Emirates</a>'s credit balance was reduced from <strong>$40,000</strong> to <strong>$34,800 AUD</strong> following a partial cancellation of 6 seats for the Quarter Final.
+            </div>
+            <div class="log-footer">
+              <span class="log-user">James Okafor</span>
+              <button class="log-details-toggle" aria-expanded="false" aria-controls="ld2" onclick="toggleLogDetail('ld2', this)">
+                Details <span class="log-chevron" aria-hidden="true">▾</span>
+              </button>
+            </div>
+          </div>
+          <span class="log-time" aria-label="Logged at 8.52am">8.52am</span>
+        </article>
+
+        <article class="log-entry" aria-label="Credit not held for DHL">
+          <div class="log-content">
+            <div class="log-meta-row">
+              <span class="log-category">Credit</span>
+              <span class="log-badge log-badge--failure">FAILED</span>
+              <a class="log-req" href="#">REQ-4809</a>
+            </div>
+            <div class="log-action">
+              <a class="log-kc" href="#">DHL</a><span class="log-sep" aria-hidden="true"> · </span>Credit not held<span class="log-sep" aria-hidden="true"> · </span><span class="log-val">Awaiting finance sign-off</span>
+            </div>
+            <div class="log-detail-sentence" id="ld3" aria-live="polite">
+              <strong>$9,200 AUD</strong> (4 seats, Pool B semifinal) could not be held against <a href="#">DHL</a>'s credit. Awaiting finance sign-off.
+            </div>
+            <div class="log-footer">
+              <span class="log-user">Sarah Mitchell</span>
+              <button class="log-details-toggle" aria-expanded="false" aria-controls="ld3" onclick="toggleLogDetail('ld3', this)">
+                Details <span class="log-chevron" aria-hidden="true">▾</span>
+              </button>
+            </div>
+          </div>
+          <span class="log-time" aria-label="Logged at 8.31am">8.31am</span>
+        </article>
+
+        <div class="act-date-heading">Tuesday, 20 Apr 2027</div>
+
+        <article class="log-entry" aria-label="Credit set up for Visa">
+          <div class="log-content">
+            <div class="log-meta-row">
+              <span class="log-category">Credit</span>
+              <span class="log-badge log-badge--created">CREATED</span>
+            </div>
+            <div class="log-action">
+              <a class="log-kc" href="#">Visa</a><span class="log-sep" aria-hidden="true"> · </span>Credit created<span class="log-sep" aria-hidden="true"> · </span><span class="log-val">$50,000 AUD</span> Non-refundable
+            </div>
+            <div class="log-detail-sentence" id="ld4" aria-live="polite">
+              <a href="#">Visa</a> was set up with a credit of <strong>$50,000 AUD</strong> (Non-refundable, 10 seats × 5 matches) for Phase 1 and Phase 2 of RWC 2027.
+            </div>
+            <div class="log-footer">
+              <span class="log-user">Priya Nair</span>
+              <button class="log-details-toggle" aria-expanded="false" aria-controls="ld4" onclick="toggleLogDetail('ld4', this)">
+                Details <span class="log-chevron" aria-hidden="true">▾</span>
+              </button>
+            </div>
+          </div>
+          <span class="log-time" aria-label="Logged at 4.45pm">4.45pm</span>
+        </article>
+
+        <article class="log-entry" aria-label="Credit expired for Heineken">
+          <div class="log-content">
+            <div class="log-meta-row">
+              <span class="log-category">Credit</span>
+              <span class="log-badge log-badge--neutral">EXPIRED</span>
+            </div>
+            <div class="log-action">
+              <a class="log-kc" href="#">Heineken</a><span class="log-sep" aria-hidden="true"> · </span>Credit expired<span class="log-sep" aria-hidden="true"> · </span><span class="log-val">$4,800 AUD</span> forfeited
+            </div>
+            <div class="log-footer">
+              <span class="log-user">System</span>
+            </div>
+          </div>
+          <span class="log-time" aria-label="Logged at 12.00am">12.00am</span>
+        </article>
+
+        <article class="log-entry" aria-label="Credit set up for Deloitte">
+          <div class="log-content">
+            <div class="log-meta-row">
+              <span class="log-category">Credit</span>
+              <span class="log-badge log-badge--created">CREATED</span>
+            </div>
+            <div class="log-action">
+              <a class="log-kc" href="#">Deloitte</a><span class="log-sep" aria-hidden="true"> · </span>Credit created<span class="log-sep" aria-hidden="true"> · </span><span class="log-val">$50,000 AUD</span> Non-refundable
+            </div>
+            <div class="log-detail-sentence" id="ld6" aria-live="polite">
+              <a href="#">Deloitte</a> was set up with a credit of <strong>$50,000 AUD</strong> (Non-refundable, 12 seats × 4 matches) for Phase 1 and Phase 2 of RWC 2027.
+            </div>
+            <div class="log-footer">
+              <span class="log-user">James Okafor</span>
+              <button class="log-details-toggle" aria-expanded="false" aria-controls="ld6" onclick="toggleLogDetail('ld6', this)">
+                Details <span class="log-chevron" aria-hidden="true">▾</span>
+              </button>
+            </div>
+          </div>
+          <span class="log-time" aria-label="Logged at 11.20am">11.20am</span>
+        </article>
+
+        <div class="act-date-heading">Monday, 19 Apr 2027</div>
+
+        <article class="log-entry" aria-label="Credit adjusted for Vodafone">
+          <div class="log-content">
+            <div class="log-meta-row">
+              <span class="log-category">Credit</span>
+              <span class="log-badge log-badge--neutral">ADJUSTED</span>
+            </div>
+            <div class="log-action">
+              <a class="log-kc" href="#">Vodafone</a><span class="log-sep" aria-hidden="true"> · </span>Type changed<span class="log-sep" aria-hidden="true"> · </span><span class="log-val">Non-refundable → Refundable</span>
+            </div>
+            <div class="log-detail-sentence" id="ld7" aria-live="polite">
+              <a href="#">Vodafone</a>'s credit type was changed from <strong>Non-refundable</strong> to <strong>Refundable</strong> following a contract amendment.
+            </div>
+            <div class="log-footer">
+              <span class="log-user">Sarah Mitchell</span>
+              <button class="log-details-toggle" aria-expanded="false" aria-controls="ld7" onclick="toggleLogDetail('ld7', this)">
+                Details <span class="log-chevron" aria-hidden="true">▾</span>
+              </button>
+            </div>
+          </div>
+          <span class="log-time" aria-label="Logged at 2.03pm">2.03pm</span>
+        </article>
+
+        <article class="log-entry" aria-label="Credit set up for Land Rover">
+          <div class="log-content">
+            <div class="log-meta-row">
+              <span class="log-category">Credit</span>
+              <span class="log-badge log-badge--created">CREATED</span>
+            </div>
+            <div class="log-action">
+              <a class="log-kc" href="#">Land Rover</a><span class="log-sep" aria-hidden="true"> · </span>Credit created<span class="log-sep" aria-hidden="true"> · </span><span class="log-val">$40,000 AUD</span> Non-refundable
+            </div>
+            <div class="log-detail-sentence" id="ld8" aria-live="polite">
+              <a href="#">Land Rover</a> was set up with a credit of <strong>$40,000 AUD</strong> (Non-refundable, 8 seats × 5 matches) for Phase 1 and Phase 2 of RWC 2027.
+            </div>
+            <div class="log-footer">
+              <span class="log-user">Priya Nair</span>
+              <button class="log-details-toggle" aria-expanded="false" aria-controls="ld8" onclick="toggleLogDetail('ld8', this)">
+                Details <span class="log-chevron" aria-hidden="true">▾</span>
+              </button>
+            </div>
+          </div>
+          <span class="log-time" aria-label="Logged at 9.58am">9.58am</span>
+        </article>
+
+      </div>
+    </div>
+
+    <!-- CANVAS BODY -->
+    <div class="canvas-body">
+
+      <!-- ── Hero ──────────────────────────────────── -->
+      <div class="hero-bar visible" data-zone="Hero bar">
+        <div class="hero-phase hero-phase--open">
+          <div class="hero-phase-eyebrow">Active phase</div>
+          <div class="hero-phase-name">Request Phase 1</div>
+          <div class="hero-phase-sub">Closes <span class="hero-phase-days--warn">in 12 days</span> &nbsp;·&nbsp; 30 Sep 2026</div>
+        </div>
+        <div class="hero-divider"></div>
+        <div class="hero-stat">
+          <div class="hero-stat-number">18<span class="hero-stat-denom">&thinsp;/ 24</span></div>
+          <div class="hero-stat-label">Clients configured</div>
+          <div class="hero-stat-sub hero-stat-sub--warn" style="cursor:pointer;" onclick="heroFilter('not-configured')">6 not configured →</div>
+        </div>
+        <div class="hero-divider"></div>
+        <div class="hero-stat">
+          <div class="hero-stat-number">$2.4<span class="hero-stat-unit">M</span></div>
+          <div class="hero-stat-label">Total remaining</div>
+          <div class="hero-stat-sub">of $4.1M allocated</div>
+        </div>
+        <div class="hero-divider"></div>
+        <div class="hero-stat">
+          <div class="hero-stat-number">3</div>
+          <div class="hero-stat-label">High usage</div>
+          <div class="hero-stat-sub hero-stat-sub--high" style="cursor:pointer;" onclick="heroFilter('high')">3 running low →</div>
+        </div>
+        <div class="hero-divider"></div>
+        <div class="hero-stat">
+          <div class="hero-stat-number">2</div>
+          <div class="hero-stat-label">Low usage</div>
+          <div class="hero-stat-sub hero-stat-sub--low" style="cursor:pointer;" onclick="heroFilter('low')">2 at risk of expiring →</div>
+        </div>
+      </div>
+
+      <!-- ── Client list ───────────────────────────── -->
+      <div class="section-header">
+        <div>
+          <span class="section-title">Key Clients</span>
+          <span class="section-count">14 clients</span>
+        </div>
+      </div>
+
+      <!-- Search + filters + view toggle -->
+      <div class="list-toolbar" data-zone="Client table">
+        <!-- Search -->
+        <div class="search-wrap">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#9B9B9B" stroke-width="1.5" stroke-linecap="round"><circle cx="7" cy="7" r="4"/><path d="M10.5 10.5l2.5 2.5"/></svg>
+          <input class="search-input" id="search-input" type="text" placeholder="Search clients…">
+        </div>
+
+        <!-- Segment filter chips -->
+        <div class="filter-dropdowns">
+          <button class="seg-chip" data-value="apac"     onclick="toggleChip(this)" type="button">APAC</button>
+          <button class="seg-chip" data-value="emea"     onclick="toggleChip(this)" type="button">EMEA</button>
+          <button class="seg-chip" data-value="mena"     onclick="toggleChip(this)" type="button">MENA</button>
+          <button class="seg-chip" data-value="americas" onclick="toggleChip(this)" type="button">Americas</button>
+          <div class="chip-separator"></div>
+          <button class="seg-chip" data-value="not-configured" onclick="toggleChip(this)" type="button">Not configured</button>
+
+          <!-- Hero filter active indicator -->
+          <span class="hero-filter-active" id="hero-filter-active">
+            <span id="hero-filter-label"></span>
+            <button class="hero-filter-clear" onclick="resetFilters()">× Clear</button>
+          </span>
+
+          <!-- Reset -->
+          <button class="reset-btn" id="reset-btn" onclick="resetFilters()">
+            <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8a5 5 0 1 0 1.5-3.5"/><path d="M3 4v4h4"/></svg>
+            Reset
+          </button>
+        </div>
+
+        <!-- Manage button (visible when selection active) -->
+        <div class="manage-btn-wrap" id="manage-btn-wrap">
+          <button class="manage-btn" id="manage-btn" onclick="toggleManageMenu()" aria-haspopup="true" aria-expanded="false">
+            Manage
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 4l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <div class="manage-dropdown" id="manage-dropdown" role="menu">
+            <button class="manage-dropdown__item" role="menuitem" onclick="doSetupCredit()">Set up credit</button>
+            <div class="manage-dropdown__sep"></div>
+            <button class="manage-dropdown__item manage-dropdown__item--danger" role="menuitem" onclick="doResetCredit()">Reset credit</button>
+          </div>
+        </div>
+
+        <!-- View toggle -->
+        <div class="view-toggle">
+          <button class="toggle-btn toggle-btn--active" id="btn-list" onclick="setView('list')" title="List view">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M2 4h12M2 8h12M2 12h12"/></svg>
+          </button>
+          <button class="toggle-btn" id="btn-grid" onclick="setView('grid')" title="Grid view">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="5" height="5" rx="1"/><rect x="9" y="2" width="5" height="5" rx="1"/><rect x="2" y="9" width="5" height="5" rx="1"/><rect x="9" y="9" width="5" height="5" rx="1"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- LIST VIEW -->
+      <div class="client-table" id="list-view" data-zone="Client table" role="table" aria-label="Key clients credit list">
+        <div role="rowgroup">
+        <div class="table-head" role="row">
+          <div class="th" role="columnheader">Client</div>
+          <button class="th th--sortable" id="th-remaining" onclick="toggleSort('remaining')" aria-label="Sort by remaining credit" role="columnheader" aria-sort="none">
+            Remaining
+            <svg class="sort-caret" id="sort-caret-remaining" width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true">
+              <path d="M5 2L8.5 7H1.5L5 2Z" fill="currentColor"/>
+            </svg>
+          </button>
+          <div class="th" role="columnheader">
+            <span class="th-info-wrap">
+              <button class="th th--sortable" id="th-usage" onclick="toggleSort('usage')" aria-label="Sort by usage" style="text-transform:uppercase;letter-spacing:0.08em;" aria-sort="none">
+                Usage
+                <svg class="sort-caret" id="sort-caret-usage" width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true">
+                  <path d="M5 2L8.5 7H1.5L5 2Z" fill="currentColor"/>
+                </svg>
+              </button>
+              <span class="th-info-btn" tabindex="0">i
+                <span class="th-info-tooltip">
+                  <span style="display:inline-flex;align-items:center;gap:5px;margin-bottom:4px;"><span style="background:#FFE3E3;color:#A50000;padding:1px 5px;border-radius:3px;font-size:11px;font-weight:600;">High usage</span> ≥67% used</span><br>
+                  Credit running low — consider topping up.<br><br>
+                  <span style="display:inline-flex;align-items:center;gap:5px;margin-bottom:4px;"><span style="background:#DBFEEF;color:#047A49;padding:1px 5px;border-radius:3px;font-size:11px;font-weight:600;">Normal usage</span> 34–66% used</span><br>
+                  On track, no action needed.<br><br>
+                  <span style="display:inline-flex;align-items:center;gap:5px;margin-bottom:4px;"><span style="background:#FEF3E2;color:#C55B0F;padding:1px 5px;border-radius:3px;font-size:11px;font-weight:600;">Low usage</span> ≤33% used</span><br>
+                  Credit at risk of expiring unused — prompt client to apply.
+                </span>
+              </span>
+            </span>
+          </div>
+          <button class="th th--sortable" id="th-status" onclick="toggleSort('status')" aria-label="Sort by status" role="columnheader" aria-sort="none">
+            Status
+            <svg class="sort-caret" id="sort-caret-status" width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true">
+              <path d="M5 2L8.5 7H1.5L5 2Z" fill="currentColor"/>
+            </svg>
+          </button>
+        </div>
+        </div><!-- /rowgroup header -->
+
+        <div role="rowgroup">
+        <!-- Select all -->
+        <div class="bulk-select-row" id="bulk-select-row" role="row" aria-rowindex="0">
+          <input type="checkbox" id="select-all-check" class="row-check" onchange="toggleSelectAll(this)" aria-label="Select all">
+          <span id="bulk-select-all-label" style="cursor:pointer;">Select all</span>
+          <span id="bulk-selection-info" style="display:none;" aria-live="polite">
+            <span id="bulk-count"></span><button class="bulk-select-clear" onclick="clearBulkSelection()">Clear selection</button>
+          </span>
+          <span id="bulk-total-label" style="color:#767676;margin-left:auto;">14 clients</span>
+        </div>
+
+        <!-- Mastercard -->
+        <a class="table-row" href="Credit Overview — Mastercard.html" data-name="mastercard" data-status="active" data-type="non-refundable" data-segment="apac" data-remaining="52400" data-configured="yes" role="row">
+          <div class="ci" role="cell">
+            <label class="ci-logo-label">
+              <input type="checkbox" class="row-check" data-client="Mastercard" onchange="updateBulkBar()" onclick="event.stopPropagation()">
+              <div class="ci-logo">MC</div>
+            </label>
+            <div>
+              <div class="ci-name">Mastercard</div>
+              <div class="ci-segment">APAC · Financial Services</div>
+              <div class="ci-pin">
+                <svg width="10" height="10" viewBox="0 0 20 20" fill="#FFB932" stroke="#FFB932" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 3h10a1 1 0 011 1v13l-6-3.5L4 17V4a1 1 0 011-1z"/></svg>
+                Pinned
+              </div>
+            </div>
+          </div>
+          <div class="credit-cell" role="cell">
+            <div class="credit-remaining">AUD $52,400</div>
+            <div class="credit-bar-label" style="margin-top:3px;">of $75,000 · 70% remaining</div>
+          </div>
+          <div class="usage-cell" data-usage="30" role="cell"><span class="usage-badge usage-badge--low">Low usage</span></div>
+          <div role="cell"><span class="status-badge status-badge--configured">Configured</span></div>
+        </a>
+
+        <!-- Visa -->
+        <a class="table-row" href="#" data-name="visa" data-status="active" data-type="non-refundable" data-segment="apac" data-remaining="31800" data-configured="yes" role="row">
+          <div class="ci" role="cell">
+            <label class="ci-logo-label">
+              <input type="checkbox" class="row-check" data-client="Visa" onchange="updateBulkBar()" onclick="event.stopPropagation()">
+              <div class="ci-logo">VI</div>
+            </label>
+            <div>
+              <div class="ci-name">Visa</div>
+              <div class="ci-segment">APAC · Financial Services</div>
+            </div>
+          </div>
+          <div class="credit-cell" role="cell">
+            <div class="credit-remaining">AUD $31,800</div>
+            <div class="credit-bar-label" style="margin-top:3px;">of $50,000 · 64% remaining</div>
+          </div>
+          <div class="usage-cell" data-usage="36" role="cell"><span class="usage-badge usage-badge--normal">Normal usage</span></div>
+          <div role="cell"><span class="status-badge status-badge--configured">Configured</span></div>
+        </a>
+
+        <!-- Emirates -->
+        <a class="table-row" href="#" data-name="emirates" data-status="expiring" data-type="non-refundable" data-segment="mena" data-remaining="8200" data-configured="yes" role="row">
+          <div class="ci" role="cell">
+            <label class="ci-logo-label">
+              <input type="checkbox" class="row-check" data-client="Emirates" onchange="updateBulkBar()" onclick="event.stopPropagation()">
+              <div class="ci-logo">EM</div>
+            </label>
+            <div>
+              <div class="ci-name">Emirates</div>
+              <div class="ci-segment">MENA · Aviation &amp; Travel</div>
+            </div>
+          </div>
+          <div class="credit-cell" role="cell">
+            <div class="credit-remaining">AUD $8,200</div>
+            <div class="credit-bar-label" style="margin-top:3px;">of $40,000 · 21% remaining</div>
+          </div>
+          <div class="usage-cell" data-usage="79" role="cell"><span class="usage-badge usage-badge--high">High usage</span></div>
+          <div role="cell"><span class="status-badge status-badge--configured">Configured</span></div>
+        </a>
+
+        <!-- DHL -->
+        <a class="table-row" href="#" data-name="dhl" data-status="hold" data-type="refundable" data-segment="emea" data-remaining="14600" data-configured="yes" role="row">
+          <div class="ci" role="cell">
+            <label class="ci-logo-label">
+              <input type="checkbox" class="row-check" data-client="DHL" onchange="updateBulkBar()" onclick="event.stopPropagation()">
+              <div class="ci-logo">DH</div>
+            </label>
+            <div>
+              <div class="ci-name">DHL</div>
+              <div class="ci-segment">EMEA · Logistics</div>
+            </div>
+          </div>
+          <div class="credit-cell" role="cell">
+            <div class="credit-remaining">AUD $14,600</div>
+            <div class="credit-bar-label" style="margin-top:3px;">of $28,000 · 52% remaining</div>
+          </div>
+          <div class="usage-cell" data-usage="48" role="cell"><span class="usage-badge usage-badge--normal">Normal usage</span></div>
+          <div role="cell"><span class="status-badge status-badge--configured">Configured</span></div>
+        </a>
+
+        <!-- Deloitte -->
+        <a class="table-row" href="#" data-name="deloitte" data-status="active" data-type="non-refundable" data-segment="emea" data-remaining="44000" data-configured="yes" role="row">
+          <div class="ci" role="cell">
+            <label class="ci-logo-label">
+              <input type="checkbox" class="row-check" data-client="Deloitte" onchange="updateBulkBar()" onclick="event.stopPropagation()">
+              <div class="ci-logo">DL</div>
+            </label>
+            <div>
+              <div class="ci-name">Deloitte</div>
+              <div class="ci-segment">EMEA · Professional Services</div>
+            </div>
+          </div>
+          <div class="credit-cell" role="cell">
+            <div class="credit-remaining">AUD $44,000</div>
+            <div class="credit-bar-label" style="margin-top:3px;">of $50,000 · 88% remaining</div>
+          </div>
+          <div class="usage-cell" data-usage="12" role="cell"><span class="usage-badge usage-badge--low">Low usage</span></div>
+          <div role="cell"><span class="status-badge status-badge--configured">Configured</span></div>
+        </a>
+
+        <!-- Vodafone -->
+        <a class="table-row" href="#" data-name="vodafone" data-status="expiring" data-type="non-refundable" data-segment="emea" data-remaining="3100" data-configured="yes" role="row">
+          <div class="ci" role="cell">
+            <label class="ci-logo-label">
+              <input type="checkbox" class="row-check" data-client="Vodafone" onchange="updateBulkBar()" onclick="event.stopPropagation()">
+              <div class="ci-logo">VF</div>
+            </label>
+            <div>
+              <div class="ci-name">Vodafone</div>
+              <div class="ci-segment">EMEA · Telecommunications</div>
+            </div>
+          </div>
+          <div class="credit-cell" role="cell">
+            <div class="credit-remaining">AUD $3,100</div>
+            <div class="credit-bar-label" style="margin-top:3px;">of $35,000 · 9% remaining</div>
+          </div>
+          <div class="usage-cell" data-usage="91" role="cell"><span class="usage-badge usage-badge--high">High usage</span></div>
+          <div role="cell"><span class="status-badge status-badge--configured">Configured</span></div>
+        </a>
+
+        <!-- Heineken -->
+        <a class="table-row" href="#" data-name="heineken" data-status="active" data-type="refundable" data-segment="emea" data-remaining="19500" data-configured="yes" role="row">
+          <div class="ci" role="cell">
+            <label class="ci-logo-label">
+              <input type="checkbox" class="row-check" data-client="Heineken" onchange="updateBulkBar()" onclick="event.stopPropagation()">
+              <div class="ci-logo">HK</div>
+            </label>
+            <div>
+              <div class="ci-name">Heineken</div>
+              <div class="ci-segment">EMEA · FMCG</div>
+            </div>
+          </div>
+          <div class="credit-cell" role="cell">
+            <div class="credit-remaining">AUD $19,500</div>
+            <div class="credit-bar-label" style="margin-top:3px;">of $35,000 · 55% remaining</div>
+          </div>
+          <div class="usage-cell" data-usage="44" role="cell"><span class="usage-badge usage-badge--normal">Normal usage</span></div>
+          <div role="cell"><span class="status-badge status-badge--configured">Configured</span></div>
+        </a>
+
+        <!-- Land Rover -->
+        <a class="table-row" href="#" data-name="land rover" data-status="active" data-type="non-refundable" data-segment="emea" data-remaining="26700" data-configured="yes" role="row">
+          <div class="ci" role="cell">
+            <label class="ci-logo-label">
+              <input type="checkbox" class="row-check" data-client="Land Rover" onchange="updateBulkBar()" onclick="event.stopPropagation()">
+              <div class="ci-logo">LR</div>
+            </label>
+            <div>
+              <div class="ci-name">Land Rover</div>
+              <div class="ci-segment">EMEA · Automotive</div>
+            </div>
+          </div>
+          <div class="credit-cell" role="cell">
+            <div class="credit-remaining">AUD $26,700</div>
+            <div class="credit-bar-label" style="margin-top:3px;">of $40,000 · 67% remaining</div>
+          </div>
+          <div class="usage-cell" data-usage="33" role="cell"><span class="usage-badge usage-badge--low">Low usage</span></div>
+          <div role="cell"><span class="status-badge status-badge--configured">Configured</span></div>
+        </a>
+
+        <!-- Not configured rows -->
+        <div class="table-row table-row--unconfigured" data-name="adidas" data-segment="emea" data-configured="no" data-remaining="0" role="row">
+          <div class="ci" role="cell">
+            <label class="ci-logo-label">
+              <input type="checkbox" class="row-check" data-client="Adidas" onchange="updateBulkBar()">
+              <div class="ci-logo">AD</div>
+            </label>
+            <div>
+              <div class="ci-name">Adidas</div>
+              <div class="ci-segment">EMEA · Sporting Goods</div>
+            </div>
+          </div>
+          <div class="credit-cell" role="cell"><div class="credit-remaining" style="color:var(--moonrock);">—</div></div>
+          <div class="usage-cell" data-usage="-1" role="cell"><span class="usage-badge usage-badge--not-configured">Not configured</span></div>
+          <div role="cell"><a class="setup-credit-link" href="Credits — Set up Credit.html">Set up credit →</a></div>
+        </div>
+
+        <div class="table-row table-row--unconfigured" data-name="samsung" data-segment="apac" data-configured="no" data-remaining="0" role="row">
+          <div class="ci" role="cell">
+            <label class="ci-logo-label">
+              <input type="checkbox" class="row-check" data-client="Samsung" onchange="updateBulkBar()">
+              <div class="ci-logo">SG</div>
+            </label>
+            <div>
+              <div class="ci-name">Samsung</div>
+              <div class="ci-segment">APAC · Technology</div>
+            </div>
+          </div>
+          <div class="credit-cell" role="cell"><div class="credit-remaining" style="color:var(--moonrock);">—</div></div>
+          <div class="usage-cell" data-usage="-1" role="cell"><span class="usage-badge usage-badge--not-configured">Not configured</span></div>
+          <div role="cell"><a class="setup-credit-link" href="Credits — Set up Credit.html">Set up credit →</a></div>
+        </div>
+
+        <div class="table-row table-row--unconfigured" data-name="qatar airways" data-segment="mena" data-configured="no" data-remaining="0" role="row">
+          <div class="ci" role="cell">
+            <label class="ci-logo-label">
+              <input type="checkbox" class="row-check" data-client="Qatar Airways" onchange="updateBulkBar()">
+              <div class="ci-logo">QA</div>
+            </label>
+            <div>
+              <div class="ci-name">Qatar Airways</div>
+              <div class="ci-segment">MENA · Aviation &amp; Travel</div>
+            </div>
+          </div>
+          <div class="credit-cell" role="cell"><div class="credit-remaining" style="color:var(--moonrock);">—</div></div>
+          <div class="usage-cell" data-usage="-1" role="cell"><span class="usage-badge usage-badge--not-configured">Not configured</span></div>
+          <div role="cell"><a class="setup-credit-link" href="Credits — Set up Credit.html">Set up credit →</a></div>
+        </div>
+
+        <div class="table-row table-row--unconfigured" data-name="pwc" data-segment="americas" data-configured="no" data-remaining="0" role="row">
+          <div class="ci" role="cell">
+            <label class="ci-logo-label">
+              <input type="checkbox" class="row-check" data-client="PwC" onchange="updateBulkBar()">
+              <div class="ci-logo">PW</div>
+            </label>
+            <div>
+              <div class="ci-name">PwC</div>
+              <div class="ci-segment">Americas · Professional Services</div>
+            </div>
+          </div>
+          <div class="credit-cell" role="cell"><div class="credit-remaining" style="color:var(--moonrock);">—</div></div>
+          <div class="usage-cell" data-usage="-1" role="cell"><span class="usage-badge usage-badge--not-configured">Not configured</span></div>
+          <div role="cell"><a class="setup-credit-link" href="Credits — Set up Credit.html">Set up credit →</a></div>
+        </div>
+
+        <div class="table-row table-row--unconfigured" data-name="hsbc" data-segment="apac" data-configured="no" data-remaining="0" role="row">
+          <div class="ci" role="cell">
+            <label class="ci-logo-label">
+              <input type="checkbox" class="row-check" data-client="HSBC" onchange="updateBulkBar()">
+              <div class="ci-logo">HB</div>
+            </label>
+            <div>
+              <div class="ci-name">HSBC</div>
+              <div class="ci-segment">APAC · Financial Services</div>
+            </div>
+          </div>
+          <div class="credit-cell" role="cell"><div class="credit-remaining" style="color:var(--moonrock);">—</div></div>
+          <div class="usage-cell" data-usage="-1" role="cell"><span class="usage-badge usage-badge--not-configured">Not configured</span></div>
+          <div role="cell"><a class="setup-credit-link" href="Credits — Set up Credit.html">Set up credit →</a></div>
+        </div>
+
+        <div class="table-row table-row--unconfigured" data-name="amazon" data-segment="americas" data-configured="no" data-remaining="0" role="row">
+          <div class="ci" role="cell">
+            <label class="ci-logo-label">
+              <input type="checkbox" class="row-check" data-client="Amazon" onchange="updateBulkBar()">
+              <div class="ci-logo">AZ</div>
+            </label>
+            <div>
+              <div class="ci-name">Amazon</div>
+              <div class="ci-segment">Americas · Technology</div>
+            </div>
+          </div>
+          <div class="credit-cell" role="cell"><div class="credit-remaining" style="color:var(--moonrock);">—</div></div>
+          <div class="usage-cell" data-usage="-1" role="cell"><span class="usage-badge usage-badge--not-configured">Not configured</span></div>
+          <div role="cell"><a class="setup-credit-link" href="Credits — Set up Credit.html">Set up credit →</a></div>
+        </div>
+        </div><!-- /rowgroup data -->
+
+        <div class="list-empty" id="list-empty">No clients match your search or filters.</div>
+      </div>
+
+      <!-- GRID VIEW -->
+      <div class="client-grid" id="grid-view">
+
+        <a class="cc" href="Credit Overview — Mastercard.html" data-name="mastercard" data-segment="apac" data-configured="yes">
+          <div class="cc-identity">
+              <div class="cc-identity-top"><div class="cc-logo">MC</div><span class="status-badge status-badge--configured">Configured</span></div>
+              <div class="cc-identity-meta"><div class="cc-name">Mastercard</div><div class="cc-segment">APAC · Financial Services</div></div>
+          </div>
+          <div class="cc-amount">
+                          <div class="cc-remaining">$52,400</div>
+            <div class="cc-footer">
+              <span class="cc-allocated">of $75,000 allocated</span>
+              <span class="usage-badge usage-badge--low">Low usage</span>
+            </div>
+          </div>
+        </a>
+
+        <a class="cc" href="#" data-name="visa" data-segment="apac" data-configured="yes">
+          <div class="cc-identity">
+              <div class="cc-identity-top"><div class="cc-logo">VI</div><span class="status-badge status-badge--configured">Configured</span></div>
+              <div class="cc-identity-meta"><div class="cc-name">Visa</div><div class="cc-segment">APAC · Financial Services</div></div>
+          </div>
+          <div class="cc-amount">
+                          <div class="cc-remaining">$31,800</div>
+            <div class="cc-footer">
+              <span class="cc-allocated">of $50,000 allocated</span>
+              <span class="usage-badge usage-badge--normal">Normal usage</span>
+            </div>
+          </div>
+        </a>
+
+        <a class="cc" href="#" data-name="emirates" data-segment="mena" data-configured="yes">
+          <div class="cc-identity">
+              <div class="cc-identity-top"><div class="cc-logo">EM</div><span class="status-badge status-badge--configured">Configured</span></div>
+              <div class="cc-identity-meta"><div class="cc-name">Emirates</div><div class="cc-segment">MENA · Aviation &amp; Travel</div></div>
+          </div>
+          <div class="cc-amount">
+                          <div class="cc-remaining">$8,200</div>
+            <div class="cc-footer">
+              <span class="cc-allocated">of $40,000 allocated</span>
+              <span class="usage-badge usage-badge--high">High usage</span>
+            </div>
+          </div>
+        </a>
+
+        <a class="cc" href="#" data-name="dhl" data-segment="emea" data-configured="yes">
+          <div class="cc-identity">
+              <div class="cc-identity-top"><div class="cc-logo">DH</div><span class="status-badge status-badge--configured">Configured</span></div>
+              <div class="cc-identity-meta"><div class="cc-name">DHL</div><div class="cc-segment">EMEA · Logistics</div></div>
+          </div>
+          <div class="cc-amount">
+                          <div class="cc-remaining">$14,600</div>
+            <div class="cc-footer">
+              <span class="cc-allocated">of $28,000 allocated</span>
+              <span class="usage-badge usage-badge--normal">Normal usage</span>
+            </div>
+          </div>
+        </a>
+
+        <a class="cc" href="#" data-name="deloitte" data-segment="emea" data-configured="yes">
+          <div class="cc-identity">
+              <div class="cc-identity-top"><div class="cc-logo">DL</div><span class="status-badge status-badge--configured">Configured</span></div>
+              <div class="cc-identity-meta"><div class="cc-name">Deloitte</div><div class="cc-segment">EMEA · Professional Services</div></div>
+          </div>
+          <div class="cc-amount">
+                          <div class="cc-remaining">$44,000</div>
+            <div class="cc-footer">
+              <span class="cc-allocated">of $50,000 allocated</span>
+              <span class="usage-badge usage-badge--low">Low usage</span>
+            </div>
+          </div>
+        </a>
+
+        <a class="cc" href="#" data-name="vodafone" data-segment="emea" data-configured="yes">
+          <div class="cc-identity">
+              <div class="cc-identity-top"><div class="cc-logo">VF</div><span class="status-badge status-badge--configured">Configured</span></div>
+              <div class="cc-identity-meta"><div class="cc-name">Vodafone</div><div class="cc-segment">EMEA · Telecommunications</div></div>
+          </div>
+          <div class="cc-amount">
+                          <div class="cc-remaining">$3,100</div>
+            <div class="cc-footer">
+              <span class="cc-allocated">of $35,000 allocated</span>
+              <span class="usage-badge usage-badge--high">High usage</span>
+            </div>
+          </div>
+        </a>
+
+        <a class="cc" href="#" data-name="heineken" data-segment="emea" data-configured="yes">
+          <div class="cc-identity">
+              <div class="cc-identity-top"><div class="cc-logo">HK</div><span class="status-badge status-badge--configured">Configured</span></div>
+              <div class="cc-identity-meta"><div class="cc-name">Heineken</div><div class="cc-segment">EMEA · FMCG</div></div>
+          </div>
+          <div class="cc-amount">
+                          <div class="cc-remaining">$19,500</div>
+            <div class="cc-footer">
+              <span class="cc-allocated">of $35,000 allocated</span>
+              <span class="usage-badge usage-badge--normal">Normal usage</span>
+            </div>
+          </div>
+        </a>
+
+        <a class="cc" href="#" data-name="land rover" data-segment="emea" data-configured="yes">
+          <div class="cc-identity">
+              <div class="cc-identity-top"><div class="cc-logo">LR</div><span class="status-badge status-badge--configured">Configured</span></div>
+              <div class="cc-identity-meta"><div class="cc-name">Land Rover</div><div class="cc-segment">EMEA · Automotive</div></div>
+          </div>
+          <div class="cc-amount">
+                          <div class="cc-remaining">$26,700</div>
+            <div class="cc-footer">
+              <span class="cc-allocated">of $40,000 allocated</span>
+              <span class="usage-badge usage-badge--low">Low usage</span>
+            </div>
+          </div>
+        </a>
+
+        <!-- Not configured cards -->
+        <div class="cc cc--not-configured" data-name="adidas" data-segment="emea" data-configured="no">
+          <div class="cc-identity">
+              <div class="cc-identity-top"><div class="cc-logo">AD</div><span class="status-badge status-badge--not-configured">Not configured</span></div>
+              <div class="cc-identity-meta"><div class="cc-name">Adidas</div><div class="cc-segment">EMEA · Sporting Goods</div></div>
+          </div>
+          <div class="cc-amount">
+                          <div class="cc-remaining cc-remaining--empty">—</div>
+            <div class="cc-footer"><a class="setup-credit-link" href="Credits — Set up Credit.html" style="pointer-events:auto;">Set up credit →</a></div>
+          </div>
+        </div>
+
+        <div class="cc cc--not-configured" data-name="samsung" data-segment="apac" data-configured="no">
+          <div class="cc-identity">
+              <div class="cc-identity-top"><div class="cc-logo">SG</div><span class="status-badge status-badge--not-configured">Not configured</span></div>
+              <div class="cc-identity-meta"><div class="cc-name">Samsung</div><div class="cc-segment">APAC · Technology</div></div>
+          </div>
+          <div class="cc-amount">
+                          <div class="cc-remaining cc-remaining--empty">—</div>
+            <div class="cc-footer"><a class="setup-credit-link" href="Credits — Set up Credit.html" style="pointer-events:auto;">Set up credit →</a></div>
+          </div>
+        </div>
+
+        <div class="cc cc--not-configured" data-name="qatar airways" data-segment="mena" data-configured="no">
+          <div class="cc-identity">
+              <div class="cc-identity-top"><div class="cc-logo">QA</div><span class="status-badge status-badge--not-configured">Not configured</span></div>
+              <div class="cc-identity-meta"><div class="cc-name">Qatar Airways</div><div class="cc-segment">MENA · Aviation &amp; Travel</div></div>
+          </div>
+          <div class="cc-amount">
+                          <div class="cc-remaining cc-remaining--empty">—</div>
+            <div class="cc-footer"><a class="setup-credit-link" href="Credits — Set up Credit.html" style="pointer-events:auto;">Set up credit →</a></div>
+          </div>
+        </div>
+
+        <div class="cc cc--not-configured" data-name="pwc" data-segment="americas" data-configured="no">
+          <div class="cc-identity">
+              <div class="cc-identity-top"><div class="cc-logo">PW</div><span class="status-badge status-badge--not-configured">Not configured</span></div>
+              <div class="cc-identity-meta"><div class="cc-name">PwC</div><div class="cc-segment">Americas · Professional Services</div></div>
+          </div>
+          <div class="cc-amount">
+                          <div class="cc-remaining cc-remaining--empty">—</div>
+            <div class="cc-footer"><a class="setup-credit-link" href="Credits — Set up Credit.html" style="pointer-events:auto;">Set up credit →</a></div>
+          </div>
+        </div>
+
+        <div class="cc cc--not-configured" data-name="hsbc" data-segment="apac" data-configured="no">
+          <div class="cc-identity">
+              <div class="cc-identity-top"><div class="cc-logo">HB</div><span class="status-badge status-badge--not-configured">Not configured</span></div>
+              <div class="cc-identity-meta"><div class="cc-name">HSBC</div><div class="cc-segment">APAC · Financial Services</div></div>
+          </div>
+          <div class="cc-amount">
+                          <div class="cc-remaining cc-remaining--empty">—</div>
+            <div class="cc-footer"><a class="setup-credit-link" href="Credits — Set up Credit.html" style="pointer-events:auto;">Set up credit →</a></div>
+          </div>
+        </div>
+
+        <div class="cc cc--not-configured" data-name="amazon" data-segment="americas" data-configured="no">
+          <div class="cc-identity">
+              <div class="cc-identity-top"><div class="cc-logo">AZ</div><span class="status-badge status-badge--not-configured">Not configured</span></div>
+              <div class="cc-identity-meta"><div class="cc-name">Amazon</div><div class="cc-segment">Americas · Technology</div></div>
+          </div>
+          <div class="cc-amount">
+                          <div class="cc-remaining cc-remaining--empty">—</div>
+            <div class="cc-footer"><a class="setup-credit-link" href="Credits — Set up Credit.html" style="pointer-events:auto;">Set up credit →</a></div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+<script>
+  // ── Kebab ────────────────────────────────────────
+  function toggleKebab() {
+    document.getElementById('kebab-wrap').classList.toggle('open');
+  }
+  document.addEventListener('click', e => {
+    if (!e.target.closest('#kebab-wrap')) {
+      document.getElementById('kebab-wrap').classList.remove('open');
+    }
+  });
+
+  // ── Log detail toggle ────────────────────────────
+  function toggleLogDetail(id, btn) {
+    const el = document.getElementById(id);
+    const isOpen = el.classList.toggle('open');
+    btn.classList.toggle('open', isOpen);
+    btn.setAttribute('aria-expanded', String(isOpen));
+  }
+
+  // ── Activity drawer ──────────────────────────────
+  function openActivity() {
+    document.getElementById('kebab-wrap').classList.remove('open');
+    document.getElementById('activity-overlay').classList.add('open');
+    document.getElementById('activity-drawer').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeActivity() {
+    document.getElementById('activity-overlay').classList.remove('open');
+    document.getElementById('activity-drawer').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  function refreshActivity() {
+    const now = new Date();
+    const h = now.getHours(), m = now.getMinutes();
+    const time = (h % 12 || 12) + ':' + String(m).padStart(2, '0') + ' ' + (h < 12 ? 'AM' : 'PM') + ' GMT';
+    document.getElementById('act-last-updated').textContent = time;
+  }
+
+  // ── Nav ──────────────────────────────────────────
+  function toggleNav() {
+    const nav    = document.getElementById('sidenav');
+    const canvas = document.getElementById('canvas');
+    const isCollapsed = nav.classList.toggle('collapsed');
+    canvas.style.marginLeft = isCollapsed ? '56px' : '208px';
+  }
+
+  function toggleTile() {
+    const subnav  = document.getElementById('kc-subnav');
+    const chevron = document.getElementById('kc-chevron');
+    const btn     = document.getElementById('kc-tile-btn');
+    const tile    = document.getElementById('kc-tile');
+    const isOpen  = subnav.style.display !== 'none';
+    subnav.style.display    = isOpen ? 'none' : '';
+    chevron.style.transform = isOpen ? 'rotate(-90deg)' : '';
+    btn.setAttribute('aria-expanded', String(!isOpen));
+    tile.style.borderRadius = isOpen ? '4px' : '';
+  }
+
+  // ── View toggle ──────────────────────────────────
+  function setView(v) {
+    const listView = document.getElementById('list-view');
+    const gridView = document.getElementById('grid-view');
+    const btnList  = document.getElementById('btn-list');
+    const btnGrid  = document.getElementById('btn-grid');
+    if (v === 'list') {
+      listView.classList.remove('hidden');
+      gridView.classList.remove('active');
+      btnList.classList.add('toggle-btn--active');
+      btnGrid.classList.remove('toggle-btn--active');
+    } else {
+      listView.classList.add('hidden');
+      gridView.classList.add('active');
+      btnGrid.classList.add('toggle-btn--active');
+      btnList.classList.remove('toggle-btn--active');
+    }
+    applyFilters();
+  }
+
+  // ── Filter state ─────────────────────────────────
+  const activeFilters = { segment: new Set(), usage: null };
+
+  // usage filter labels for display
+  const USAGE_LABELS = {
+    'high':           'High usage',
+    'low':            'Low usage',
+    'not-configured': 'Not configured',
+  };
+
+  function heroFilter(type) {
+    // Toggle off if already active
+    if (activeFilters.usage === type) {
+      activeFilters.usage = null;
+    } else {
+      activeFilters.usage = type;
+      // Replace segment filters
+      activeFilters.segment.clear();
+      document.querySelectorAll('.seg-chip').forEach(c => c.classList.remove('active'));
+    }
+    // Sync hero chip active states
+    ['high','low'].forEach(t => {
+      const chip = document.getElementById('hchip-' + t);
+      if (chip) chip.classList.toggle('hero-chip--active', activeFilters.usage === t);
+    });
+    applyFilters();
+    // Scroll list into view
+    if (activeFilters.usage) {
+      document.getElementById('list-view').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }
+
+  function toggleChip(el) {
+    const value = el.dataset.value;
+    el.classList.toggle('active');
+    if (el.classList.contains('active')) {
+      activeFilters.segment.add(value);
+    } else {
+      activeFilters.segment.delete(value);
+    }
+    applyFilters();
+  }
+
+  // ── Apply search + filters ───────────────────────
+  function applyFilters() {
+    const query      = document.getElementById('search-input').value.trim().toLowerCase();
+    const noSegment  = activeFilters.segment.size === 0;
+    const noUsage    = activeFilters.usage === null;
+    const noSearch   = query === '';
+    const hasAny     = !noSegment || !noUsage || !noSearch || sortCol !== null;
+
+    // Hero filter indicator
+    const hfa   = document.getElementById('hero-filter-active');
+    const hfl   = document.getElementById('hero-filter-label');
+    if (!noUsage) {
+      hfl.textContent = USAGE_LABELS[activeFilters.usage] || '';
+      hfa.classList.add('visible');
+    } else {
+      hfa.classList.remove('visible');
+    }
+
+    // Reset button
+    document.getElementById('reset-btn').classList.toggle('visible', hasAny);
+
+    // Filter list rows
+    const rows = document.querySelectorAll('#list-view .table-row');
+    let listVisible = 0;
+    rows.forEach(row => {
+      const nameMatch  = noSearch  || row.dataset.name.includes(query);
+      const segMatch   = noSegment || matchSegmentFilter(row, activeFilters.segment);
+      const usageMatch = noUsage   || matchUsageFilter(row, activeFilters.usage);
+      const match = nameMatch && segMatch && usageMatch;
+      row.style.display = match ? '' : 'none';
+      if (match) listVisible++;
+    });
+
+    // Filter grid cards
+    const cards = document.querySelectorAll('#grid-view .cc');
+    cards.forEach(card => {
+      const nameMatch  = noSearch  || card.dataset.name.includes(query);
+      const segMatch   = noSegment || matchSegmentFilter(card, activeFilters.segment);
+      const usageMatch = noUsage   || matchUsageFilter(card, activeFilters.usage);
+      card.style.display = (nameMatch && segMatch && usageMatch) ? '' : 'none';
+    });
+
+    applySort();
+
+    const empty = document.getElementById('list-empty');
+    empty.style.display = listVisible === 0 ? 'block' : 'none';
+
+    // Section count label
+    const total   = rows.length;
+    const countEl = document.querySelector('.section-count');
+    if (!noUsage) {
+      countEl.textContent = listVisible + ' of ' + total + ' · ' + USAGE_LABELS[activeFilters.usage];
+    } else if (hasAny) {
+      countEl.textContent = listVisible + ' of ' + total + ' clients';
+    } else {
+      countEl.textContent = total + ' clients';
+    }
+  }
+
+  function matchSegmentFilter(el, segments) {
+    const wantsNotConfigured = segments.has('not-configured');
+    const regionChips = [...segments].filter(v => v !== 'not-configured');
+
+    // AND logic: each active dimension must match
+    // Regions OR within themselves; not-configured is a separate AND condition
+    const regionMatch = regionChips.length === 0 || regionChips.includes(el.dataset.segment);
+    const configMatch = !wantsNotConfigured || el.dataset.configured === 'no';
+    return regionMatch && configMatch;
+  }
+
+  function matchUsageFilter(el, filter) {
+    if (filter === 'not-configured') return el.dataset.configured === 'no';
+    const usageCell = el.querySelector ? el.querySelector('.usage-cell') : null;
+    if (!usageCell) return false;
+    const pct = parseInt(usageCell.dataset.usage, 10);
+    if (filter === 'high') return pct >= 67;
+    if (filter === 'low')  return pct >= 0 && pct <= 33;
+    return true;
+  }
+
+  // ── Reset all filters ────────────────────────────
+  function resetFilters() {
+    activeFilters.segment.clear();
+    activeFilters.usage = null;
+    sortCol = null;
+    sortDir = null;
+    document.querySelectorAll('.seg-chip').forEach(c => c.classList.remove('active'));
+    ['high','low'].forEach(t => {
+      const chip = document.getElementById('hchip-' + t);
+      if (chip) chip.classList.remove('hero-chip--active');
+    });
+    ['remaining','usage','status'].forEach(c => {
+      const btn   = document.getElementById('th-' + c);
+      const caret = document.getElementById('sort-caret-' + c);
+      if (btn)   btn.classList.remove('th--sorted');
+      if (caret) { caret.style.visibility = 'hidden'; caret.classList.remove('sort-caret--asc'); }
+    });
+    document.getElementById('search-input').value = '';
+    applyFilters();
+  }
+
+  // ── Live search ──────────────────────────────────
+  document.getElementById('search-input').addEventListener('input', applyFilters);
+
+  // ── Sort ─────────────────────────────────────────
+  let sortDir = null;
+  const SORT_CYCLE = { null: 'desc', desc: 'asc', asc: null };
+  let sortCol = null; // 'remaining' | 'usage' | 'status' | null
+
+  function toggleSort(col) {
+    if (sortCol === col) {
+      sortDir = SORT_CYCLE[sortDir];
+      if (sortDir === null) sortCol = null;
+    } else {
+      sortCol = col;
+      sortDir = 'desc';
+    }
+    ['remaining','usage','status'].forEach(c => {
+      const btn   = document.getElementById('th-' + c);
+      const caret = document.getElementById('sort-caret-' + c);
+      if (!btn || !caret) return;
+      btn.classList.toggle('th--sorted', sortCol === c);
+      caret.style.visibility = sortCol === c ? 'visible' : 'hidden';
+      caret.classList.toggle('sort-caret--asc', sortCol === c && sortDir === 'asc');
+    });
+    applyFilters();
+  }
+
+  // High=2, Normal=1, Low=0, Not configured=-1
+  function usageOrder(row) {
+    const cell = row.querySelector ? row.querySelector('.usage-cell') : null;
+    if (!cell) return -1;
+    const pct = parseInt(cell.dataset.usage, 10);
+    if (pct < 0) return -1;
+    if (pct >= 67) return 2;
+    if (pct >= 34) return 1;
+    return 0;
+  }
+
+  function applySort() {
+    const tbody = document.getElementById('list-view');
+    const rows  = [...tbody.querySelectorAll('.table-row')];
+    if (sortCol === 'remaining') {
+      rows.sort((a, b) => {
+        const av = parseInt(a.dataset.remaining || 0, 10);
+        const bv = parseInt(b.dataset.remaining || 0, 10);
+        return sortDir === 'desc' ? bv - av : av - bv;
+      });
+    } else if (sortCol === 'usage') {
+      rows.sort((a, b) => {
+        const av = usageOrder(a), bv = usageOrder(b);
+        return sortDir === 'desc' ? bv - av : av - bv;
+      });
+    } else if (sortCol === 'status') {
+      rows.sort((a, b) => {
+        const av = a.dataset.configured === 'yes' ? 1 : 0;
+        const bv = b.dataset.configured === 'yes' ? 1 : 0;
+        return sortDir === 'desc' ? bv - av : av - bv;
+      });
+    } else {
+      rows.sort((a, b) => a.dataset.name.localeCompare(b.dataset.name));
+    }
+    // Pinned rows always float to top, regardless of sort
+    rows.sort((a, b) => (b.classList.contains('table-row--pinned') ? 1 : 0) - (a.classList.contains('table-row--pinned') ? 1 : 0));
+    const empty = document.getElementById('list-empty');
+    rows.forEach(r => tbody.insertBefore(r, empty));
+  }
+
+  // ── Pin state from localStorage ──────────────────
+  (function applyPinned() {
+    try {
+      const pinned = JSON.parse(localStorage.getItem('credits-pinned') || '[]');
+      document.querySelectorAll('#list-view .table-row').forEach(row => {
+        const isPinned = pinned.includes(row.dataset.name);
+        row.classList.toggle('table-row--pinned', isPinned);
+      });
+    } catch {}
+    applySort();
+  })();
+</script>
+<script>
+  function visibleRowChecks() {
+    return Array.from(document.querySelectorAll('.row-check:not(#select-all-check)'))
+      .filter(c => {
+        const row = c.closest('.table-row');
+        return row && getComputedStyle(row).display !== 'none';
+      });
+  }
+
+  function updateBulkBar() {
+    const visible       = visibleRowChecks();
+    const checked       = visible.filter(c => c.checked);
+    const countEl        = document.getElementById('bulk-count');
+    const selectionInfo  = document.getElementById('bulk-selection-info');
+    const selectAllLabel = document.getElementById('bulk-select-all-label');
+    const selectAll      = document.getElementById('select-all-check');
+    const manageBtnWrap  = document.getElementById('manage-btn-wrap');
+    const n = checked.length;
+    countEl.textContent = n + (n === 1 ? ' item' : ' items') + ' selected';
+    selectionInfo.style.display  = n > 0 ? '' : 'none';
+    selectAllLabel.style.display = n > 0 ? 'none' : '';
+    if (manageBtnWrap) manageBtnWrap.classList.toggle('visible', n > 0);
+    if (n === 0) closeManageMenu();
+    if (selectAll) {
+      selectAll.checked       = n === visible.length && visible.length > 0;
+      selectAll.indeterminate = n > 0 && n < visible.length;
+    }
+  }
+
+  function toggleManageMenu() {
+    const btn  = document.getElementById('manage-btn');
+    const menu = document.getElementById('manage-dropdown');
+    const open = menu.classList.toggle('open');
+    btn.classList.toggle('open', open);
+    btn.setAttribute('aria-expanded', String(open));
+  }
+
+  function closeManageMenu() {
+    const btn  = document.getElementById('manage-btn');
+    const menu = document.getElementById('manage-dropdown');
+    if (!menu) return;
+    menu.classList.remove('open');
+    btn.classList.remove('open');
+    btn.setAttribute('aria-expanded', 'false');
+  }
+
+  function doSetupCredit() {
+    closeManageMenu();
+    const names = Array.from(document.querySelectorAll('.row-check:not(#select-all-check):checked'))
+      .map(c => c.dataset.client).filter(Boolean);
+    sessionStorage.setItem('bulkSelectedClients', JSON.stringify(names));
+    window.location.href = 'Credits — Set up Credit.html';
+  }
+
+  function doResetCredit() {
+    closeManageMenu();
+    const names = Array.from(document.querySelectorAll('.row-check:not(#select-all-check):checked'))
+      .map(c => c.dataset.client).filter(Boolean);
+    document.getElementById('reset-modal-clients').innerHTML =
+      names.map(n => `<div class="reset-modal__client">· ${n}</div>`).join('');
+    document.getElementById('reset-backdrop').classList.add('open');
+  }
+
+  function closeResetModal() {
+    document.getElementById('reset-backdrop').classList.remove('open');
+  }
+
+  function handleResetBackdropClick(e) {
+    if (e.target === document.getElementById('reset-backdrop')) closeResetModal();
+  }
+
+  function confirmReset() {
+    const checked = Array.from(document.querySelectorAll('.row-check:not(#select-all-check):checked'));
+    const count = checked.length;
+    checked.forEach(c => {
+      const row = c.closest('.table-row');
+      if (!row) return;
+      const remEl      = row.querySelector('.credit-remaining');
+      const barLabelEl = row.querySelector('.credit-bar-label');
+      if (remEl)      remEl.textContent      = 'AUD $0';
+      if (barLabelEl) barLabelEl.textContent = '—';
+    });
+    closeResetModal();
+    clearBulkSelection();
+    showLandingToast(`Balance reset for ${count} client${count !== 1 ? 's' : ''}`);
+  }
+
+  function showLandingToast(msg) {
+    const t = document.getElementById('landing-toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 3000);
+  }
+
+  // Close manage menu on outside click
+  document.addEventListener('click', function(e) {
+    const wrap = document.getElementById('manage-btn-wrap');
+    if (wrap && wrap.classList.contains('visible') && !wrap.contains(e.target)) closeManageMenu();
+  });
+
+  // ESC closes modal and menu
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') { closeResetModal(); closeManageMenu(); }
+  });
+
+  function toggleSelectAll(cb) {
+    visibleRowChecks().forEach(c => { c.checked = cb.checked; });
+    updateBulkBar();
+  }
+
+  function clearBulkSelection() {
+    document.querySelectorAll('.row-check').forEach(c => { c.checked = false; });
+    updateBulkBar();
+  }
+</script>
+<script>
+document.addEventListener('click', function(e) {
+  var node = e.target;
+  while (node && node !== document.body) {
+    if (node.dataset && node.dataset.zone) {
+      window.parent.postMessage({ type: 'wt-zone', page: 'Credits — Landing.html', zone: node.dataset.zone }, '*');
+      return;
+    }
+    node = node.parentElement;
+  }
+}, true);
+</script>
+
+
+<!-- Reset confirmation modal -->
+<div class="reset-backdrop" id="reset-backdrop" onclick="handleResetBackdropClick(event)">
+  <div class="reset-modal" role="dialog" aria-modal="true" aria-labelledby="reset-modal-title">
+    <div class="reset-modal__title" id="reset-modal-title">Reset credit balance</div>
+    <div class="reset-modal__body">This will set the balance to zero for the following clients. The credit record will remain in place.</div>
+    <div class="reset-modal__clients" id="reset-modal-clients"></div>
+    <div class="reset-modal__actions">
+      <button class="reset-modal__cancel" onclick="closeResetModal()">Cancel</button>
+      <button class="reset-modal__confirm" onclick="confirmReset()">Reset balances</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="landing-toast" id="landing-toast"></div>
+
+</body>
+</html>

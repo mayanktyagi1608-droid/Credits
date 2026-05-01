@@ -1,0 +1,4140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mastercard Global — Credit · Sport XT</title>
+
+  <style>
+    /* ── Averta (Ticketmaster CDN) ─────────────────── */
+    @font-face {
+      font-family: "Averta"; font-style: normal; font-weight: 400; font-display: swap;
+      src: local("Averta Regular"),
+           url(https://www.ticketmaster.com/static/fonts/averta/averta-regular.woff2) format("woff2"),
+           url(https://www.ticketmaster.com/static/fonts/averta/averta-regular.woff) format("woff");
+    }
+    @font-face {
+      font-family: "Averta"; font-style: normal; font-weight: 600; font-display: swap;
+      src: local("Averta Semibold"),
+           url(https://www.ticketmaster.com/static/fonts/averta/averta-semibold.woff2) format("woff2"),
+           url(https://www.ticketmaster.com/static/fonts/averta/averta-semibold.woff) format("woff");
+    }
+    @font-face {
+      font-family: "Averta"; font-style: normal; font-weight: 700; font-display: swap;
+      src: local("Averta Bold"),
+           url(https://www.ticketmaster.com/static/fonts/averta/averta-bold.woff2) format("woff2"),
+           url(https://www.ticketmaster.com/static/fonts/averta/averta-bold.woff) format("woff");
+    }
+
+    /* ── GDS-E V2 Design Tokens ─────────────────────── */
+    :root {
+      /* Colour */
+      --neptune:    #024DFF;
+      --cosmos:     #050505;
+      --granite:    #767676;
+      --spotlight:  #FFFFFF;
+      --earth:      #048851;
+      --mars:       #EB0000;
+      --jupiter:    #FFB932;
+      --slate:      #949494;
+      --moonrock:   #BFBFBF;
+      --ammonite:   #CDCDCD;
+      --diatomite:  #E6E6E6;
+      --lunar:      #F2F2F2;
+
+      /* Spacing scale (4px base) */
+      --sp-1:  4px;
+      --sp-2:  8px;
+      --sp-3:  12px;
+      --sp-4:  16px;
+      --sp-5:  20px;
+      --sp-6:  24px;
+      --sp-8:  32px;
+      --sp-10: 40px;
+      --sp-12: 48px;
+      --sp-16: 64px;
+
+      /* Legacy spacing aliases (used in existing component styles) */
+      --lounge:        4px;
+      --club:          8px;
+      --hall:         12px;
+      --auditorium:   16px;
+      --theatre:      20px;
+      --amphitheatre: 24px;
+      --arena:        32px;
+      --stadium:      48px;
+      --dome:         64px;
+
+      /* Border radius */
+      --radius-xs:   0px;
+      --radius-sm:   4px;    /* Small — buttons */
+      --radius-md:   8px;    /* Medium — cards, inputs */
+      --radius-lg:   12px;   /* Large */
+      --radius-xl:   16px;   /* XLarge */
+      --radius-full: 9999px; /* Full — pills, badges */
+
+      /* Elevation */
+      --elev-01: 0px 2px 4px rgba(0,0,0,0.08);
+      --elev-02: 0px 4px 8px rgba(0,0,0,0.12);
+      --elev-03: 0px 8px 16px rgba(0,0,0,0.16);
+      --elev-04: 0px 16px 32px rgba(0,0,0,0.20);
+
+      /* Button */
+      --btn-h-md: 40px;
+      --btn-h-sm: 32px;
+    }
+
+    /* ── Reset ─────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      height: 100%;
+      font-family: "Averta", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-size: 14px; /* Body M base */
+      line-height: 1.5;
+      color: var(--cosmos);
+      background: var(--lunar);
+    }
+
+    /* ════════════════════════════════════════════════
+       APP SHELL
+    ════════════════════════════════════════════════ */
+    .app-shell {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* ════════════════════════════════════════════════
+       SIDENAV — collapsible TM1 nav
+    ════════════════════════════════════════════════ */
+    .l2-nav {
+      width: 208px;
+      flex-shrink: 0;
+      background: var(--spotlight);
+      border-right: 1px solid var(--diatomite);
+      position: fixed;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      z-index: 200;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: width 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .l2-nav.collapsed {
+      width: 56px;
+    }
+
+    /* Canvas tracks nav width */
+    .canvas {
+      transition: margin-left 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* Logo row at top of L2 */
+    .l2-logo-row {
+      height: 54px;
+      display: flex;
+      align-items: center;
+      padding: 0 16px;
+      flex-shrink: 0;
+    }
+
+    .l2-nav.collapsed .l2-logo-row {
+      justify-content: center;
+      padding: 0;
+    }
+
+    /* Logo button — 40×36, radius 2px, per TM1 spec */
+    .l2-logo-btn {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 4px 0;
+      gap: 8px;
+      width: 40px;
+      height: 36px;
+      border-radius: 2px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      flex-shrink: 0;
+      transition: background 0.12s;
+    }
+
+    .l2-logo-btn:hover { background: var(--lunar); }
+
+
+    /* Tiles container — padding never changes, prevents jump */
+    .l2-tiles {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      padding: 0 12px 24px;
+      flex: 1;
+    }
+
+    /* Nav tile — inactive: flat row */
+    .l2-tile {
+      background: var(--lunar);
+      border-radius: 4px;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      padding: 6px 8px;
+      gap: 8px;
+      height: 44px;
+      min-height: 44px;
+      cursor: pointer;
+      border: none;
+      width: 100%;
+      text-align: left;
+      font-family: inherit;
+      white-space: nowrap;
+      overflow: hidden;
+    }
+
+    .l2-tile:hover { background: #E8E8E8; }
+
+    /* Nav tile — active: expanded with subitems */
+    .l2-tile-expanded {
+      background: var(--lunar);
+      border-radius: 4px;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    /* Active tile header row */
+    .l2-tile-header {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      padding: 6px 8px;
+      gap: 8px;
+      height: 44px;
+      min-height: 44px;
+      border-radius: 4px 4px 0 0;
+      white-space: nowrap;
+      cursor: pointer;
+      transition: background 0.12s;
+    }
+    .l2-tile-header:hover { background: #E8E8E8; }
+
+    /* Tile app icon — 32×32 circle */
+    .l2-tile-icon {
+      width: 32px;
+      height: 32px;
+      min-width: 32px;
+      border-radius: 999px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    /* GDS-E icon inside tile — 16×16 */
+    .l2-tile-icon img {
+      width: 16px;
+      height: 16px;
+      display: block;
+    }
+
+    /* Invert icon to white when on blue bg */
+    .l2-tile-icon--active svg { filter: brightness(0) invert(1); }
+
+    .l2-tile-icon--inactive { background: var(--lunar); }
+    .l2-tile-icon--active   { background: var(--neptune); }
+
+    /* Tile label — hidden when collapsed */
+    .l2-tile-label {
+      flex: 1;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 1.6px;
+      text-transform: uppercase;
+      color: #050505;
+      line-height: 12px;
+      white-space: nowrap;
+      overflow: hidden;
+      opacity: 1;
+      transition: opacity 0.15s;
+    }
+
+    /* Tile chevron */
+    .l2-tile-chevron {
+      width: 16px;
+      height: 16px;
+      min-width: 16px;
+      flex-shrink: 0;
+    }
+
+    /* Active tile subnav */
+    .l2-tile-subnav {
+      padding: 0 8px 8px;
+      border-radius: 0 0 4px 4px;
+    }
+
+    /* Sublink — 36px height */
+    .l2-sublink {
+      display: flex;
+      align-items: center;
+      height: 36px;
+      padding: 0 12px;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.01em;
+      color: #050505;
+      text-decoration: none;
+      border-left: 2px solid transparent;
+      cursor: pointer;
+      transition: background 0.12s;
+      white-space: nowrap;
+      overflow: hidden;
+    }
+
+    .l2-sublink:hover { background: rgba(0,0,0,0.04); border-radius: 0 4px 4px 0; }
+
+    .l2-sublink--active {
+      background: rgba(2, 78, 255, 0.10);
+      border-left-color: var(--neptune);
+      color: var(--neptune);
+    }
+
+    .l2-sublink--active:hover { background: rgba(2, 78, 255, 0.14); }
+
+    /* ══════════════════════════════════════════════
+       COLLAPSED STATE — 56px icon-only strip
+    ══════════════════════════════════════════════ */
+
+    /* Hide all text/chevrons/subnav — no layout impact */
+    .l2-nav.collapsed .l2-tile-label,
+    .l2-nav.collapsed .l2-tile-chevron,
+    .l2-nav.collapsed .l2-tile-subnav,
+    .l2-nav.collapsed .l2-account-creds,
+    .l2-nav.collapsed .l2-account-meatball,
+    .l2-nav.collapsed .l2-help-label,
+    .l2-nav.collapsed .l2-help-chevron,
+    .l2-nav.collapsed .l2-collapse-label { display: none; }
+
+    /* Zero out all horizontal padding so the 32px circle fits in 56px */
+    .l2-nav.collapsed .l2-tiles { padding-left: 0; padding-right: 0; }
+
+    /* Strip tile backgrounds — icon circle is the affordance */
+    .l2-nav.collapsed .l2-tile {
+      background: none;
+      justify-content: center;
+      padding-left: 0;
+      padding-right: 0;
+    }
+    /* In collapsed: tile stays transparent — icon circle is the hover target */
+    .l2-nav.collapsed .l2-tile:hover { background: none; }
+    .l2-nav.collapsed .l2-tile:hover .l2-tile-icon--inactive { background: #E2E2E2; }
+    .l2-nav.collapsed .l2-tile-header:hover .l2-tile-icon--inactive { background: #E2E2E2; }
+
+    /* Active tile: remove card bg, just show icon row */
+    .l2-nav.collapsed .l2-tile-expanded { background: none; }
+    .l2-nav.collapsed .l2-tile-header {
+      background: none;
+      justify-content: center;
+      padding-left: 0; padding-right: 0;
+    }
+
+    /* Bottom rows: zero margins/padding so 32px icons fit in 56px */
+    .l2-nav.collapsed .l2-help-row {
+      justify-content: center;
+      margin-left: 0; margin-right: 0;
+      padding-left: 0; padding-right: 0;
+    }
+    .l2-nav.collapsed .l2-account-row {
+      justify-content: center;
+      border: none; background: none;
+      margin-left: 0; margin-right: 0;
+      padding-left: 0; padding-right: 0;
+    }
+    .l2-nav.collapsed .l2-collapse-btn {
+      justify-content: center;
+      margin-left: 0; margin-right: 0;
+      padding-left: 0; padding-right: 0;
+      width: 100%;
+    }
+
+    /* Flip collapse arrow to point right */
+    .l2-nav.collapsed .l2-collapse-icon { transform: scaleX(-1); }
+
+    /* Bottom section of L2 */
+    .l2-bottom {
+      flex-shrink: 0;
+      padding-bottom: 12px;
+    }
+
+    .l2-bottom-sep {
+      height: 1px;
+      background: var(--diatomite);
+    }
+
+    /* Help row */
+    .l2-help-row {
+      display: flex;
+      align-items: center;
+      padding: 10px 8px;
+      gap: 10px;
+      height: 44px;
+      margin: 0 12px;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background 0.12s;
+      white-space: nowrap;
+      overflow: hidden;
+    }
+
+    .l2-help-row:hover { background: var(--lunar); }
+
+    .l2-help-row img {
+      width: 24px;
+      height: 24px;
+      flex-shrink: 0;
+    }
+
+    .l2-help-label {
+      flex: 1;
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 0.01em;
+      color: #050505;
+      transition: opacity 0.15s;
+    }
+
+    .l2-help-chevron {
+      width: 16px;
+      height: 16px;
+      flex-shrink: 0;
+      transition: opacity 0.15s;
+    }
+
+    /* Account row */
+    .l2-account-row {
+      display: flex;
+      align-items: center;
+      padding: 6px 10px 6px 6px;
+      gap: 8px;
+      height: 44px;
+      margin: 4px 12px;
+      background: var(--spotlight);
+      border: 1px solid var(--ammonite);
+      border-radius: 6px;
+      cursor: pointer;
+      white-space: nowrap;
+      overflow: hidden;
+    }
+
+    .l2-account-avatar {
+      width: 32px;
+      height: 32px;
+      min-width: 32px;
+      border-radius: 4px;
+      background: rgba(2, 78, 255, 0.10);
+      border: 1px solid #8F8F8F;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: #050505;
+      flex-shrink: 0;
+    }
+
+    .l2-account-creds {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      flex: 1;
+      min-width: 0;
+      overflow: hidden;
+      transition: opacity 0.15s;
+    }
+
+    .l2-account-name {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: #050505;
+      line-height: 12px;
+    }
+
+    .l2-account-org {
+      font-size: 12px;
+      color: #767676;
+      line-height: 12px;
+    }
+
+    .l2-account-meatball {
+      flex-shrink: 0;
+      transition: opacity 0.15s;
+    }
+
+    /* Collapse button */
+    .l2-collapse-btn {
+      display: flex;
+      align-items: center;
+      padding: 10px 8px;
+      gap: 10px;
+      height: 44px;
+      margin: 4px 12px 0;
+      border-radius: 4px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      width: calc(100% - 24px);
+      font-family: inherit;
+      transition: background 0.12s;
+      white-space: nowrap;
+      overflow: hidden;
+    }
+
+    .l2-collapse-btn:hover { background: var(--lunar); }
+
+    .l2-collapse-btn img {
+      width: 24px;
+      height: 24px;
+      flex-shrink: 0;
+    }
+
+    .l2-collapse-label {
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: #050505;
+      transition: opacity 0.15s;
+    }
+
+    /* Flip collapse icon when collapsed */
+    .l2-nav.collapsed .l2-collapse-icon {
+      transform: scaleX(-1);
+    }
+
+    /* ════════════════════════════════════════════════
+       CANVAS — main content area
+    ════════════════════════════════════════════════ */
+    .canvas {
+      margin-left: 208px; /* sidenav width */
+      flex: 1;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ════════════════════════════════════════════════
+       OBJECT HEADER — GDS-E Static variant
+       background: #1D2537, height: 76px, radius: 8px
+    ════════════════════════════════════════════════ */
+    .obj-header {
+      background: #1D2537;
+      height: 76px;
+      border-radius: 0 0 var(--radius-md) var(--radius-md); /* sharp top, rounded bottom */
+      display: flex;
+      align-items: center;
+      gap: var(--sp-4);
+      padding: 0 var(--sp-4) 0 0;
+      margin: 0;                             /* flush to top and sides */
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      flex-shrink: 0;
+    }
+
+    /* Back chevron — 44×44 touch target */
+    .back-btn {
+      width: 44px;
+      height: 76px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: none;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      color: rgba(255,255,255,0.7);
+      border-radius: 0 0 0 var(--radius-md);
+      flex-shrink: 0;
+      transition: background 0.12s, color 0.12s;
+    }
+
+    .back-btn:hover {
+      background: rgba(255,255,255,0.07);
+      color: var(--spotlight);
+    }
+
+    /* Left cluster: title stack (context bar + title + underline) */
+    .obj-header-left {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      flex: 1;
+      min-width: 0;
+    }
+
+    /* Stacked context bar + title */
+    .obj-header-title-stack {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      min-width: 0;
+      gap: 2px;
+    }
+
+    /* Context bar — 14px semibold, dot-separated metadata strings */
+    .obj-context-bar {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      font-size: 14px;
+      font-weight: 600;
+      color: rgba(255,255,255,0.85);
+      line-height: 1.3;
+      white-space: nowrap;
+      overflow: hidden;
+    }
+
+    /* Grey dot separator between context bar strings */
+    .obj-context-sep {
+      display: inline-block;
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: #767676;
+      flex-shrink: 0;
+      margin: 0 8px;
+      vertical-align: middle;
+    }
+
+    /* Title wrapper — holds the text + blue underline bar */
+    .obj-title-wrap {
+      display: inline-flex;
+      flex-direction: column;
+      gap: 3px;
+      min-width: 0;
+    }
+
+    /* Page title — 20px weight-900, uppercase, white */
+    .obj-title {
+      font-size: 20px;
+      font-weight: 900;
+      color: var(--spotlight);
+      text-transform: uppercase;
+      letter-spacing: 0.012em;
+      line-height: 1.06;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    /* Blue underline bar below the title */
+    .obj-title-underline {
+      height: 2px;
+      background: var(--neptune);
+      border-radius: 1px;
+      width: 100%;
+    }
+
+    /* Right cluster: action buttons + icon buttons */
+    .obj-header-right {
+      display: flex;
+      align-items: center;
+      gap: var(--sp-2);
+      flex-shrink: 0;
+    }
+
+    /* Header action buttons (outline style — white border) */
+    .obj-btn {
+      height: 40px;
+      padding: 0 var(--sp-4);
+      border-radius: var(--radius-sm);
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: var(--sp-2);
+      white-space: nowrap;
+      transition: background 0.12s;
+    }
+
+    .obj-btn--primary {
+      background: var(--neptune);
+      color: var(--spotlight);
+      border: none;
+    }
+    .obj-btn--primary:hover { background: #0d4de0; }
+
+    .obj-btn--outline {
+      background: transparent;
+      color: var(--spotlight);
+      border: 1px solid rgba(255,255,255,0.5);
+    }
+    .obj-btn--outline:hover { background: rgba(255,255,255,0.07); border-color: var(--spotlight); }
+
+    /* Icon button — 40×40 touch target */
+    .obj-icon-btn {
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: rgba(255,255,255,0.7);
+      border-radius: var(--radius-sm);
+      transition: background 0.12s, color 0.12s;
+    }
+
+    .obj-icon-btn:hover {
+      background: rgba(255,255,255,0.07);
+      color: var(--spotlight);
+    }
+    .obj-icon-btn--pinned { color: var(--jupiter); }
+    .obj-icon-btn--pinned:hover { color: var(--jupiter); }
+    .obj-icon-btn--pinned svg { fill: var(--jupiter); stroke: var(--jupiter); }
+
+    /* ── Page-level action row (below header, in canvas body) ── */
+    .page-action-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: var(--sp-4);
+    }
+
+    /* Page meta — replaces header metadata strip */
+    .page-meta {
+      display: flex;
+      align-items: center;
+      gap: var(--sp-2);
+      flex-wrap: wrap;
+    }
+
+    .page-meta-text {
+      font-size: 12px;
+      color: var(--granite);
+    }
+
+    .page-meta-sep {
+      font-size: 12px;
+      color: var(--moonrock);
+    }
+
+    .page-actions {
+      display: flex;
+      gap: var(--sp-2);
+      align-items: center;
+      flex-shrink: 0;
+    }
+
+    /* ── Button — Medium 40px, GDS-E V2 ──
+       Used in the page action row (below header)
+    ── */
+    .btn {
+      height: var(--btn-h-md);
+      padding: 0 var(--sp-4);
+      border-radius: var(--radius-sm); /* 4px — Small for buttons */
+      font-family: inherit;
+      font-size: 14px; /* Label M */
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: var(--sp-2);
+      border: none;
+      white-space: nowrap;
+      transition: box-shadow 0.15s, opacity 0.15s;
+    }
+
+    /* Reset filters link button */
+    .reset-filters-btn {
+      height: 40px; padding: 0 12px; background: none; border: none;
+      cursor: pointer; font-family: inherit; font-size: 13px; font-weight: 600;
+      color: var(--neptune); white-space: nowrap; display: none; align-items: center; gap: 5px;
+      transition: color 0.12s;
+    }
+    .reset-filters-btn:hover { color: #0045E8; }
+    .reset-filters-btn.visible { display: inline-flex; }
+
+    /* Outline / secondary */
+    .btn--secondary {
+      background: var(--spotlight);
+      color: var(--cosmos);
+      border: 1px solid var(--ammonite);
+    }
+    .btn--secondary:hover { border-color: var(--moonrock); box-shadow: var(--elev-01); }
+
+    /* Solid / primary */
+    .btn--primary {
+      background: var(--neptune);
+      color: var(--spotlight);
+    }
+    .btn--primary:hover { opacity: 0.88; box-shadow: var(--elev-01); }
+    .btn--destructive { background: var(--mars); color: var(--spotlight); }
+    .btn--destructive:hover { opacity: 0.88; }
+
+    /* ════════════════════════════════════════════════
+       CANVAS BODY — scrollable content
+    ════════════════════════════════════════════════ */
+    .canvas-body {
+      padding: var(--sp-6) var(--sp-4) var(--sp-8);
+      flex: 1;
+    }
+
+    /* ════════════════════════════════════════════════
+       OVERVIEW LAYOUT
+    ════════════════════════════════════════════════ */
+
+    /* Row 1: hero total + expiry side by side */
+    .overview-row1 {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: var(--sp-4);
+      margin-bottom: var(--sp-4);
+      align-items: stretch;
+    }
+
+    /* Row 2: two bucket cards side by side */
+    .overview-row2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--sp-4);
+      margin-bottom: var(--sp-4);
+    }
+
+    /* Base card */
+    .stat-card {
+      background: var(--spotlight);
+      border: 1px solid var(--diatomite);
+      border-radius: var(--radius-md);
+      padding: var(--sp-5) var(--sp-6);
+      box-shadow: var(--elev-02);
+    }
+
+    /* Hero card — larger, prominent */
+    .stat-card--hero {
+      padding: var(--sp-6);
+    }
+
+    /* Expiry card — compact, auto width */
+    .stat-card--expiry {
+      min-width: 180px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    /* Bucket card — refundable / non-refundable */
+    .stat-card--bucket {
+      position: relative;
+    }
+
+    /* Bucket type pill */
+    /* Nil state — empty bucket */
+    .bucket-nil .stat-value { color: var(--moonrock); }
+
+    /* Label S — 12px */
+    .stat-label {
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--granite);
+      margin-bottom: var(--sp-2);
+    }
+
+    /* Data XL — 32px for hero */
+    .stat-value {
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--cosmos);
+      line-height: 1.1;
+    }
+
+    /* Data L — 20px for buckets */
+    .stat-value--md { font-size: 20px; }
+
+    /* Data M — 16px for expiry/secondary */
+    .stat-value--sm { font-size: 16px; }
+
+    /* Bucket sub-row: drawn + held + remaining */
+    .bucket-sub-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: var(--sp-4);
+      margin-top: var(--sp-4);
+      padding-top: var(--sp-4);
+      border-top: 1px solid var(--diatomite);
+    }
+
+    .bucket-sub-value--held { color: #D97706; }
+
+    .bucket-sub-label {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--slate);
+      margin-bottom: 4px;
+    }
+
+    .bucket-sub-value {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--cosmos);
+    }
+
+    .bucket-sub-value--nil { color: var(--moonrock); }
+
+    /* Body S — 12px */
+    .stat-sub {
+      font-size: 12px;
+      color: var(--slate);
+      margin-top: var(--lounge);
+    }
+
+    /* Progress bar — drawn / held / remaining */
+    .stat-progress {
+      height: 4px;
+      background: var(--diatomite);
+      border-radius: 2px;
+      margin-top: var(--sp-3);
+      overflow: hidden;
+      display: flex;
+      gap: 1px;
+    }
+
+    .stat-progress-fill {
+      height: 100%;
+      border-radius: 2px 0 0 2px;
+      background: var(--neptune);
+      flex-shrink: 0;
+    }
+
+    .stat-progress-held {
+      height: 100%;
+      background: #D97706;
+      flex-shrink: 0;
+    }
+
+    /* Keep old stat-strip for any legacy use */
+    .stat-strip {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: var(--sp-4);
+      margin-bottom: var(--sp-4);
+    }
+
+    /* ════════════════════════════════════════════════
+       SPARKLINE CARD — Level 02 elevation
+    ════════════════════════════════════════════════ */
+    .sparkline-card {
+      background: var(--spotlight);
+      border: 1px solid var(--diatomite);
+      border-radius: var(--radius-md);
+      padding: var(--theatre) var(--auditorium);
+      box-shadow: var(--elev-02);
+      margin-bottom: var(--arena);
+      position: relative;
+    }
+
+    /* Label S — 12px */
+    .sparkline-label {
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--granite);
+      margin-bottom: var(--hall);
+    }
+
+    .sparkline-wrap {
+      position: relative;
+      height: 120px;
+      cursor: crosshair;
+    }
+
+    .sparkline-wrap canvas {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+
+    .sparkline-axis {
+      display: flex;
+      justify-content: space-between;
+      margin-top: var(--club);
+    }
+
+    /* Label S — 12px */
+    .sparkline-axis span {
+      font-size: 12px;
+      color: var(--slate);
+    }
+
+    /* ── Chart tooltip — Level 03 (popovers/modals) ── */
+    .spark-tooltip {
+      position: absolute;
+      background: var(--spotlight);
+      border: 1px solid var(--ammonite);
+      border-radius: var(--radius-md);
+      padding: var(--hall) var(--auditorium);
+      box-shadow: var(--elev-03);
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.1s ease;
+      z-index: 20;
+      min-width: 172px;
+      white-space: nowrap;
+    }
+
+    .spark-tooltip.visible { opacity: 1; }
+
+    /* Badge in tooltip — pill, Standard 20px height */
+    .stt-badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 0 8px;
+      height: 20px;
+      border-radius: var(--radius-full);
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: var(--club);
+    }
+    .stt-badge--created  { background: var(--neptune); color: var(--spotlight); }
+    .stt-badge--adjusted { background: var(--earth);   color: var(--spotlight); }
+    .stt-badge--used     { background: #EEF4FF;        color: var(--neptune);        border: 1px solid #BDD5FF; }
+    .stt-badge--refunded { background: #E8F5E9;        color: var(--earth); border: 1px solid #A5D6A7; }
+    .stt-badge--held     { background: #FFF3CD;        color: #7A5800; border: 1px solid #FFD97D; }
+    .stt-badge--released { background: #F0FDF4;        color: #166534; border: 1px solid #BBF7D0; }
+    .stt-badge--wishlist { background: #F3F0FF;        color: #6D28D9; border: 1px solid #C4B5FD; }
+
+    /* Label S — 12px */
+    .stt-date {
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--granite);
+      margin-bottom: 3px;
+    }
+
+    /* Data M — 16px */
+    .stt-balance {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--cosmos);
+      line-height: 1.2;
+      margin-bottom: 3px;
+    }
+
+    /* Body S — 12px */
+    .stt-event { font-size: 12px; color: var(--granite); }
+
+    .stt-delta { font-size: 12px; font-weight: 700; margin-top: 3px; }
+    .stt-delta--pos { color: var(--earth); }
+    .stt-delta--neg { color: var(--mars);  }
+
+    /* ════════════════════════════════════════════════
+       CREDIT HISTORY SECTION
+    ════════════════════════════════════════════════ */
+    .history-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: var(--amphitheatre);
+    }
+
+    /* Heading S — 16px */
+    .history-title { font-size: 16px; font-weight: 600; color: var(--cosmos); display: flex; align-items: center; gap: 6px; }
+    .hist-info-btn {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 16px; height: 16px; border-radius: 50%;
+      font-size: 10px; font-weight: 700; font-style: normal;
+      border: 1.5px solid var(--slate); color: var(--slate);
+      cursor: default; position: relative; flex-shrink: 0; line-height: 1;
+    }
+    .hist-info-btn:hover { border-color: var(--cosmos); color: var(--cosmos); }
+    .hist-info-tooltip {
+      display: none; position: absolute; top: calc(100% + 8px); left: 0;
+      background: #1A1A1A; color: #F5F5F5; font-size: 12px; font-weight: 400;
+      border-radius: 6px; padding: 10px 12px; white-space: nowrap;
+      z-index: 100; box-shadow: 0 4px 16px rgba(0,0,0,0.22);
+      min-width: 280px; line-height: 1.6;
+    }
+    .hist-info-tooltip::before {
+      content: ''; position: absolute; top: -5px; left: 12px;
+      border: 5px solid transparent; border-top: none;
+      border-bottom-color: #1A1A1A;
+    }
+    .hist-info-btn:hover .hist-info-tooltip,
+    .hist-info-btn:focus .hist-info-tooltip { display: block; }
+
+    /* Body S — 12px */
+    .history-count { font-size: 12px; color: var(--slate); }
+
+    /* ════════════════════════════════════════════════
+       FILTER BAR — GDS-E multiselect dropdowns
+       Trigger   → border-radius/input/m (4px)
+                   color/input/fill/default + hover
+                   color/border/primary, hover, active
+                   height core/dimension/1000 (40px)
+       Dropdown  → border-radius/container/xl (8px)
+                   color/elevation/level-3
+                   color/border/elevation
+                   elevation-level-3 shadow
+       Option    → color/input/fill/hover on hover
+       Checkbox  → core/border/radius/xs (2px)
+                   color/interactive/primary/fill/default when checked
+    ════════════════════════════════════════════════ */
+    .filter-bar {
+      display: flex;
+      gap: var(--sp-2);
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: var(--sp-5);
+    }
+
+    .filter-bar-left {
+      display: flex;
+      gap: var(--sp-2);
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    /* ── Select trigger ── */
+    .ms-select { position: relative; }
+
+    .ms-trigger {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      height: 40px;
+      padding: 0 12px;
+      border: 1px solid #8F8F8F;
+      border-radius: 4px;
+      background: var(--spotlight);
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 400;
+      color: #9B9B9B;
+      cursor: pointer;
+      white-space: nowrap;
+      min-width: 148px;
+      transition: border-color 0.12s, background 0.12s;
+    }
+
+    .ms-trigger:hover           { border-color: #5D5D5D; background: var(--lunar); }
+    .ms-select.open .ms-trigger { border-color: #050505; background: var(--spotlight); outline: none; }
+    .ms-select.has-value .ms-trigger { color: #050505; border-color: #050505; font-weight: 600; }
+
+    .ms-trigger-label { flex: 1; text-align: left; }
+
+    .ms-trigger-count {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 20px;
+      height: 20px;
+      padding: 0 5px;
+      border-radius: 999px;
+      background: #E5EDFF;
+      color: var(--neptune);
+      font-size: 11px;
+      font-weight: 700;
+      line-height: 1;
+    }
+
+    .ms-trigger-chevron {
+      flex-shrink: 0;
+      color: #767676;
+      transition: transform 0.18s;
+    }
+    .ms-select.open .ms-trigger-chevron { transform: rotate(180deg); }
+
+    /* ── Dropdown panel ── */
+    .ms-dropdown {
+      position: absolute;
+      top: calc(100% + 4px);
+      left: 0;
+      min-width: 220px;
+      background: var(--spotlight);
+      border: 1px solid var(--diatomite);
+      border-radius: 8px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.12), 0 2px 6px rgba(0,0,0,0.06);
+      z-index: 300;
+      overflow: hidden;
+      display: none;
+    }
+    .ms-select.open .ms-dropdown { display: block; }
+
+    /* ── Listbox ── */
+    .ms-listbox { padding: 6px 0; max-height: 280px; overflow-y: auto; }
+
+    /* ── Option row ── */
+    .ms-option {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      height: 40px;
+      padding: 0 12px;
+      cursor: pointer;
+      user-select: none;
+      transition: background 0.1s;
+    }
+    .ms-option:hover { background: var(--lunar); }
+
+    /* ── GDS-E Checkbox ── */
+    .ms-checkbox {
+      width: 16px;
+      height: 16px;
+      min-width: 16px;
+      border: 1.5px solid #8F8F8F;
+      border-radius: 2px;
+      background: var(--spotlight);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.12s, border-color 0.12s;
+      flex-shrink: 0;
+      pointer-events: none;
+    }
+    .ms-checkbox.checked {
+      background: var(--neptune);
+      border-color: var(--neptune);
+    }
+    .ms-checkbox.checked::after {
+      content: '';
+      display: block;
+      width: 9px;
+      height: 5px;
+      border-left: 2px solid #fff;
+      border-bottom: 2px solid #fff;
+      transform: rotate(-45deg) translateY(-1px);
+    }
+
+    /* ── Colour dot in option ── */
+    .ms-opt-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .ms-option-label { font-size: 14px; color: #050505; flex: 1; }
+
+    /* ── Panel footer ── */
+    .ms-panel-footer {
+      padding: 6px 12px 8px;
+      border-top: 1px solid var(--diatomite);
+    }
+    .ms-clear-btn {
+      background: none;
+      border: none;
+      padding: 0;
+      font-family: inherit;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--neptune);
+      cursor: pointer;
+    }
+    .ms-clear-btn:hover { color: #0049F4; }
+    .ms-clear-btn:disabled { color: #B9B9B9; cursor: default; }
+
+    /* ════════════════════════════════════════════════
+       TIME MACHINE WRAP — fixed, floats below header
+       The wrap holds both the bar and the gradient scrim.
+       Width is set by JS to match the canvas body.
+    ════════════════════════════════════════════════ */
+    .timemachine-wrap {
+      position: fixed;
+      top: 84px;                              /* 76px header + 8px gap */
+      left: 208px;                            /* sidenav width — updated by JS on collapse */
+      right: 0;
+      z-index: 40;
+      pointer-events: none;
+      opacity: 0;
+      transform: translateY(-6px);
+      transition: opacity 0.2s ease, transform 0.2s ease;
+    }
+
+    .timemachine-wrap.visible {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+
+    /* Time machine — same anatomy as .tl-card */
+    .timemachine-bar {
+      margin: 0 16px 0 44px;
+      background: var(--spotlight);
+      border: 1px solid var(--diatomite);
+      border-left: 4px solid var(--neptune);
+      border-radius: var(--radius-md);
+      padding: var(--auditorium);
+      box-shadow: var(--elev-02);
+      outline: none;
+    }
+    .timemachine-wrap { outline: none; }
+
+    /* Row 1 — mirrors tl-meta */
+    .tm-meta {
+      display: flex;
+      align-items: center;
+      gap: var(--club);
+      margin-bottom: var(--club);
+      flex-wrap: wrap;
+    }
+
+    .tm-meta-right { margin-left: auto; display: flex; align-items: center; gap: var(--club); }
+
+    /* Row 2 — mirrors tl-desc baseline */
+    .tm-stats {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .tm-stat {
+      display: flex;
+      align-items: baseline;
+      gap: 5px;
+    }
+
+    .tm-stat-label {
+      font-size: 12px;
+      color: var(--granite);
+    }
+
+    .tm-stat-value {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--cosmos);
+    }
+
+    .tm-stat-value--held { color: #D97706; }
+
+    .tm-vsep {
+      width: 1px; height: 14px;
+      background: var(--diatomite);
+      flex-shrink: 0;
+      align-self: center;
+    }
+
+    /* Actor stack — overlapping avatars */
+    .tm-actors {
+      display: flex;
+      align-items: center;
+    }
+    .tm-actors .actor-avatar,
+    .tm-actors .actor-system {
+      margin-left: -6px;
+      border: 1.5px solid var(--spotlight);
+    }
+    .tm-actors .actor-avatar:first-child,
+    .tm-actors .actor-system:first-child { margin-left: 0; }
+
+    /* Gradient scrim below — matches card width */
+    .timemachine-scrim {
+      height: 48px;
+      margin: 0 16px 0 44px;
+      background: linear-gradient(to bottom, var(--lunar) 0%, transparent 100%);
+      pointer-events: none;
+    }
+
+    /* Timeline empty state */
+    .timeline-empty {
+      padding: var(--sp-10) var(--sp-6);
+      text-align: center;
+      color: var(--slate);
+      font-size: 14px;
+    }
+
+    /* ════════════════════════════════════════════════
+       TIMELINE
+    ════════════════════════════════════════════════ */
+    .timeline {
+      position: relative;
+      padding-left: 28px;
+      padding-bottom: 60vh;
+    }
+
+    /* vertical connector */
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 7px;
+      top: 26px;
+      bottom: 26px;
+      width: 2px;
+      background: var(--diatomite);
+    }
+
+    .tl-event {
+      position: relative;
+      margin-bottom: var(--arena);
+      transition: opacity 0.12s linear;
+    }
+
+    .tl-event:last-child { margin-bottom: 0; }
+
+    /* dot */
+    .tl-dot {
+      position: absolute;
+      left: -28px;
+      top: 18px;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      border: 2px solid var(--spotlight);
+      z-index: 1;
+    }
+
+    .tl-dot--grey   { background: var(--moonrock); box-shadow: 0 0 0 2px var(--moonrock); }
+    .tl-dot--green  { background: var(--earth);    box-shadow: 0 0 0 2px var(--earth); }
+    .tl-dot--blue   { background: var(--neptune);  box-shadow: 0 0 0 2px var(--neptune); }
+    .tl-dot--amber  { background: #D97706;         box-shadow: 0 0 0 2px #D97706; }
+    .tl-dot--purple { background: #6D28D9;         box-shadow: 0 0 0 2px #6D28D9; }
+
+    /* Event card — Medium radius (8px), Level 02 */
+    .tl-card {
+      position: relative;
+      z-index: 1;              /* sits below timemachine-wrap (z-index: 40) */
+      background: var(--spotlight);
+      border: 1px solid var(--diatomite);
+      border-radius: var(--radius-md);
+      padding: var(--auditorium);
+      box-shadow: var(--elev-02);
+    }
+
+    .tl-meta {
+      display: flex;
+      align-items: center;
+      gap: var(--club);
+      margin-bottom: var(--club);
+      flex-wrap: wrap;
+    }
+
+    .tl-meta-right { margin-left: auto; }
+
+    /* Badge — Standard 20px height, Full radius (pill) */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.02em;
+      line-height: 1.4;
+    }
+
+    .badge--grey     { background: var(--lunar);   color: var(--granite); }
+    .badge--used     { background: #EEF4FF;        color: var(--neptune); }
+    .badge--green    { background: var(--earth);   color: var(--spotlight); }
+    .badge--blue     { background: var(--neptune); color: var(--spotlight); }
+    .badge--amber    { background: #FFF3CD;        color: #7A5800; }
+    .badge--refunded { background: #E8F5E9;        color: var(--earth); }
+    .badge--released { background: #F0FDF4;        color: #166534; }
+    .badge--held     { background: #FFF3CD;        color: #7A5800; }
+    .badge--wishlist { background: #F3F0FF;        color: #6D28D9; }
+    .badge--adjusted-down { background: #A50000;  color: var(--spotlight); }
+
+    /* Body S — 12px */
+    .tl-date  { font-size: 12px; color: var(--granite); }
+    .tl-date--clickable {
+      cursor: pointer;
+      text-decoration: underline;
+      text-decoration-style: dotted;
+      text-underline-offset: 2px;
+    }
+    .tl-date--clickable:hover { color: var(--neptune); }
+
+    .actor {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      color: var(--granite);
+    }
+
+    /* Avatar — 20px, XSmall */
+    .actor-avatar {
+      width: 20px; height: 20px;
+      border-radius: 50%;
+      background: var(--diatomite);
+      color: var(--cosmos);
+      font-size: 8px;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .actor-system {
+      width: 20px; height: 20px;
+      border-radius: 50%;
+      background: var(--lunar);
+      border: 1px solid var(--diatomite);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    /* delta — Body M: 14px */
+    .delta        { font-size: 14px; font-weight: 700; line-height: 1; }
+    .delta--pos   { color: var(--earth); }
+    .delta--neg   { color: var(--mars); }
+    .delta--lg    { font-size: 20px; } /* Data L for large adjustment deltas */
+
+    /* description — Body M */
+    .tl-desc {
+      font-size: 14px;
+      color: var(--cosmos);
+      line-height: 1.5;
+      margin-bottom: var(--club);
+    }
+
+    .tl-req {
+      font-size: 11px; font-weight: 700; color: #494949;
+      text-decoration: none; font-family: "SF Mono", "Fira Code", monospace;
+      background: var(--lunar); border-radius: 3px; padding: 1px 5px;
+      letter-spacing: 0.01em;
+    }
+    .tl-req:hover { background: var(--diatomite); color: #050505; }
+
+    /* reason callout */
+    .tl-reason {
+      border-left: 3px solid var(--ammonite);
+      padding: var(--club) var(--hall);
+      margin: var(--club) 0 var(--hall);
+      font-size: 13px;
+      font-style: italic;
+      color: var(--granite);
+      line-height: 1.4;
+    }
+
+    /* show more / show less — below meta row */
+    .tl-show-more {
+      background: none;
+      border: none;
+      padding: 0;
+      font-family: inherit;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--slate);
+      cursor: pointer;
+      margin-top: var(--sp-2);
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+    }
+    .tl-show-more:hover { color: var(--cosmos); }
+
+    .tl-body { margin-top: var(--sp-2); }
+    .tl-body[hidden] { display: none; }
+
+    /* expand toggle — Label S */
+    .tl-toggle {
+      background: none;
+      border: none;
+      padding: 0;
+      font-family: inherit;
+      font-size: 12px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: var(--lounge);
+      font-weight: 600;
+    }
+    .tl-toggle { color: var(--slate); }
+    .tl-toggle:hover { color: var(--neptune); }
+
+    .toggle-icon {
+      font-style: normal;
+      font-size: 11px;
+      transition: transform 0.2s;
+      display: inline-block;
+    }
+
+    /* diff table */
+    .diff-wrap {
+      margin-top: var(--hall);
+      border: 1px solid var(--diatomite);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+    }
+
+    .diff-wrap[hidden] { display: none; }
+
+    .diff-table { width: 100%; border-collapse: collapse; }
+
+    /* Label S — 12px */
+    .diff-table th {
+      background: var(--lunar);
+      padding: var(--club) var(--hall);
+      text-align: left;
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--granite);
+      border-bottom: 1px solid var(--diatomite);
+    }
+
+    .diff-table th:not(:first-child),
+    .diff-table td:not(:first-child) { text-align: right; }
+
+    /* Body M — 14px */
+    .diff-table td {
+      padding: var(--club) var(--hall);
+      font-size: 14px;
+      color: var(--cosmos);
+      border-bottom: 1px solid var(--diatomite);
+    }
+
+    .diff-table tr:last-child td {
+      border-bottom: none;
+      font-weight: 700;
+      background: var(--lunar);
+    }
+
+    .diff-pos { color: var(--earth); font-weight: 600; }
+    .diff-neu { color: var(--slate); }
+
+    /* origin detail panel */
+    .origin-detail {
+      margin-top: var(--hall);
+      padding: var(--hall) var(--auditorium);
+      background: var(--lunar);
+      border: 1px solid var(--diatomite);
+      border-radius: var(--radius-md);
+      font-size: 14px;
+      color: var(--granite);
+      display: flex;
+      flex-direction: column;
+      gap: var(--club);
+    }
+
+    .origin-detail[hidden] { display: none; }
+
+    .origin-row { display: flex; gap: var(--auditorium); }
+
+    /* Label M — 14px */
+    .origin-field {
+      min-width: 140px;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--cosmos);
+    }
+
+    /* ── Milestone divider ── */
+    .tl-milestone {
+      position: relative;
+      margin: var(--amphitheatre) 0;
+      display: flex;
+      align-items: center;
+      gap: var(--hall);
+    }
+
+    .tl-milestone::before,
+    .tl-milestone::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      border-top: 1px dashed var(--ammonite);
+    }
+
+    .tl-milestone-label { font-size: 12px; color: var(--slate); white-space: nowrap; }
+
+    /* Phase marker — pill badge, Full radius */
+    .tl-phase {
+      position: relative;
+      margin: var(--amphitheatre) 0;
+      display: flex;
+      align-items: center;
+      gap: var(--hall);
+    }
+
+    .tl-phase::before,
+    .tl-phase::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--ammonite);
+    }
+
+    .tl-phase-label {
+      display: flex;
+      align-items: center;
+      gap: var(--club);
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--cosmos);
+      white-space: nowrap;
+      flex-shrink: 0;
+      background: var(--lunar);
+      border: 1px solid var(--ammonite);
+      border-radius: var(--radius-full);
+      padding: 4px var(--hall);
+    }
+
+    .tl-phase-dot {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: var(--neptune);
+      flex-shrink: 0;
+    }
+
+    /* Settled sub-label — Label S: 12px, success green */
+    .tl-settled {
+      font-size: 12px;
+      color: var(--earth);
+      font-weight: 600;
+      margin-top: 4px;
+      display: flex;
+      align-items: center;
+      gap: var(--lounge);
+    }
+
+    .tl-settled::before { content: '✓'; font-size: 10px; }
+
+    /* ════════════════════════════════════════════════
+       ADJUST CREDIT DRAWER — GDS-E Tm1Drawer pattern
+       Right panel, 480px, slides in over content
+    ════════════════════════════════════════════════ */
+    .drawer-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.32);
+      z-index: 300;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s ease;
+    }
+    .drawer-backdrop.open {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .drawer {
+      position: fixed;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      width: 480px;
+      max-width: 100vw;
+      background: var(--spotlight);
+      box-shadow: var(--elev-04);
+      z-index: 301;
+      display: flex;
+      flex-direction: column;
+      transform: translateX(100%);
+      transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .drawer.open {
+      transform: translateX(0);
+    }
+
+    /* Drawer header */
+    .drawer-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      padding: var(--sp-6) var(--sp-6) var(--sp-4);
+      border-bottom: 1px solid var(--ammonite);
+      flex-shrink: 0;
+    }
+    .drawer-header-text {}
+    .drawer-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--cosmos);
+      margin-bottom: 2px;
+    }
+    .drawer-subtitle {
+      font-size: 13px;
+      color: var(--granite);
+    }
+    .drawer-close {
+      width: 32px;
+      height: 32px;
+      border: none;
+      background: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--cosmos);
+      border-radius: var(--radius-sm);
+      flex-shrink: 0;
+      margin-top: -2px;
+      transition: background 0.12s;
+    }
+    .drawer-close:hover { background: var(--lunar); }
+
+    /* Drawer body — scrollable */
+    .drawer-body {
+      flex: 1;
+      overflow-y: auto;
+      padding: var(--sp-6);
+      display: flex;
+      flex-direction: column;
+      gap: var(--sp-5);
+    }
+
+    /* Drawer footer */
+    .drawer-footer {
+      padding: var(--sp-4) var(--sp-6);
+      border-top: 1px solid var(--ammonite);
+      display: flex;
+      flex-direction: column;
+      gap: var(--sp-3);
+      flex-shrink: 0;
+      background: var(--spotlight);
+    }
+    .drawer-footer-actions {
+      display: flex;
+      gap: var(--sp-2);
+      justify-content: flex-end;
+    }
+    .drawer-footer .db-preview {
+      margin: 0;
+    }
+
+    /* ── Bucket section inside drawer ── */
+    .db-section-title {
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--granite);
+      margin-bottom: var(--sp-3);
+    }
+
+    .db-bucket {
+      border: 1px solid var(--diatomite);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+    }
+
+    .db-bucket-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: var(--sp-3) var(--sp-4);
+      background: var(--lunar);
+      border-bottom: 1px solid var(--diatomite);
+    }
+    .db-bucket--active .db-bucket-header {
+      background: rgba(2,77,223,0.04);
+      border-bottom-color: rgba(2,77,223,0.2);
+    }
+
+    .db-bucket-name {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--cosmos);
+    }
+    .db-bucket--active .db-bucket-name { color: var(--neptune); }
+
+    .db-lock-btn {
+      width: 28px;
+      height: 28px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--ammonite);
+      background: var(--spotlight);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--slate);
+      transition: border-color 0.12s, color 0.12s, background 0.12s;
+    }
+    .db-lock-btn:hover { border-color: var(--neptune); color: var(--neptune); }
+    .db-lock-btn--active { border-color: var(--neptune); color: var(--neptune); background: rgba(2,77,223,0.06); }
+
+    .db-bucket-stats {
+      display: flex;
+      gap: var(--sp-6);
+      padding: var(--sp-3) var(--sp-4);
+    }
+    .db-stat-label {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--slate);
+      margin-bottom: 2px;
+    }
+    .db-stat-value {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--cosmos);
+    }
+    .db-stat-value--muted { color: var(--moonrock); }
+
+    .db-input-area {
+      padding: var(--sp-3) var(--sp-4) var(--sp-4);
+      border-top: 1px solid var(--diatomite);
+      display: none;
+    }
+    .db-bucket--active .db-input-area { display: block; }
+
+    /* Sign-toggle input */
+    .db-input-wrap {
+      display: flex;
+      align-items: stretch;
+      border: 1px solid var(--ammonite);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+    .db-input-wrap:focus-within { border-color: var(--neptune); box-shadow: 0 0 0 3px rgba(2,77,223,0.12); }
+    .db-input-wrap--error { border-color: var(--mars) !important; box-shadow: 0 0 0 3px rgba(235,0,0,0.1) !important; }
+
+    .db-sign-btn {
+      padding: 0 var(--sp-3);
+      height: 40px;
+      border: none;
+      border-right: 1px solid var(--ammonite);
+      font-family: inherit;
+      font-size: 16px;
+      font-weight: 800;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 40px;
+      transition: background 0.12s, color 0.12s;
+    }
+    .db-sign-btn--pos { background: rgba(4,136,81,0.08); color: var(--earth); }
+    .db-sign-btn--pos:hover { background: rgba(4,136,81,0.15); }
+    .db-sign-btn--neg { background: rgba(235,0,0,0.07); color: var(--mars); }
+    .db-sign-btn--neg:hover { background: rgba(235,0,0,0.13); }
+
+    .db-prefix {
+      padding: 0 var(--sp-3);
+      background: var(--lunar);
+      border-right: 1px solid var(--ammonite);
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--granite);
+      display: flex;
+      align-items: center;
+      flex-shrink: 0;
+    }
+
+    .db-input {
+      flex: 1;
+      height: 40px;
+      padding: 0 var(--sp-3);
+      border: none;
+      font-family: inherit;
+      font-size: 14px;
+      color: var(--cosmos);
+      background: var(--spotlight);
+      outline: none;
+    }
+    .db-input::placeholder { color: var(--moonrock); }
+
+    .db-magnitude {
+      font-size: 12px;
+      font-style: italic;
+      min-height: 18px;
+      margin-top: var(--sp-1);
+      color: var(--slate);
+      transition: color 0.15s;
+    }
+    .db-magnitude--pos { color: var(--earth); }
+    .db-magnitude--neg { color: var(--mars); }
+
+    .db-field-error {
+      font-size: 12px;
+      color: var(--mars);
+      margin-top: var(--sp-1);
+      display: none;
+    }
+    .db-field-error.visible { display: block; }
+
+    /* Preview band */
+    .db-preview {
+      background: rgba(2,77,223,0.04);
+      border: 1px solid rgba(2,77,223,0.18);
+      border-radius: var(--radius-md);
+      padding: var(--sp-3) var(--sp-4);
+      display: none;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .db-preview.visible {
+      display: flex;
+    }
+    .db-preview-label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--neptune);
+      margin-bottom: 2px;
+    }
+    .db-preview-hero {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--cosmos);
+      line-height: 1.2;
+    }
+    .db-preview-sub {
+      font-size: 12px;
+      color: var(--granite);
+      margin-top: 2px;
+    }
+    .db-preview-delta--pos { color: var(--earth); font-weight: 600; }
+    .db-preview-delta--neg { color: var(--mars); font-weight: 600; }
+
+    /* Reason field */
+    .db-label {
+      display: block;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--cosmos);
+      margin-bottom: var(--sp-2);
+    }
+    .db-hint {
+      font-size: 12px;
+      color: var(--granite);
+      margin-bottom: var(--sp-2);
+    }
+    .db-textarea {
+      width: 100%;
+      padding: var(--sp-3);
+      border: 1px solid var(--ammonite);
+      border-radius: var(--radius-md);
+      font-family: inherit;
+      font-size: 14px;
+      color: var(--cosmos);
+      background: var(--spotlight);
+      outline: none;
+      resize: vertical;
+      min-height: 80px;
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+    .db-textarea:focus { border-color: var(--neptune); box-shadow: 0 0 0 3px rgba(2,77,223,0.12); }
+    .db-textarea::placeholder { color: var(--moonrock); }
+
+    /* ── Confirmation modal ── */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.4);
+      z-index: 500;
+      display: none;
+      align-items: center;
+      justify-content: center;
+    }
+    .modal-backdrop.open { display: flex; }
+    .modal {
+      background: var(--spotlight);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--elev-04);
+      width: 460px;
+      max-width: calc(100vw - 48px);
+      overflow: hidden;
+    }
+    .modal-header { padding: var(--sp-6) var(--sp-6) var(--sp-4); }
+    .modal-title { font-size: 18px; font-weight: 700; color: var(--cosmos); margin-bottom: var(--sp-1); }
+    .modal-subtitle { font-size: 13px; color: var(--granite); line-height: 1.5; }
+    .modal-body { padding: 0 var(--sp-6) var(--sp-6); }
+    .modal-confirm-label {
+      font-size: 14px;
+      color: var(--granite);
+      display: flex;
+      align-items: baseline;
+      gap: var(--sp-2);
+      margin-bottom: var(--sp-2);
+    }
+    .modal-confirm-delta { font-weight: 700; }
+    .mdiff-pos { color: var(--earth); }
+    .mdiff-neg { color: var(--mars); }
+    .modal-confirm-hero {
+      font-size: 32px;
+      font-weight: 700;
+      color: var(--cosmos);
+      margin-bottom: var(--sp-2);
+      line-height: 1.1;
+    }
+    .modal-confirm-sub {
+      font-size: 13px;
+      color: var(--granite);
+      margin-bottom: var(--sp-5);
+    }
+    .modal-reason {
+      background: var(--lunar);
+      border-left: 3px solid var(--ammonite);
+      border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+      padding: var(--sp-3) var(--sp-4);
+      font-size: 13px;
+      font-style: italic;
+      color: var(--granite);
+      margin-bottom: var(--sp-5);
+    }
+    .modal-btn-confirm {
+      display: block;
+      width: 100%;
+      height: 48px;
+      background: var(--neptune);
+      color: #fff;
+      border: none;
+      border-radius: var(--radius-md);
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-bottom: var(--sp-3);
+    }
+    .modal-btn-confirm:hover { background: #013db5; }
+    .modal-btn-cancel {
+      display: block;
+      width: 100%;
+      background: none;
+      border: none;
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--granite);
+      text-decoration: underline;
+      cursor: pointer;
+      padding: var(--sp-2) 0;
+    }
+    .modal-btn-cancel:hover { color: var(--cosmos); }
+
+  </style>
+</head>
+<body>
+
+<div class="app-shell">
+
+  <!-- ═══════════════════════════════════
+       SIDENAV — TM1 expanded / collapsible
+  ════════════════════════════════════ -->
+  <nav id="sidenav" class="l2-nav" aria-label="Sport XT navigation">
+
+    <!-- Logo row -->
+    <div>
+      <div class="l2-logo-row">
+        <button class="l2-logo-btn" aria-label="tm/1 home">
+          <svg width="32" height="28" viewBox="0 0 32 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <g clip-path="url(#clip0_15238_7288)">
+              <path fill-rule="evenodd" clip-rule="evenodd" d="M25.205 0.101958L19.3718 28L18.884 27.898L24.7172 -4.00543e-05L25.205 0.101958Z" fill="#050505"/>
+              <path d="M4.82587 11.0638L4.64729 11.9422H2.67458L1.49095 17.4138C1.40166 17.7897 1.38297 18.0783 1.38297 18.5082C1.38297 19.1 1.74221 19.2806 2.24473 19.2806C2.60398 19.2806 2.97983 19.1727 3.33907 19.0294L3.24978 19.9451C2.83655 20.1071 2.3714 20.1777 1.93948 20.1777C1.07772 20.1777 0.396618 19.6212 0.396618 18.6161C0.396618 18.1323 0.431919 17.7191 0.539899 17.2519L1.68822 11.9422H0L0.197271 11.0638H1.86681L2.29665 8.9997L3.35568 8.65915L2.85316 11.0638H4.82587ZM18.0492 13.0552C18.0492 13.3064 18.0139 13.5764 17.96 13.8276L16.6683 19.9825H15.682L16.9196 14.027C16.9736 13.757 17.0089 13.4705 17.0089 13.2026C17.0089 12.2329 16.5064 11.7843 15.5553 11.7843C13.8505 11.7843 12.7562 13.5785 12.4509 15.0673L11.4292 19.9825H10.4429L11.6805 14.027C11.7345 13.757 11.7698 13.4705 11.7698 13.2026C11.7698 12.1976 11.232 11.7843 10.2622 11.7843C8.5574 11.7843 7.51706 13.5972 7.21181 15.0673L6.19015 19.9825H5.2038L6.62207 13.1818C6.76535 12.4821 6.90863 11.7823 6.98131 11.0638H7.87837L7.62711 12.6066C8.3809 11.585 9.29665 10.8852 10.6942 10.8852C11.7698 10.8852 12.6856 11.6577 12.6856 12.7686C13.3314 11.7096 14.515 10.8852 15.79 10.8852C17.1356 10.8852 18.0513 11.6743 18.0513 13.0552H18.0492Z" fill="#050505"/>
+              <path d="M25.7387 11.9069L24.6443 10.202L28.841 7.45684H31.121L28.4112 19.9804H25.8985L28.0332 10.31L25.7387 11.9069Z" fill="#050505"/>
+            </g>
+            <defs>
+              <clipPath id="clip0_15238_7288">
+                <rect width="31.121" height="28" fill="white"/>
+              </clipPath>
+            </defs>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Nav tiles -->
+      <div class="l2-tiles">
+
+        <!-- System — Settings icon -->
+        <button class="l2-tile">
+          <div class="l2-tile-icon l2-tile-icon--inactive">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path fill-rule="evenodd" clip-rule="evenodd" d="M15.6326 9.73662L12.3879 7.7043L8.7759 8.97399L7.51655 12.5896L9.55814 15.8285L13.3633 16.2517L16.0667 13.5406L15.6326 9.73662ZM9.15858 12.4022L9.9462 10.1409L12.2052 9.34686L14.2345 10.6179L14.506 12.9969L12.8152 14.6925L10.4354 14.4278L9.15858 12.4022Z" fill="#050505"/><path fill-rule="evenodd" clip-rule="evenodd" d="M3.56123 4.97368L4.80108 7.54555L4.04244 9.12087L1.265 9.77231L1.26489 14.2669L4.0474 14.8831L4.79739 16.4404L3.53755 18.9932L7.08196 21.8253L9.30811 20.0413L11.008 20.4293L12.2542 23L16.6229 21.9944V19.1467L17.9829 18.0621L20.7638 18.7092L22.7193 14.645L20.4859 12.8676V11.1348L22.7324 9.38143L20.777 5.31768L17.99 5.93719L16.6229 4.84698V1.99494L12.2391 1L11.0052 3.56496L9.30432 3.95318L7.07135 2.17921L3.56123 4.97368ZM5.41883 5.39807L7.07232 4.0817L8.93822 5.56406L12.0361 4.85699L13.0666 2.7147L15.1339 3.18389V5.56406L17.6182 7.54521L19.9473 7.02748L20.8704 8.94584L18.9969 10.4081V13.5856L20.8623 15.0702L19.9393 16.9885L17.6182 16.4484L15.1339 18.4296V20.8092L13.0765 21.2828L12.0361 19.1366L8.93822 18.4296L7.0806 19.9182L5.40303 18.5778L6.45393 16.4484L5.07526 13.5856L2.75394 13.0715L2.75399 10.9525L5.07526 10.4081L6.45393 7.54521L5.41883 5.39807Z" fill="#050505"/></svg>
+          </div>
+          <span class="l2-tile-label">System</span>
+        </button>
+
+        <!-- Accounts — User icon -->
+        <button class="l2-tile">
+          <div class="l2-tile-icon l2-tile-icon--inactive">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path fill-rule="evenodd" clip-rule="evenodd" d="M12 1C8.96026 1 6.5 3.46026 6.5 6.5C6.5 9.53974 8.96026 12 12 12C15.0397 12 17.5 9.53974 17.5 6.5C17.5 3.46026 15.0397 1 12 1ZM8 6.5C8 4.28869 9.78869 2.5 12 2.5C14.2113 2.5 16 4.28869 16 6.5C16 8.71131 14.2113 10.5 12 10.5C9.78869 10.5 8 8.71131 8 6.5Z" fill="#050505"/><path fill-rule="evenodd" clip-rule="evenodd" d="M18.4868 13H5.4345L1 16.9066V23H23V16.8789L18.4868 13ZM2.5 17.5842L6.00099 14.5H17.9308L21.5 17.5676V21.5H2.5V17.5842Z" fill="#050505"/></svg>
+          </div>
+          <span class="l2-tile-label">Accounts</span>
+        </button>
+
+        <!-- Tournament — Star icon -->
+        <button class="l2-tile">
+          <div class="l2-tile-icon l2-tile-icon--inactive">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M14.1811 15.6157L16.4692 17.8308L14.8647 20.4614L11.4144 19.2293L11.2509 16.6582L14.1811 15.6157Z" fill="#050505"/><path d="M17.8304 12.713L14.5912 13.6739L12.319 11.4724L14.1693 8.49136L17.4751 9.47572L17.8304 12.713Z" fill="#050505"/><path fill-rule="evenodd" clip-rule="evenodd" d="M6.77924 10.9396C6.52532 10.9794 6.26507 11 6 11C3.23858 11 1 8.76142 1 6C1 3.23858 3.23858 1 6 1C8.76142 1 11 3.23858 11 6C11 6.26504 10.9794 6.52527 10.9397 6.77916C12.0226 6.27892 13.2287 5.99984 14.5 5.99984C19.1944 5.99984 23 9.80542 23 14.4998C23 19.1943 19.1944 22.9998 14.5 22.9998C9.80556 22.9998 5.99998 19.1943 5.99998 14.4998C5.99998 13.2286 6.27904 12.0226 6.77924 10.9396ZM3.98982 8.86553C4.55866 9.26531 5.25192 9.5 6 9.5C7.933 9.5 9.5 7.933 9.5 6C9.5 5.50496 9.39722 5.03392 9.21184 4.60705C8.99631 4.58503 8.74293 4.57987 8.48097 4.61727C8.14193 4.66568 7.80407 4.78277 7.50724 5.01359C7.21488 5.24095 6.91996 5.61126 6.71147 6.23666C6.42734 7.08894 6.01797 7.71063 5.52507 8.1419C5.03078 8.57439 4.49041 8.78209 3.99829 8.86413L3.98982 8.86553ZM2.76434 7.33675C2.59399 6.92488 2.5 6.47342 2.5 6C2.5 4.067 4.067 2.5 6 2.5C6.76896 2.5 7.48 2.74798 8.05752 3.16833C7.57838 3.26337 7.06244 3.45932 6.58643 3.82949C6.03505 4.25827 5.57997 4.88783 5.28846 5.76227C5.07258 6.40983 4.79445 6.78806 4.53735 7.01301C4.28164 7.23674 4.00951 7.34156 3.75163 7.38455C3.48705 7.42866 3.23542 7.40742 3.04436 7.37162C2.95051 7.35403 2.87615 7.33384 2.82843 7.31926C2.80471 7.31202 2.78802 7.30629 2.77928 7.30319L2.77241 7.30069L2.77375 7.30121L2.77567 7.30196L2.77766 7.30275C2.77766 7.30275 2.77776 7.3028 2.76434 7.33675ZM14.5 21.4998C11.2813 21.4998 8.56999 19.3275 7.75229 16.3689L10.0214 15.1922L10.3969 11.8054L8.98525 10.188C10.2666 8.55153 12.2605 7.49984 14.5 7.49984C17.9136 7.49984 20.7566 9.94337 21.3751 13.1768L18.9136 13.7405L18.5081 17.8276L19.7444 19.1364C18.4618 20.5859 16.5876 21.4998 14.5 21.4998Z" fill="#050505"/><path d="M22 3.5C22 4.88071 20.8807 6 19.5 6C18.1193 6 17 4.88071 17 3.5C17 2.11929 18.1193 1 19.5 1C20.8807 1 22 2.11929 22 3.5Z" fill="#050505"/></svg>
+          </div>
+          <span class="l2-tile-label">Tournament</span>
+        </button>
+
+        <!-- Venue — Venue icon -->
+        <button class="l2-tile">
+          <div class="l2-tile-icon l2-tile-icon--inactive">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path fill-rule="evenodd" clip-rule="evenodd" d="M3.25 1.72401L4.22763 1L9.40763 2.67167L9.40134 4.12168L4.75 5.57725V7.45224L5.69211 7.04317H16.25V1.72401L17.2276 1L22.4076 2.67167L22.4013 4.12168L17.75 5.57725V7.04317H18.3079L23 9.08049V10.792V11.5912V20.6385L19.2123 23H4.78772L1 20.6385V11.5912V10.792V9.08049L3.25 8.10354V1.72401ZM2.5 12.2425V14.0024L5.65687 15.4016H9.25V15.4015H15.25V15.4016H18.3431L21.5 14.0023V12.2425L18.5909 13.5057L18 13.6285H5.69211L2.5 12.2425ZM2.5 17.0417V15.6611L5.3431 16.9213H9.25V18.441H5.65687L2.5 17.0417ZM2.5 18.7005V19.7893L5.21228 21.4803H9.25V19.9607H5.3431L2.5 18.7005ZM10.75 21.4803V16.9213H13.75V21.4803H10.75ZM15.25 18.441V16.9213H18.5L18.8006 16.8576L21.5 15.6611V17.0417L18.3431 18.441H15.25ZM15.25 19.9607V21.4803H18.7877L21.5 19.7893V18.7005L18.8006 19.897L18.5 19.9607H15.25ZM4.75 3.98671L6.67433 3.38452L4.75 2.76351V3.98671ZM17.75 3.98671L19.6743 3.38452L17.75 2.76351V3.98671ZM18 12.1088H6L2.5 10.5891V10.0826L6 8.56287H18L21.5 10.0826V10.5891L18 12.1088Z" fill="#050505"/></svg>
+          </div>
+          <span class="l2-tile-label">Venue</span>
+        </button>
+
+        <!-- Key Clients — Group icon, active expanded -->
+        <div class="l2-tile-expanded" id="kc-tile">
+          <button class="l2-tile-header" id="kc-tile-btn" onclick="toggleTile()" aria-expanded="true" aria-controls="kc-subnav" style="background:none;border:none;width:100%;font-family:inherit;text-align:left;">
+            <div class="l2-tile-icon l2-tile-icon--active">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M11.25 14.75H5.25V13.25H11.25V14.75Z" fill="#D06010"/><path d="M11.25 9.25H7.75V7.75H11.25V9.25Z" fill="#D06010"/><path fill-rule="evenodd" clip-rule="evenodd" d="M13.75 5.25H5.25V11.75H13.75V5.25ZM6.75 10.25V6.75H12.25V10.25H6.75Z" fill="#D06010"/><path fill-rule="evenodd" clip-rule="evenodd" d="M2.75 1H16.25V3.75H19V6.25H21.25V19.7905L18.3312 22.9925L7.75 23.0007V20.5H5.5V17.75H2.75V1ZM7 17.75V19H15.14L17.5 16.524V5.25H16.25V14.3743L13.2646 17.5065L13.0385 17.75H7ZM4.25 2.5V16.25H12.39L14.75 13.774V2.5H4.25ZM19 17.1243V7.75H19.75V19.2095L17.6688 21.4925L9.25 21.4993V20.5H15.7885L16.0146 20.2565L19 17.1243Z" fill="#D06010"/></svg>
+            </div>
+            <span class="l2-tile-label">Key Clients</span>
+            <svg class="l2-tile-chevron" id="kc-chevron" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#050505" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="transition:transform 0.2s;"><path d="M4 10l4-4 4 4"/></svg>
+          </button>
+          <div class="l2-tile-subnav" id="kc-subnav">
+            <a class="l2-sublink" href="#">Stakeholders</a>
+            <a class="l2-sublink" href="#">Entitlements</a>
+            <a class="l2-sublink l2-sublink--active" href="#" aria-current="page">Credits</a>
+            <a class="l2-sublink" href="#">Requests</a>
+            <a class="l2-sublink" href="#">Reports</a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Bottom: help + account + collapse -->
+    <div class="l2-bottom">
+      <div class="l2-bottom-sep"></div>
+
+      <!-- Help — QuestionAlt icon -->
+      <div class="l2-help-row" role="button" tabindex="0">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M12.2531 8.0003L12.2505 8.00024L12.2469 8.00033C12.2374 8.00065 12.2201 8.0014 12.196 8.00312C12.1476 8.00658 12.0735 8.01386 11.9827 8.029C11.7974 8.05987 11.5619 8.12023 11.3354 8.23346C11.1119 8.34522 10.9112 8.50109 10.7647 8.72085C10.6213 8.93592 10.5 9.25638 10.5 9.75014H9C9 8.9939 9.19121 8.37686 9.51659 7.8888C9.83883 7.40544 10.2631 7.09256 10.6646 6.89182C11.0631 6.69255 11.4526 6.59666 11.7361 6.54941C11.8796 6.52549 12.0008 6.51324 12.0891 6.50693C12.1334 6.50377 12.1698 6.50207 12.1969 6.50117C12.2105 6.50071 12.2218 6.50046 12.2307 6.50031L12.2422 6.50017L12.2466 6.50015L12.2484 6.50014L12.2507 6.50014L12.253 6.50015L12.2569 6.50017L12.2672 6.50028L12.2975 6.50096C12.3218 6.50168 12.3545 6.50303 12.3942 6.50555C12.4735 6.51059 12.5824 6.52037 12.7115 6.53949C12.9658 6.57716 13.3176 6.6539 13.6796 6.81478C14.0423 6.97598 14.4404 7.23314 14.7484 7.64389C15.0634 8.06388 15.25 8.59938 15.25 9.25014C15.25 10.4731 14.5819 11.2802 14.0679 11.9012C14.0295 11.9477 13.9919 11.9931 13.9555 12.0376C13.4143 12.6989 13 13.2744 13 14.2501H11.5C11.5 12.7259 12.2107 11.8013 12.7945 11.0877L12.8343 11.0391C13.4123 10.333 13.75 9.92047 13.75 9.25014C13.75 8.9009 13.6553 8.6864 13.5484 8.54389C13.4346 8.39214 13.2702 8.2743 13.0704 8.1855C12.8699 8.09638 12.6592 8.04812 12.4917 8.02329C12.4098 8.01116 12.3429 8.00532 12.2992 8.00254C12.2774 8.00116 12.2617 8.00056 12.2531 8.0003Z" fill="#050505"/><path d="M11.5 17V15.5H13V17H11.5Z" fill="#050505"/><path fill-rule="evenodd" clip-rule="evenodd" d="M1 12C0.999995 5.92488 5.92486 1 12 1C18.0751 1 23 5.92487 23 12C23 18.0751 18.0751 23 12 23C5.92487 23 1.00001 18.0751 1 12ZM21.5 12C21.5 17.2467 17.2467 21.5 12 21.5C6.7533 21.5 2.50001 17.2467 2.5 12C2.5 6.7533 6.75329 2.5 12 2.5C17.2467 2.5 21.5 6.7533 21.5 12Z" fill="#050505"/></svg>
+        <span class="l2-help-label">Help</span>
+        <svg class="l2-help-chevron" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#050505" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 4l4 4-4 4"/></svg>
+      </div>
+
+      <!-- Account row -->
+      <div class="l2-account-row">
+        <div class="l2-account-avatar">MT</div>
+        <div class="l2-account-creds">
+          <span class="l2-account-name">Mayank T.</span>
+          <span class="l2-account-org">Sport XT</span>
+        </div>
+        <svg class="l2-account-meatball" width="16" height="16" viewBox="0 0 16 16" fill="none">
+          <circle cx="3" cy="8" r="1.2" fill="#050505"/>
+          <circle cx="8" cy="8" r="1.2" fill="#050505"/>
+          <circle cx="13" cy="8" r="1.2" fill="#050505"/>
+        </svg>
+      </div>
+
+      <!-- Collapse toggle -->
+      <button id="collapse-btn" class="l2-collapse-btn" aria-label="Collapse navigation">
+        <svg class="l2-collapse-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#050505" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0">
+          <!-- left rail -->
+          <line x1="4" y1="5" x2="4" y2="19"/>
+          <!-- arrow pointing left -->
+          <path d="M20 12H9"/>
+          <path d="M13 8l-4 4 4 4"/>
+        </svg>
+        <span class="l2-collapse-label">Collapse</span>
+      </button>
+    </div>
+
+  </nav>
+
+  <!-- ═══════════════════════════════════
+       CANVAS
+  ════════════════════════════════════ -->
+  <div class="canvas">
+
+    <!-- ─────────────────────────────────
+         OBJECT HEADER — GDS-E Static variant
+         #1D2537 · 76px · radius 8px
+    ──────────────────────────────────── -->
+    <header class="obj-header">
+
+      <!-- Back chevron -->
+      <a class="back-btn" href="Credits — Landing.html" aria-label="Back to Credits">
+        <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M11 14L6 9l5-5"/>
+        </svg>
+      </a>
+
+      <!-- Left: context bar + title -->
+      <div class="obj-header-left">
+        <div class="obj-header-title-stack">
+
+          <!-- Context bar: dot-separated metadata strings -->
+          <div class="obj-context-bar">
+            <span>Key Client</span>
+            <span class="obj-context-sep"></span>
+            <span>APAC</span>
+            <span class="obj-context-sep"></span>
+            <span>Global Sponsor</span>
+          </div>
+
+          <!-- Title + blue underline bar -->
+          <div class="obj-title-wrap">
+            <h1 class="obj-title">Mastercard Australia</h1>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Right: action buttons + icon buttons -->
+      <div class="obj-header-right">
+
+        <!-- Adjust Credit — primary action -->
+        <button class="obj-btn obj-btn--primary" aria-label="Adjust Credit" onclick="openAdjustDrawer()">
+          Adjust Credit
+        </button>
+
+        <!-- Bookmark -->
+        <button class="obj-icon-btn" id="bookmark-btn" aria-label="Pin to top" onclick="togglePin()">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M5 3h10a1 1 0 011 1v13l-6-3.5L4 17V4a1 1 0 011-1z"/>
+          </svg>
+        </button>
+
+        <!-- Meatball -->
+        <button class="obj-icon-btn" aria-label="More options">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <circle cx="5"  cy="10" r="1.3" fill="currentColor"/>
+            <circle cx="10" cy="10" r="1.3" fill="currentColor"/>
+            <circle cx="15" cy="10" r="1.3" fill="currentColor"/>
+          </svg>
+        </button>
+
+      </div>
+
+    </header>
+
+    <!-- TIME MACHINE WRAP — fixed float, appears when timeline scrolls past fold -->
+    <div class="timemachine-wrap" id="timemachineWrap" data-zone="Time machine">
+      <div class="timemachine-bar" id="timemachineBar" aria-live="polite" role="status" aria-label="Running balance snapshot — updates as you navigate the credit history">
+        <!-- Context row: date · phase · actors -->
+        <div class="tm-meta">
+          <span class="badge badge--grey">
+            <svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="margin-right:3px"><circle cx="8" cy="8" r="6"/><path d="M8 5v3.5L10 10"/></svg>
+            Balance as of&nbsp;<span id="tmDate">—</span>
+          </span>
+          <span id="tmPhaseBadge" class="badge badge--grey" style="display:none"></span>
+          <div class="tm-meta-right">
+            <div class="tm-actors" id="tmActors"></div>
+          </div>
+        </div>
+        <!-- Overview-style stat block -->
+        <div style="margin-top:var(--sp-3);">
+          <div class="stat-label">Remaining credit</div>
+          <div class="stat-value stat-value--md" id="tmRemFull">—</div>
+          <div class="stat-sub" id="tmTotalLine">—</div>
+          <div class="stat-progress" style="margin-top:var(--sp-2);">
+            <div class="stat-progress-fill" id="tmProgressFill" style="width:0%"></div>
+            <div class="stat-progress-held" id="tmProgressHeld" style="width:0%"></div>
+          </div>
+          <div class="bucket-sub-row" style="grid-template-columns:1fr 1fr;margin-top:var(--sp-3);padding-top:var(--sp-3);">
+            <div>
+              <div class="bucket-sub-label">Used</div>
+              <div class="bucket-sub-value" id="tmUsedFull">—</div>
+            </div>
+            <div>
+              <div class="bucket-sub-label">Held</div>
+              <div class="bucket-sub-value" id="tmHeldFull">—</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="timemachine-scrim"></div>
+    </div>
+
+    <!-- ─────────────────────────────────
+         CANVAS BODY
+    ──────────────────────────────────── -->
+    <div class="canvas-body">
+
+      <!-- SECTION HEADER — Credit overview -->
+      <div class="history-header">
+        <div class="history-title">Credit overview</div>
+      </div>
+
+      <!-- ROW 1: Hero total + expiry -->
+      <div class="overview-row1" data-zone="Credit overview">
+
+        <div class="stat-card stat-card--hero">
+          <div class="stat-label">Remaining credit</div>
+          <div class="stat-value">AUD $52,400</div>
+          <div class="stat-sub" style="margin-top: var(--sp-1)">of AUD $82,500 total</div>
+          <div class="stat-progress" style="margin-top: var(--sp-3)">
+            <div class="stat-progress-fill" style="width: 27.4%"></div>
+            <div class="stat-progress-held" style="width: 9.1%"></div>
+          </div>
+          <div class="bucket-sub-row">
+            <div>
+              <div class="bucket-sub-label">Used</div>
+              <div class="bucket-sub-value">AUD $22,600</div>
+            </div>
+            <div>
+              <div class="bucket-sub-label">Held</div>
+              <div class="bucket-sub-value bucket-sub-value--held">AUD $7,500</div>
+            </div>
+            <div>
+              <div class="bucket-sub-label">Total</div>
+              <div class="bucket-sub-value">AUD $82,500</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="stat-card stat-card--expiry">
+          <div class="stat-label">Expires</div>
+          <div class="stat-value stat-value--sm">31 Dec 2027</div>
+          <div class="stat-sub">620 days remaining</div>
+        </div>
+
+      </div>
+
+      <!-- ROW 2: Refundable + Non-refundable buckets -->
+      <div class="overview-row2" data-zone="Buckets and sparkline">
+
+        <!-- Non-refundable bucket -->
+        <div class="stat-card stat-card--bucket">
+          <div class="stat-label">Non-refundable</div>
+          <div class="stat-value stat-value--md">AUD $52,400</div>
+          <div class="stat-sub" style="margin-top: var(--sp-1)">of AUD $82,500 total</div>
+          <div class="stat-progress" style="margin-top: var(--sp-3)">
+            <div class="stat-progress-fill" style="width: 27.4%"></div>
+            <div class="stat-progress-held" style="width: 9.1%"></div>
+          </div>
+          <div class="bucket-sub-row">
+            <div>
+              <div class="bucket-sub-label">Used</div>
+              <div class="bucket-sub-value">AUD $22,600</div>
+            </div>
+            <div>
+              <div class="bucket-sub-label">Held</div>
+              <div class="bucket-sub-value bucket-sub-value--held">AUD $7,500</div>
+            </div>
+            <div>
+              <div class="bucket-sub-label">Total</div>
+              <div class="bucket-sub-value">AUD $82,500</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Refundable bucket — nil state -->
+        <div class="stat-card stat-card--bucket bucket-nil">
+          <div class="stat-label">Refundable</div>
+          <div class="stat-value stat-value--md">AUD $0</div>
+          <div class="stat-sub" style="margin-top: var(--sp-1)">of AUD $0 total</div>
+          <div class="stat-progress" style="margin-top: var(--sp-3)">
+            <div class="stat-progress-fill" style="width: 0%"></div>
+            <div class="stat-progress-held" style="width: 0%"></div>
+          </div>
+          <div class="bucket-sub-row">
+            <div>
+              <div class="bucket-sub-label">Used</div>
+              <div class="bucket-sub-value bucket-sub-value--nil">AUD $0</div>
+            </div>
+            <div>
+              <div class="bucket-sub-label">Held</div>
+              <div class="bucket-sub-value bucket-sub-value--nil">AUD $0</div>
+            </div>
+            <div>
+              <div class="bucket-sub-label">Total</div>
+              <div class="bucket-sub-value bucket-sub-value--nil">AUD $0</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- SPARKLINE -->
+      <div class="sparkline-card">
+        <div class="sparkline-label">Balance over time</div>
+        <div class="sparkline-wrap" id="sparkWrap">
+          <canvas id="sparkCanvas"></canvas>
+        </div>
+        <div class="sparkline-axis">
+          <span>Setup — Jan 2026</span>
+          <span>Phase 1 — Nov 2026</span>
+          <span>Phase 2 — Mar 2027</span>
+          <span>Today</span>
+        </div>
+        <!-- Tooltip -->
+        <div class="spark-tooltip" id="sparkTooltip" aria-hidden="true">
+          <div class="stt-badge" id="sttBadge"></div>
+          <div class="stt-date"    id="sttDate"></div>
+          <div class="stt-balance" id="sttBalance"></div>
+          <div class="stt-event"   id="sttEvent"></div>
+          <div class="stt-delta"   id="sttDelta"></div>
+        </div>
+      </div>
+
+      <!-- HISTORY HEADER -->
+      <div class="history-header" data-zone="Activity history">
+        <div class="history-title">
+          Credit history
+          <span class="hist-info-btn" tabindex="0" role="button" aria-label="Status key">i
+            <span class="hist-info-tooltip" role="tooltip">
+              <strong style="display:block;margin-bottom:7px;color:#fff;font-size:12px;">Status key</strong>
+              <span style="display:flex;align-items:center;gap:7px;margin-bottom:5px;"><span class="badge badge--used" style="font-size:11px;flex-shrink:0;">Used</span> Credit drawn against a confirmed booking</span>
+              <span style="display:flex;align-items:center;gap:7px;margin-bottom:5px;"><span class="badge badge--held" style="font-size:11px;flex-shrink:0;">Held</span> Amount reserved — pending approval of a request</span>
+              <span style="display:flex;align-items:center;gap:7px;margin-bottom:5px;"><span class="badge badge--released" style="font-size:11px;flex-shrink:0;">Released</span> Held amount returned — request denied or cancelled</span>
+              <span style="display:flex;align-items:center;gap:7px;margin-bottom:5px;"><span class="badge badge--refunded" style="font-size:11px;flex-shrink:0;">Refunded</span> Credit returned after a booking was cancelled</span>
+              <span style="display:flex;align-items:center;gap:7px;margin-bottom:5px;"><span class="badge badge--adjusted" style="font-size:11px;flex-shrink:0;">Adjusted</span> Balance manually updated by an operator</span>
+              <span style="display:flex;align-items:center;gap:7px;"><span class="badge badge--created" style="font-size:11px;flex-shrink:0;">Created</span> Credit record first set up</span>
+            </span>
+          </span>
+        </div>
+        <div class="history-count" id="historyCount">11 events</div>
+      </div>
+
+      <!-- FILTER BAR -->
+      <div class="filter-bar" id="filterBar" data-zone="Activity history">
+        <div class="filter-bar-left">
+
+        <!-- Event type multiselect -->
+        <div class="ms-select" id="typeSelect" aria-label="Filter by event type">
+          <button class="ms-trigger" id="typeTrigger" aria-haspopup="listbox" aria-expanded="false" type="button">
+            <span class="ms-trigger-label" id="typeTriggerLabel">Event type</span>
+            <svg class="ms-trigger-chevron" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6l4 4 4-4"/></svg>
+          </button>
+          <div class="ms-dropdown" id="typeDropdown" role="listbox" aria-multiselectable="true">
+            <ul class="ms-listbox" id="typeListbox">
+              <li class="ms-option" role="option" data-value="used"     aria-selected="false"><div class="ms-checkbox"></div><span class="ms-opt-dot" style="background:#024DFF"></span><span class="ms-option-label">Used</span></li>
+              <li class="ms-option" role="option" data-value="held"     aria-selected="false"><div class="ms-checkbox"></div><span class="ms-opt-dot" style="background:#D97706"></span><span class="ms-option-label">Held</span></li>
+              <li class="ms-option" role="option" data-value="released" aria-selected="false"><div class="ms-checkbox"></div><span class="ms-opt-dot" style="background:#166534"></span><span class="ms-option-label">Released</span></li>
+              <li class="ms-option" role="option" data-value="refunded" aria-selected="false"><div class="ms-checkbox"></div><span class="ms-opt-dot" style="background:#048851"></span><span class="ms-option-label">Refunded</span></li>
+              <li class="ms-option" role="option" data-value="adjusted" aria-selected="false"><div class="ms-checkbox"></div><span class="ms-opt-dot" style="background:#048851"></span><span class="ms-option-label">Adjusted</span></li>
+              <li class="ms-option" role="option" data-value="created"  aria-selected="false"><div class="ms-checkbox"></div><span class="ms-opt-dot" style="background:#024DFF"></span><span class="ms-option-label">Created</span></li>
+            </ul>
+            <div class="ms-panel-footer">
+              <button class="ms-clear-btn" id="typeClear" type="button" disabled>Clear</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Phase multiselect -->
+        <div class="ms-select" id="phaseSelect" aria-label="Filter by phase">
+          <button class="ms-trigger" id="phaseTrigger" aria-haspopup="listbox" aria-expanded="false" type="button">
+            <span class="ms-trigger-label" id="phaseTriggerLabel">Phase</span>
+            <svg class="ms-trigger-chevron" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6l4 4 4-4"/></svg>
+          </button>
+          <div class="ms-dropdown" id="phaseDropdown" role="listbox" aria-multiselectable="true">
+            <ul class="ms-listbox" id="phaseListbox">
+              <li class="ms-option" role="option" data-value="setup"  aria-selected="false"><div class="ms-checkbox"></div><span class="ms-option-label">Setup</span></li>
+              <li class="ms-option" role="option" data-value="phase1" aria-selected="false"><div class="ms-checkbox"></div><span class="ms-option-label">Phase 1</span></li>
+              <li class="ms-option" role="option" data-value="phase2" aria-selected="false"><div class="ms-checkbox"></div><span class="ms-option-label">Phase 2</span></li>
+            </ul>
+            <div class="ms-panel-footer">
+              <button class="ms-clear-btn" id="phaseClear" type="button" disabled>Clear</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Request type multiselect -->
+        <div class="ms-select" id="requestSelect" aria-label="Filter by request type">
+          <button class="ms-trigger" id="requestTrigger" aria-haspopup="listbox" aria-expanded="false" type="button">
+            <span class="ms-trigger-label" id="requestTriggerLabel">Request type</span>
+            <svg class="ms-trigger-chevron" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6l4 4 4-4"/></svg>
+          </button>
+          <div class="ms-dropdown" id="requestDropdown" role="listbox" aria-multiselectable="true">
+            <ul class="ms-listbox" id="requestListbox">
+              <li class="ms-option" role="option" data-value="standard" aria-selected="false"><div class="ms-checkbox"></div><span class="ms-option-label">Standard</span></li>
+              <li class="ms-option" role="option" data-value="wishlist" aria-selected="false"><div class="ms-checkbox"></div><span class="ms-opt-dot" style="background:#6D28D9"></span><span class="ms-option-label">Wishlist</span></li>
+            </ul>
+            <div class="ms-panel-footer">
+              <button class="ms-clear-btn" id="requestClear" type="button" disabled>Clear</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Direction multiselect -->
+        <div class="ms-select" id="dirSelect" aria-label="Filter by direction">
+          <button class="ms-trigger" id="dirTrigger" aria-haspopup="listbox" aria-expanded="false" type="button">
+            <span class="ms-trigger-label" id="dirTriggerLabel">Direction</span>
+            <svg class="ms-trigger-chevron" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6l4 4 4-4"/></svg>
+          </button>
+          <div class="ms-dropdown" id="dirDropdown" role="listbox" aria-multiselectable="true">
+            <ul class="ms-listbox" id="dirListbox">
+              <li class="ms-option" role="option" data-value="credit" aria-selected="false"><div class="ms-checkbox"></div><span class="ms-opt-dot" style="background:#048851"></span><span class="ms-option-label">Credit</span></li>
+              <li class="ms-option" role="option" data-value="debit"  aria-selected="false"><div class="ms-checkbox"></div><span class="ms-opt-dot" style="background:#EB0000"></span><span class="ms-option-label">Debit</span></li>
+            </ul>
+            <div class="ms-panel-footer">
+              <button class="ms-clear-btn" id="dirClear" type="button" disabled>Clear</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Reset filters -->
+        <button class="reset-filters-btn" id="resetFiltersBtn" type="button" onclick="resetAllFilters()">
+          <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8a5 5 0 1 0 1.5-3.5"/><path d="M3 4v4h4"/></svg>
+          Reset filters
+        </button>
+
+        </div><!-- /filter-bar-left -->
+
+        <!-- Export — secondary action -->
+        <button class="btn btn--secondary" aria-label="Export credit history">
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M8 2v8M5 7l3 3 3-3"/><rect x="2" y="11" width="12" height="3" rx="1"/>
+          </svg>
+          Export
+        </button>
+
+      </div>
+
+      <!-- TIMELINE -->
+      <div class="timeline" id="timeline">
+
+        <!-- HELD — Grand Final, active (latest) -->
+        <div class="tl-event" data-type="held" data-direction="debit" data-phase="phase2" data-request="standard" data-snap-date="Apr 16, 2027" data-snap-actor="System" data-snap-req="REQ-5042" data-snap-rem="52400" data-snap-used="22600" data-snap-held="7500" data-snap-total="82500">
+          <div class="tl-dot tl-dot--amber"></div>
+          <div class="tl-card">
+            <div class="tl-meta">
+              <span class="badge badge--held">Held</span>
+              <span class="tl-date">Apr 16, 2027</span>
+              <span class="actor">
+                <span class="actor-system"><svg width="11" height="11" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="4.5" stroke="#949494" stroke-width="1.2"/><path d="M6 4v2.5L7.5 8" stroke="#949494" stroke-width="1.2" stroke-linecap="round"/></svg></span>
+                System
+              </span>
+              <span class="tl-meta-right delta" style="color:#D97706">−$7,500 held</span>
+            </div>
+            <div class="tl-desc"><a class="tl-req" href="#">REQ-5042</a> pending approval — Grand Final, 10 tickets</div>
+            <div class="tl-settled" id="held-status-text" style="color:#D97706">Held against credit — awaiting approval</div>
+            <div style="margin-top:var(--sp-2);font-size:12px;color:var(--granite);">This amount will be used if the request is approved, or returned to the available balance if it is denied or cancelled.</div>
+            <div style="margin-top: var(--sp-3);display:flex;gap:var(--sp-2);flex-wrap:wrap;align-items:center;">
+              <button class="btn btn--secondary" style="height:32px;font-size:12px;padding:0 12px">View request</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- USED — Semi Final, wishlist -->
+        <div class="tl-event" data-type="used" data-direction="debit" data-phase="phase2" data-request="wishlist" data-snap-date="Apr 2, 2027" data-snap-actor="System" data-snap-req="REQ-4930" data-snap-rem="59900" data-snap-used="22600" data-snap-held="0" data-snap-total="82500">
+          <div class="tl-dot tl-dot--blue"></div>
+          <div class="tl-card">
+            <div class="tl-meta">
+              <span class="badge badge--used">Used</span>
+              <span class="tl-date">Apr 2, 2027</span>
+              <span class="actor">
+                <span class="actor-system"><svg width="11" height="11" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="4.5" stroke="#949494" stroke-width="1.2"/><path d="M6 4v2.5L7.5 8" stroke="#949494" stroke-width="1.2" stroke-linecap="round"/></svg></span>
+                System
+              </span>
+              <span class="tl-meta-right delta delta--neg">−$9,800</span>
+            </div>
+            <div class="tl-desc"><a class="tl-req" href="#">REQ-4930</a> approved — Semi Final, 14 tickets · <span style="color:#6D28D9;font-weight:600">Wishlist</span></div>
+            <div class="tl-settled">Used against credit — no invoice issued</div>
+          </div>
+        </div>
+
+        <!-- RELEASED — Quarter Final request denied -->
+        <div class="tl-event" data-type="released" data-direction="credit" data-phase="phase2" data-request="standard" data-snap-date="Mar 28, 2027" data-snap-actor="System" data-snap-req="REQ-4890" data-snap-rem="69700" data-snap-used="12800" data-snap-held="0" data-snap-total="82500">
+          <div class="tl-dot tl-dot--green"></div>
+          <div class="tl-card">
+            <div class="tl-meta">
+              <span class="badge badge--released" title="Released: a previously held amount has been returned to the available balance because the request was denied or cancelled.">Released</span>
+              <span class="tl-date">Mar 28, 2027</span>
+              <span class="actor">
+                <span class="actor-system"><svg width="11" height="11" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="4.5" stroke="#949494" stroke-width="1.2"/><path d="M6 4v2.5L7.5 8" stroke="#949494" stroke-width="1.2" stroke-linecap="round"/></svg></span>
+                System
+              </span>
+              <span class="tl-meta-right delta delta--pos">+$3,500 released</span>
+            </div>
+            <div class="tl-desc"><a class="tl-req" href="#">REQ-4890</a> denied — Quarter Final, 5 tickets · held amount released</div>
+            <div class="tl-settled">Held amount released — balance restored</div>
+          </div>
+        </div>
+
+        <!-- REFUNDED — Quarter Final partial return -->
+        <div class="tl-event" data-type="refunded" data-direction="credit" data-phase="phase2" data-request="standard" data-snap-date="Mar 22, 2027" data-snap-actor="System" data-snap-req="REQ-4105" data-snap-rem="66200" data-snap-used="12800" data-snap-held="3500" data-snap-total="82500">
+          <div class="tl-dot tl-dot--green"></div>
+          <div class="tl-card">
+            <div class="tl-meta">
+              <span class="badge badge--refunded" title="Refunded: credit was returned to the available balance after a confirmed booking was cancelled or partially refunded.">Refunded</span>
+              <span class="tl-date">Mar 22, 2027</span>
+              <span class="actor">
+                <span class="actor-system"><svg width="11" height="11" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="4.5" stroke="#949494" stroke-width="1.2"/><path d="M6 4v2.5L7.5 8" stroke="#949494" stroke-width="1.2" stroke-linecap="round"/></svg></span>
+                System
+              </span>
+              <span class="tl-meta-right delta delta--pos">+$2,100</span>
+            </div>
+            <div class="tl-desc"><a class="tl-req" href="#">REQ-4105</a> approved — Quarter Final, 3 tickets · refund</div>
+            <div class="tl-settled">Credit refunded — balance restored</div>
+          </div>
+        </div>
+
+        <!-- USED — Quarter Final, standard -->
+        <div class="tl-event" data-type="used" data-direction="debit" data-phase="phase2" data-request="standard" data-snap-date="Mar 14, 2027" data-snap-actor="System" data-snap-req="REQ-4821" data-snap-rem="64100" data-snap-used="14900" data-snap-held="3500" data-snap-total="82500">
+          <div class="tl-dot tl-dot--blue"></div>
+          <div class="tl-card">
+            <div class="tl-meta">
+              <span class="badge badge--used">Used</span>
+              <span class="tl-date">Mar 14, 2027</span>
+              <span class="actor">
+                <span class="actor-system"><svg width="11" height="11" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="4.5" stroke="#949494" stroke-width="1.2"/><path d="M6 4v2.5L7.5 8" stroke="#949494" stroke-width="1.2" stroke-linecap="round"/></svg></span>
+                System
+              </span>
+              <span class="tl-meta-right delta delta--neg">−$5,600</span>
+            </div>
+            <div class="tl-desc"><a class="tl-req" href="#">REQ-4821</a> approved — Quarter Final, 8 tickets</div>
+            <div class="tl-settled">Used against credit — no invoice issued</div>
+          </div>
+        </div>
+
+        <!-- Phase 2 opened -->
+        <div class="tl-phase" data-divider>
+          <div class="tl-phase-label"><span class="tl-phase-dot"></span>Phase 2 opened — Mar 11, 2027</div>
+        </div>
+
+        <!-- ADJUSTED — top-up before Phase 2 -->
+        <div class="tl-event" data-type="adjusted" data-direction="credit" data-phase="phase2" data-snap-date="Mar 8, 2027" data-snap-actor="Mayank T" data-snap-req="" data-snap-rem="69700" data-snap-used="9300" data-snap-held="3500" data-snap-total="82500">
+          <div class="tl-dot tl-dot--green"></div>
+          <div class="tl-card">
+            <div class="tl-meta">
+              <span class="badge badge--green">Adjusted</span>
+              <span class="tl-date">Mar 8, 2027</span>
+              <span class="actor">
+                <span class="actor-avatar">MT</span>
+                Mayank T
+              </span>
+              <span class="tl-meta-right delta delta--pos delta--lg">+$7,500</span>
+            </div>
+            <div class="tl-reason">"Contractually agreed top-up ahead of Phase 2"</div>
+            <button class="tl-toggle" onclick="toggleDiff(this, 'diff-adjust')" aria-expanded="false">
+              <span class="toggle-icon">▾</span>
+              Show changes
+            </button>
+            <div class="diff-wrap" id="diff-adjust" hidden>
+              <table class="diff-table">
+                <thead><tr><th>Field</th><th>Before</th><th>After</th><th>Change</th></tr></thead>
+                <tbody>
+                  <tr>
+                    <td>Credit amount</td>
+                    <td style="color:var(--granite)">AUD $75,000</td>
+                    <td style="color:var(--cosmos);font-weight:600">AUD $82,500</td>
+                    <td class="diff-pos">+$7,500</td>
+                  </tr>
+                  <tr>
+                    <td>Type</td>
+                    <td style="color:var(--granite)">Non-refundable</td>
+                    <td style="color:var(--cosmos)">Non-refundable</td>
+                    <td class="diff-neu">—</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- Phase 1 closed -->
+        <div class="tl-phase" data-divider>
+          <div class="tl-phase-label"><span class="tl-phase-dot"></span>Phase 1 closed — Nov 30, 2026</div>
+        </div>
+
+        <!-- RELEASED — Pool Match request cancelled -->
+        <div class="tl-event" data-type="released" data-direction="credit" data-phase="phase1" data-request="standard" data-snap-date="Nov 27, 2026" data-snap-actor="System" data-snap-req="REQ-3280" data-snap-rem="62200" data-snap-used="9300" data-snap-held="3500" data-snap-total="75000">
+          <div class="tl-dot tl-dot--green"></div>
+          <div class="tl-card">
+            <div class="tl-meta">
+              <span class="badge badge--released" title="Released: a previously held amount has been returned to the available balance because the request was denied or cancelled.">Released</span>
+              <span class="tl-date">Nov 27, 2026</span>
+              <span class="actor">
+                <span class="actor-system"><svg width="11" height="11" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="4.5" stroke="#949494" stroke-width="1.2"/><path d="M6 4v2.5L7.5 8" stroke="#949494" stroke-width="1.2" stroke-linecap="round"/></svg></span>
+                System
+              </span>
+              <span class="tl-meta-right delta delta--pos">+$3,500 released</span>
+            </div>
+            <div class="tl-desc"><a class="tl-req" href="#">REQ-3280</a> cancelled — Pool Match, 5 tickets · held amount released</div>
+            <div class="tl-settled">Held amount released — balance restored</div>
+          </div>
+        </div>
+
+        <!-- USED — Pool Match, wishlist -->
+        <div class="tl-event" data-type="used" data-direction="debit" data-phase="phase1" data-request="wishlist" data-snap-date="Nov 24, 2026" data-snap-actor="System" data-snap-req="REQ-3210" data-snap-rem="58700" data-snap-used="9300" data-snap-held="7000" data-snap-total="75000">
+          <div class="tl-dot tl-dot--blue"></div>
+          <div class="tl-card">
+            <div class="tl-meta">
+              <span class="badge badge--used">Used</span>
+              <span class="tl-date">Nov 24, 2026</span>
+              <span class="actor">
+                <span class="actor-system"><svg width="11" height="11" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="4.5" stroke="#949494" stroke-width="1.2"/><path d="M6 4v2.5L7.5 8" stroke="#949494" stroke-width="1.2" stroke-linecap="round"/></svg></span>
+                System
+              </span>
+              <span class="tl-meta-right delta delta--neg">−$4,800</span>
+            </div>
+            <div class="tl-desc"><a class="tl-req" href="#">REQ-3210</a> approved — Pool Match, 8 tickets · <span style="color:#6D28D9;font-weight:600">Wishlist</span></div>
+            <div class="tl-settled">Used against credit — no invoice issued</div>
+          </div>
+        </div>
+
+        <!-- REFUNDED — Pool Match partial return -->
+        <div class="tl-event" data-type="refunded" data-direction="credit" data-phase="phase1" data-request="standard" data-snap-date="Nov 22, 2026" data-snap-actor="System" data-snap-req="REQ-3090" data-snap-rem="63500" data-snap-used="4500" data-snap-held="7000" data-snap-total="75000">
+          <div class="tl-dot tl-dot--green"></div>
+          <div class="tl-card">
+            <div class="tl-meta">
+              <span class="badge badge--refunded" title="Refunded: credit was returned to the available balance after a confirmed booking was cancelled or partially refunded.">Refunded</span>
+              <span class="tl-date">Nov 22, 2026</span>
+              <span class="actor">
+                <span class="actor-system"><svg width="11" height="11" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="4.5" stroke="#949494" stroke-width="1.2"/><path d="M6 4v2.5L7.5 8" stroke="#949494" stroke-width="1.2" stroke-linecap="round"/></svg></span>
+                System
+              </span>
+              <span class="tl-meta-right delta delta--pos">+$1,500</span>
+            </div>
+            <div class="tl-desc"><a class="tl-req" href="#">REQ-3090</a> approved — Pool Match, 2 tickets · refund</div>
+            <div class="tl-settled">Credit refunded — balance restored</div>
+          </div>
+        </div>
+
+        <!-- USED — Pool Match, standard -->
+        <div class="tl-event" data-type="used" data-direction="debit" data-phase="phase1" data-request="standard" data-snap-date="Nov 19, 2026" data-snap-actor="System" data-snap-req="REQ-3001" data-snap-rem="62000" data-snap-used="6000" data-snap-held="7000" data-snap-total="75000">
+          <div class="tl-dot tl-dot--blue"></div>
+          <div class="tl-card">
+            <div class="tl-meta">
+              <span class="badge badge--used">Used</span>
+              <span class="tl-date">Nov 19, 2026</span>
+              <span class="actor">
+                <span class="actor-system"><svg width="11" height="11" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="4.5" stroke="#949494" stroke-width="1.2"/><path d="M6 4v2.5L7.5 8" stroke="#949494" stroke-width="1.2" stroke-linecap="round"/></svg></span>
+                System
+              </span>
+              <span class="tl-meta-right delta delta--neg">−$6,000</span>
+            </div>
+            <div class="tl-desc"><a class="tl-req" href="#">REQ-3001</a> approved — Pool Match, 9 tickets</div>
+            <div class="tl-settled">Used against credit — no invoice issued</div>
+          </div>
+        </div>
+
+        <!-- Phase 1 opened -->
+        <div class="tl-phase" data-divider>
+          <div class="tl-phase-label"><span class="tl-phase-dot"></span>Phase 1 opened — Nov 19, 2026</div>
+        </div>
+
+        <!-- Credit set up milestone -->
+        <div class="tl-milestone" data-divider>
+          <span class="tl-milestone-label">Credit set up — Jan 15, 2026</span>
+        </div>
+
+        <!-- Created -->
+        <div class="tl-event" data-type="created" data-direction="credit" data-phase="setup" data-snap-date="Jan 15, 2026" data-snap-actor="Mayank T" data-snap-req="" data-snap-rem="75000" data-snap-used="0" data-snap-held="0" data-snap-total="75000">
+          <div class="tl-dot tl-dot--blue"></div>
+          <div class="tl-card">
+            <div class="tl-meta">
+              <span class="badge badge--blue">Created</span>
+              <span class="tl-date">Jan 15, 2026</span>
+              <span class="actor">
+                <span class="actor-avatar">MT</span>
+                Mayank T
+              </span>
+            </div>
+            <div class="tl-reason">"Initial credit per RWC 27 contract — signed Jan 10, 2026"</div>
+            <button class="tl-toggle" onclick="toggleDiff(this, 'diff-origin')" aria-expanded="false">
+              <span class="toggle-icon">▾</span>
+              Show details
+            </button>
+            <div class="diff-wrap" id="diff-origin" hidden>
+              <table class="diff-table">
+                <thead><tr><th>Field</th><th>Value</th></tr></thead>
+                <tbody>
+                  <tr><td>Amount</td><td style="text-align:left">AUD $75,000</td></tr>
+                  <tr><td>Type</td><td style="text-align:left">Non-refundable</td></tr>
+                  <tr><td>Expires</td><td style="text-align:left">31 Dec 2027</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- Timeline end cap -->
+        <div class="tl-phase" data-divider>
+          <div class="tl-phase-label" style="font-weight:400;color:var(--slate);border-color:var(--diatomite);">Start of credit record</div>
+        </div>
+
+      </div><!-- /timeline -->
+
+
+    </div><!-- /canvas-body -->
+  </div><!-- /canvas -->
+
+</div><!-- /app-shell -->
+
+<script>
+
+  /* ── Toggle card body (show more / show less) ─────── */
+  function toggleBody(btn) {
+    const body = btn.previousElementSibling;
+    const isHidden = body.hidden;
+    body.hidden = !isHidden;
+    btn.textContent = isHidden ? '▴ Show less' : '▾ Show more';
+  }
+
+  /* ── Toggle diff panels ─────────────────────────── */
+  function toggleDiff(btn, targetId) {
+    const target = document.getElementById(targetId);
+    const isOpen = !target.hidden;
+    const last   = btn.lastChild;
+
+    if (isOpen) {
+      target.hidden = true;
+      btn.setAttribute('aria-expanded', 'false');
+      btn.querySelector('.toggle-icon').style.transform = '';
+      if (last && last.nodeType === 3)
+        last.textContent = targetId === 'diff-adjust' ? ' Show changes' : ' Show details';
+    } else {
+      target.hidden = false;
+      btn.setAttribute('aria-expanded', 'true');
+      btn.querySelector('.toggle-icon').style.transform = 'rotate(180deg)';
+      if (last && last.nodeType === 3)
+        last.textContent = targetId === 'diff-adjust' ? ' Hide changes' : ' Hide details';
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    // Sync initial label for already-expanded adjust entry
+    const adjustBtn = document.querySelector('[onclick*="diff-adjust"]');
+    if (adjustBtn) {
+      const last = adjustBtn.lastChild;
+      if (last && last.nodeType === 3) last.textContent = ' Hide changes';
+    }
+
+    /* ── Sparkline chart ────────────────────────────
+       Step chart — each segment holds at previous value
+       until the next keypoint x-position.
+    ─────────────────────────────────────────────── */
+    const COLORS = {
+      neptune:  '#024DFF',
+      earth:    '#048851',
+      mars:     '#EB0000',
+      granite:  '#767676',
+      slate:    '#949494',
+      moonrock: '#BFBFBF',
+      diatomite:'#E6E6E6',
+      lunar:    '#F2F2F2',
+      cosmos:   '#050505',
+    };
+
+    // Normalised x (0–1), chronological order Jan 2026 → Apr 2027
+    const keypoints = [
+      { x: 0.02, balance: 75000, label: 'Jan 15, 2026',  event: 'Credit created',                                               delta: null,   type: 'created'  },
+      { x: 0.44, balance: 69000, label: 'Nov 19, 2026',  event: 'REQ-3001 approved — Pool Match, 9 tickets',                    delta: -6000,  type: 'used'     },
+      { x: 0.54, balance: 64200, label: 'Nov 24, 2026',  event: 'REQ-3210 approved — Pool Match, 8 tickets · Wishlist',         delta: -4800,  type: 'used'     },
+      { x: 0.66, balance: 71700, label: 'Mar 8, 2027',   event: 'Credit adjusted — "Contractually agreed top-up"',              delta: +7500,  type: 'adjusted' },
+      { x: 0.76, balance: 73800, label: 'Mar 22, 2027',  event: 'REQ-4105 approved — Quarter Final, 3 tickets · refund',        delta: +2100,  type: 'refunded' },
+      { x: 0.86, balance: 68200, label: 'Mar 14, 2027',  event: 'REQ-4821 approved — Quarter Final, 8 tickets',                 delta: -5600,  type: 'used'     },
+      { x: 0.97, balance: 60700, label: 'Apr 16, 2027',  event: 'REQ-5042 pending — Grand Final, 10 tickets',                   delta: -7500,  type: 'held'     },
+    ];
+
+    const Y_MIN = 30000;
+    const Y_MAX = 100000;
+
+    const canvas  = document.getElementById('sparkCanvas');
+    const wrap    = document.getElementById('sparkWrap');
+    const tooltip = document.getElementById('sparkTooltip');
+
+    function toY(value, h, padTop, padBot) {
+      const range = Y_MAX - Y_MIN;
+      return padTop + (1 - (value - Y_MIN) / range) * (h - padTop - padBot);
+    }
+
+    function draw() {
+      const dpr = window.devicePixelRatio || 1;
+      const W   = wrap.clientWidth;
+      const H   = wrap.clientHeight;
+      canvas.width  = W * dpr;
+      canvas.height = H * dpr;
+      canvas.style.width  = W + 'px';
+      canvas.style.height = H + 'px';
+
+      const ctx = canvas.getContext('2d');
+      ctx.scale(dpr, dpr);
+
+      const PAD_L = 12, PAD_R = 12, PAD_T = 18, PAD_B = 8;
+      const chartW = W - PAD_L - PAD_R;
+
+      const pts = keypoints.map(kp => ({
+        ...kp,
+        px: PAD_L + kp.x * chartW,
+        py: toY(kp.balance, H, PAD_T, PAD_B),
+      }));
+
+      // Step path
+      ctx.beginPath();
+      ctx.moveTo(pts[0].px, pts[0].py);
+      for (let i = 1; i < pts.length; i++) {
+        ctx.lineTo(pts[i].px, pts[i - 1].py);
+        ctx.lineTo(pts[i].px, pts[i].py);
+      }
+      ctx.lineTo(PAD_L + chartW, pts[pts.length - 1].py);
+
+      // Fill gradient under line
+      const grad = ctx.createLinearGradient(0, PAD_T, 0, H - PAD_B);
+      grad.addColorStop(0, 'rgba(2,77,223,0.10)');
+      grad.addColorStop(1, 'rgba(2,77,223,0)');
+      ctx.save();
+      ctx.lineTo(PAD_L + chartW, H - PAD_B);
+      ctx.lineTo(pts[0].px, H - PAD_B);
+      ctx.closePath();
+      ctx.fillStyle = grad;
+      ctx.fill();
+      ctx.restore();
+
+      // Step line
+      ctx.beginPath();
+      ctx.moveTo(pts[0].px, pts[0].py);
+      for (let i = 1; i < pts.length; i++) {
+        ctx.lineTo(pts[i].px, pts[i - 1].py);
+        ctx.lineTo(pts[i].px, pts[i].py);
+      }
+      ctx.lineTo(PAD_L + chartW, pts[pts.length - 1].py);
+      ctx.strokeStyle = COLORS.neptune;
+      ctx.lineWidth   = 2;
+      ctx.lineJoin    = 'round';
+      ctx.stroke();
+
+      // Key point dots
+      pts.forEach((pt, i) => {
+        const isAdjust   = pt.type === 'adjusted';
+        const isRefunded = pt.type === 'refunded';
+        const isHeld     = pt.type === 'held';
+        const isWishlist = pt.type === 'wishlist';
+        const dotColor   = isHeld ? '#D97706' : (isAdjust || isRefunded ? COLORS.earth : COLORS.neptune);
+        ctx.beginPath();
+        ctx.arc(pt.px, pt.py, isAdjust ? 5 : 4, 0, Math.PI * 2);
+        ctx.fillStyle = dotColor;
+        ctx.fill();
+        ctx.strokeStyle = '#fff';
+        ctx.lineWidth = 1.5;
+        ctx.stroke();
+
+        // Static value labels on anchor points
+        if (i === 0 || isAdjust || isHeld || i === pts.length - 1) {
+          const fmt    = '$' + (pt.balance / 1000).toFixed(0) + 'k';
+          const prefix = isAdjust ? '↑ ' : '';
+          ctx.font = '600 10px -apple-system, sans-serif';
+          ctx.fillStyle = isHeld ? '#D97706' : isAdjust ? COLORS.earth : COLORS.granite;
+          ctx.textAlign = i === 0 ? 'left' : (isAdjust || isHeld) ? 'left' : 'right';
+          ctx.fillText(prefix + fmt, pt.px + (i === 0 ? 8 : isAdjust ? 8 : -8), pt.py - 8);
+        }
+      });
+    }
+
+    draw();
+    window.addEventListener('resize', draw);
+
+    /* ── Hover interaction ──────────────────────── */
+    function getActiveSegment(mouseX) {
+      const W      = wrap.clientWidth;
+      const PAD_L  = 12, PAD_R = 12;
+      const chartW = W - PAD_L - PAD_R;
+      const normX  = (mouseX - PAD_L) / chartW;
+
+      let active = keypoints[0];
+      for (const kp of keypoints) {
+        if (kp.x <= normX) active = kp;
+        else break;
+      }
+      return active;
+    }
+
+    function formatMoney(n) {
+      return 'AUD $' + n.toLocaleString('en-AU');
+    }
+
+    function showTooltip(kp, mouseX, mouseY) {
+      const badge   = document.getElementById('sttBadge');
+      const date    = document.getElementById('sttDate');
+      const balance = document.getElementById('sttBalance');
+      const event   = document.getElementById('sttEvent');
+      const delta   = document.getElementById('sttDelta');
+
+      const badgeStyleMap = {
+        created:  'stt-badge--created',
+        adjusted: 'stt-badge--adjusted',
+        used:     'stt-badge--used',
+        refunded: 'stt-badge--refunded',
+        held:     'stt-badge--held',
+        released: 'stt-badge--released',
+      };
+      const badgeLabelMap = { created: 'Created', adjusted: 'Adjusted', used: 'Used', refunded: 'Refunded', held: 'Held', released: 'Released' };
+
+      badge.className = 'stt-badge ' + (badgeStyleMap[kp.type] || 'stt-badge--used');
+      badge.textContent = badgeLabelMap[kp.type] || kp.type;
+      date.textContent    = kp.label;
+      balance.textContent = formatMoney(kp.balance);
+      event.textContent   = kp.event;
+
+      if (kp.delta !== null) {
+        const sign = kp.delta > 0 ? '+' : '';
+        delta.textContent = sign + formatMoney(Math.abs(kp.delta));
+        delta.className   = 'stt-delta ' + (kp.delta > 0 ? 'stt-delta--pos' : 'stt-delta--neg');
+        delta.style.display = '';
+      } else {
+        delta.style.display = 'none';
+      }
+
+      // Position tooltip inside card, flip left near right edge
+      const cardRect = wrap.closest('.sparkline-card').getBoundingClientRect();
+      const wrapRect = wrap.getBoundingClientRect();
+      const relX = wrapRect.left - cardRect.left + mouseX;
+      const relY = wrapRect.top  - cardRect.top  + mouseY;
+
+      const tt = tooltip;
+      tt.style.left = '';
+      tt.style.right = '';
+
+      if (relX + 188 > cardRect.width - 16) {
+        tt.style.right = (cardRect.width - relX + 12) + 'px';
+      } else {
+        tt.style.left = (relX + 16) + 'px';
+      }
+      tt.style.top = Math.max(0, relY - 20) + 'px';
+      tt.classList.add('visible');
+    }
+
+    function hideTooltip() {
+      tooltip.classList.remove('visible');
+    }
+
+    canvas.addEventListener('mousemove', e => {
+      const rect   = canvas.getBoundingClientRect();
+      const mouseX = e.clientX - rect.left;
+      const mouseY = e.clientY - rect.top;
+      const kp     = getActiveSegment(mouseX);
+
+      canvas.style.cursor = 'pointer';
+      redrawWithCrosshair(mouseX, kp);
+      showTooltip(kp, mouseX, mouseY);
+    });
+
+    canvas.addEventListener('mouseleave', () => {
+      canvas.style.cursor = '';
+      hideTooltip();
+      draw();
+    });
+
+    canvas.addEventListener('click', e => {
+      const rect = canvas.getBoundingClientRect();
+      const kp   = getActiveSegment(e.clientX - rect.left);
+      if (!kp) return;
+
+      // Find the matching timeline entry by date
+      const target = document.querySelector(`.tl-event[data-snap-date="${kp.label}"]`);
+      if (!target) return;
+
+      // Scroll so the entry lands just below the time machine bar — same logic as date click
+      const HEADER_H = 76, GAP = 8;
+      const bar = document.getElementById('timemachineBar');
+      const barBottom = HEADER_H + GAP + bar.offsetHeight;
+      const targetTop  = target.getBoundingClientRect().top + window.scrollY - barBottom - 8;
+
+      document.getElementById('timemachineWrap').classList.add('visible');
+      // updateBar is scoped to the time machine IIFE — trigger via scroll after positioning
+      window.scrollTo({ top: Math.max(0, targetTop), behavior: 'smooth' });
+    });
+
+    function redrawWithCrosshair(cx, kp) {
+      draw(); // draw() resets canvas + applies ctx.scale — do NOT call scale again here
+      const W    = wrap.clientWidth;
+      const H    = wrap.clientHeight;
+      const PAD_T = 18, PAD_B = 8;
+      const ctx   = canvas.getContext('2d');
+
+      // Vertical dashed crosshair
+      ctx.save();
+      ctx.setLineDash([3, 3]);
+      ctx.strokeStyle = COLORS.moonrock;
+      ctx.lineWidth   = 1;
+      ctx.beginPath();
+      ctx.moveTo(cx, PAD_T);
+      ctx.lineTo(cx, H - PAD_B);
+      ctx.stroke();
+      ctx.restore();
+
+      // Active dot halo
+      const nearestPt = {
+        px: (W - 12 - 12) * kp.x + 12,
+        py: toY(kp.balance, H, PAD_T, PAD_B),
+      };
+      const isAdjust   = kp.type === 'adjusted';
+      const isRefunded = kp.type === 'refunded';
+      const isHeld     = kp.type === 'held';
+      const isWishlist = kp.type === 'wishlist';
+      const hoverColor = isHeld ? '#D97706' : (isAdjust || isRefunded ? COLORS.earth : COLORS.neptune);
+
+      ctx.beginPath();
+      ctx.arc(nearestPt.px, nearestPt.py, 7, 0, Math.PI * 2);
+      ctx.fillStyle = hoverColor;
+      ctx.globalAlpha = 0.2;
+      ctx.fill();
+      ctx.globalAlpha = 1;
+
+      ctx.beginPath();
+      ctx.arc(nearestPt.px, nearestPt.py, 4.5, 0, Math.PI * 2);
+      ctx.fillStyle = hoverColor;
+      ctx.fill();
+      ctx.strokeStyle = '#fff';
+      ctx.lineWidth = 2;
+      ctx.stroke();
+    }
+  });
+</script>
+
+<script>
+  (function () {
+    const nav    = document.getElementById('sidenav');
+    const btn    = document.getElementById('collapse-btn');
+    const canvas = document.querySelector('.canvas');
+    const COLLAPSED_W = '56px';
+    const EXPANDED_W  = '208px';
+
+    btn.addEventListener('click', function () {
+      const isCollapsed = nav.classList.toggle('collapsed');
+      canvas.style.marginLeft = isCollapsed ? COLLAPSED_W : EXPANDED_W;
+      btn.setAttribute('aria-label', isCollapsed ? 'Expand navigation' : 'Collapse navigation');
+    });
+  })();
+
+  function toggleTile() {
+    const tile    = document.getElementById('kc-tile');
+    const tileBtn = document.getElementById('kc-tile-btn');
+    const subnav  = document.getElementById('kc-subnav');
+    const chevron = document.getElementById('kc-chevron');
+    const isOpen  = tileBtn.getAttribute('aria-expanded') === 'true';
+
+    tileBtn.setAttribute('aria-expanded', String(!isOpen));
+    subnav.style.display       = isOpen ? 'none' : '';
+    chevron.style.transform    = isOpen ? 'rotate(180deg)' : 'rotate(0deg)';
+    tileBtn.style.borderRadius = isOpen ? '4px' : '4px 4px 0 0';
+    tile.style.borderRadius    = isOpen ? '4px' : '4px 4px 0 0';
+  }
+</script>
+
+<script>
+  (function () {
+    const timeline = document.getElementById('timeline');
+    const countEl  = document.getElementById('historyCount');
+
+    // ── State ──────────────────────────────────────
+    let activeTypes    = new Set();       // empty = all
+    let activeDirs     = new Set();       // empty = all
+    let activePhases   = new Set();       // empty = all
+    let activeRequests = new Set();       // empty = all
+
+    const LABELS = {
+      used: 'Used', held: 'Held', released: 'Released',
+      refunded: 'Refunded', adjusted: 'Adjusted', created: 'Created',
+      credit: 'Credit', debit: 'Debit',
+      setup: 'Setup', phase1: 'Phase 1', phase2: 'Phase 2',
+      standard: 'Standard', wishlist: 'Wishlist',
+    };
+
+    // ── Apply filters ──────────────────────────────
+    function applyFilters() {
+      const events   = timeline.querySelectorAll('.tl-event');
+      const phases   = timeline.querySelectorAll('[data-divider]');
+      const noType    = activeTypes.size === 0;
+      const noDir     = activeDirs.size === 0;
+      const noPhase   = activePhases.size === 0;
+      const noRequest = activeRequests.size === 0;
+      let   visible   = 0;
+
+      events.forEach(el => {
+        const requestMatch = noRequest || activeRequests.has(el.dataset.request);
+        const show = (noType  || activeTypes.has(el.dataset.type))
+                  && (noDir   || activeDirs.has(el.dataset.direction))
+                  && (noPhase || activePhases.has(el.dataset.phase))
+                  && requestMatch;
+        el.style.display = show ? '' : 'none';
+        if (show) visible++;
+      });
+
+      phases.forEach(el => { el.style.display = (noType && noDir && noPhase && noRequest) ? '' : 'none'; });
+
+      // Show/hide reset button
+      const hasFilters = !noType || !noDir || !noPhase || !noRequest;
+      document.getElementById('resetFiltersBtn').classList.toggle('visible', hasFilters);
+
+      // Empty state
+      let emptyEl = timeline.querySelector('.timeline-empty');
+      if (visible === 0) {
+        if (!emptyEl) {
+          emptyEl = document.createElement('div');
+          emptyEl.className = 'timeline-empty';
+          timeline.appendChild(emptyEl);
+        }
+        emptyEl.textContent = 'No events match the selected filters.';
+      } else if (emptyEl) {
+        emptyEl.remove();
+      }
+
+      // Count label
+      const total = events.length;
+      if (noType && noDir && noPhase && noRequest) {
+        countEl.textContent = total + ' events';
+      } else {
+        const parts = [];
+        if (!noType)    parts.push([...activeTypes].map(v => LABELS[v]).join(', '));
+        if (!noDir)     parts.push([...activeDirs].map(v => LABELS[v]).join(', '));
+        if (!noPhase)   parts.push([...activePhases].map(v => LABELS[v]).join(', '));
+        if (!noRequest) parts.push([...activeRequests].map(v => LABELS[v]).join(', '));
+        countEl.textContent = visible + ' of ' + total + ' events · ' + parts.join(' · ');
+      }
+    }
+
+    // ── Multiselect widget factory ─────────────────
+    function initSelect({ selectId, triggerId, labelId, listboxId, clearId, state, placeholder, onUpdate }) {
+      const selectEl  = document.getElementById(selectId);
+      const trigger   = document.getElementById(triggerId);
+      const labelEl   = document.getElementById(labelId);
+      const listbox   = document.getElementById(listboxId);
+      const clearBtn  = document.getElementById(clearId);
+      const options   = listbox.querySelectorAll('.ms-option');
+
+      function open()  { selectEl.classList.add('open');    trigger.setAttribute('aria-expanded', 'true');  }
+      function close() { selectEl.classList.remove('open'); trigger.setAttribute('aria-expanded', 'false'); }
+      function isOpen(){ return selectEl.classList.contains('open'); }
+
+      function updateTrigger() {
+        const count = state.size;
+        if (count === 0) {
+          labelEl.textContent = placeholder;
+          selectEl.classList.remove('has-value');
+          // Remove count badge if present
+          const badge = trigger.querySelector('.ms-trigger-count');
+          if (badge) badge.remove();
+          clearBtn.disabled = true;
+        } else {
+          const first = [...state][0];
+          labelEl.textContent = count === 1 ? LABELS[first] : LABELS[first] + '…';
+          selectEl.classList.add('has-value');
+          // Upsert count badge
+          let badge = trigger.querySelector('.ms-trigger-count');
+          if (!badge) {
+            badge = document.createElement('span');
+            badge.className = 'ms-trigger-count';
+            trigger.insertBefore(badge, trigger.querySelector('.ms-trigger-chevron'));
+          }
+          badge.textContent = count;
+          clearBtn.disabled = false;
+        }
+      }
+
+      function syncCheckboxes() {
+        options.forEach(opt => {
+          const cb = opt.querySelector('.ms-checkbox');
+          const checked = state.has(opt.dataset.value);
+          cb.classList.toggle('checked', checked);
+          opt.setAttribute('aria-selected', String(checked));
+        });
+      }
+
+      // Option click
+      listbox.addEventListener('click', e => {
+        const opt = e.target.closest('.ms-option');
+        if (!opt) return;
+        const val = opt.dataset.value;
+        if (state.has(val)) state.delete(val);
+        else state.add(val);
+        syncCheckboxes();
+        updateTrigger();
+        onUpdate();
+      });
+
+      // Clear button
+      clearBtn.addEventListener('click', () => {
+        state.clear();
+        syncCheckboxes();
+        updateTrigger();
+        onUpdate();
+      });
+
+      // Trigger opens/closes
+      trigger.addEventListener('click', e => {
+        e.stopPropagation();
+        isOpen() ? close() : open();
+      });
+
+      // Click outside to close
+      document.addEventListener('click', e => {
+        if (!selectEl.contains(e.target)) close();
+      });
+
+      // Escape to close
+      document.addEventListener('keydown', e => {
+        if (e.key === 'Escape' && isOpen()) close();
+      });
+
+      updateTrigger();
+      syncCheckboxes();
+    }
+
+    // ── Init all three selects ─────────────────────
+    initSelect({
+      selectId:    'typeSelect',
+      triggerId:   'typeTrigger',
+      labelId:     'typeTriggerLabel',
+      listboxId:   'typeListbox',
+      clearId:     'typeClear',
+      state:       activeTypes,
+      placeholder: 'Event type',
+      onUpdate:    applyFilters,
+    });
+
+    initSelect({
+      selectId:    'requestSelect',
+      triggerId:   'requestTrigger',
+      labelId:     'requestTriggerLabel',
+      listboxId:   'requestListbox',
+      clearId:     'requestClear',
+      state:       activeRequests,
+      placeholder: 'Request type',
+      onUpdate:    applyFilters,
+    });
+
+    initSelect({
+      selectId:    'phaseSelect',
+      triggerId:   'phaseTrigger',
+      labelId:     'phaseTriggerLabel',
+      listboxId:   'phaseListbox',
+      clearId:     'phaseClear',
+      state:       activePhases,
+      placeholder: 'Phase',
+      onUpdate:    applyFilters,
+    });
+
+    initSelect({
+      selectId:    'dirSelect',
+      triggerId:   'dirTrigger',
+      labelId:     'dirTriggerLabel',
+      listboxId:   'dirListbox',
+      clearId:     'dirClear',
+      state:       activeDirs,
+      placeholder: 'Direction',
+      onUpdate:    applyFilters,
+    });
+
+    // ── Reset all filters ──────────────────────────
+    function resetAllFilters() {
+      [activeTypes, activeDirs, activePhases, activeRequests].forEach(s => s.clear());
+      document.querySelectorAll('.ms-option').forEach(opt => {
+        opt.setAttribute('aria-selected', 'false');
+        opt.querySelector('.ms-checkbox').classList.remove('checked');
+      });
+      // Reset each trigger label + badge
+      [
+        { labelId: 'typeTriggerLabel',    placeholder: 'Event type',    selectId: 'typeSelect',    clearId: 'typeClear'    },
+        { labelId: 'phaseTriggerLabel',   placeholder: 'Phase',         selectId: 'phaseSelect',   clearId: 'phaseClear'   },
+        { labelId: 'requestTriggerLabel', placeholder: 'Request type',  selectId: 'requestSelect', clearId: 'requestClear' },
+        { labelId: 'dirTriggerLabel',     placeholder: 'Direction',     selectId: 'dirSelect',     clearId: 'dirClear'     },
+      ].forEach(({ labelId, placeholder, selectId, clearId }) => {
+        document.getElementById(labelId).textContent = placeholder;
+        document.getElementById(selectId).classList.remove('has-value');
+        document.getElementById(clearId).disabled = true;
+        const badge = document.getElementById(selectId).querySelector('.ms-trigger-count');
+        if (badge) badge.remove();
+      });
+      applyFilters();
+    }
+    window.resetAllFilters = resetAllFilters;
+
+    applyFilters();
+  })();
+</script>
+
+<script>
+  (function () {
+    const wrap         = document.getElementById('timemachineWrap');
+    const bar          = document.getElementById('timemachineBar');
+    const tmDate         = document.getElementById('tmDate');
+    const tmPhaseBadge   = document.getElementById('tmPhaseBadge');
+    const tmActors       = document.getElementById('tmActors');
+    const tmRemFull      = document.getElementById('tmRemFull');
+    const tmTotalLine    = document.getElementById('tmTotalLine');
+    const tmProgressFill = document.getElementById('tmProgressFill');
+    const tmProgressHeld = document.getElementById('tmProgressHeld');
+    const tmUsedFull     = document.getElementById('tmUsedFull');
+    const tmHeldFull     = document.getElementById('tmHeldFull');
+    const timeline     = document.getElementById('timeline');
+    const sidenav      = document.getElementById('sidenav');
+
+    const TYPE_COLORS = {
+      held:     '#D97706',
+      used:     '#024DFF',
+      released: '#166534',
+      refunded: '#048851',
+      adjusted: '#048851',
+      created:  '#024DFF',
+    };
+
+    const HEADER_H = 76;
+    const GAP      = 8;   // gap between header bottom and bar top
+
+    function syncLeft() {
+      const navW = sidenav.classList.contains('collapsed') ? 56 : 208;
+      wrap.style.left = navW + 'px';
+    }
+
+    // Keep left in sync with nav collapse
+    document.getElementById('collapse-btn').addEventListener('click', () => {
+      // Wait for nav transition to settle then sync
+      setTimeout(syncLeft, 240);
+    });
+
+    syncLeft();
+
+    function fmt(n) {
+      if (n === 0) return '$0';
+      return '$' + (n / 1000).toLocaleString('en-AU', { maximumFractionDigits: 1 }) + 'k';
+    }
+
+    const PHASE_LABELS = { phase1: 'Phase 1', phase2: 'Phase 2', setup: 'Setup' };
+    const SYSTEM_AVATAR = `<span class="actor-system"><svg width="11" height="11" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="4.5" stroke="#949494" stroke-width="1.2"/><path d="M6 4v2.5L7.5 8" stroke="#949494" stroke-width="1.2" stroke-linecap="round"/></svg></span>`;
+
+    function updateBar(el) {
+      const d     = el.dataset;
+      const rem   = parseInt(d.snapRem,   10);
+      const used  = parseInt(d.snapUsed,  10);
+      const held  = parseInt(d.snapHeld,  10);
+      const phase = d.phase || '';
+
+      // Row 1 — date
+      tmDate.textContent = d.snapDate;
+
+      // Phase badge
+      const phaseLabel = PHASE_LABELS[phase];
+      if (phaseLabel) {
+        tmPhaseBadge.textContent = phaseLabel;
+        tmPhaseBadge.style.display = '';
+      } else {
+        tmPhaseBadge.style.display = 'none';
+      }
+
+      // Actors — unique actors in the same phase up to this point
+      const visEl = visibleEvents();
+      const idx = visEl.indexOf(el);
+      const phaseEvents = visEl.slice(idx).filter(e => e.dataset.phase === phase);
+      const actorSet = new Map();
+      phaseEvents.forEach(e => {
+        const a = e.dataset.snapActor || '';
+        if (a && !actorSet.has(a)) actorSet.set(a, a);
+      });
+      const actors = [...actorSet.keys()];
+      tmActors.innerHTML = actors.slice(0, 3).map(a => {
+        if (a === 'System') return SYSTEM_AVATAR;
+        const initials = a.split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2);
+        return `<span class="actor-avatar">${initials}</span>`;
+      }).join('') + (actors.length > 3 ? `<span class="actor-avatar" style="background:#E6E6E6;color:#767676">+${actors.length - 3}</span>` : '');
+
+      // Overview-style balance block
+      const total = parseInt(d.snapTotal, 10) || (rem + used + held);
+      const fmtFull = n => 'AUD $' + n.toLocaleString('en-AU');
+      tmRemFull.textContent      = fmtFull(rem);
+      tmTotalLine.textContent    = 'of ' + fmtFull(total) + ' total';
+      tmProgressFill.style.width = total > 0 ? (used / total * 100).toFixed(1) + '%' : '0%';
+      tmProgressHeld.style.width = total > 0 ? (held / total * 100).toFixed(1) + '%' : '0%';
+      tmUsedFull.textContent     = fmtFull(used);
+      tmHeldFull.textContent     = held > 0 ? fmtFull(held) : '—';
+      tmHeldFull.className       = 'bucket-sub-value' + (held > 0 ? '' : ' bucket-sub-value--nil');
+
+      // Left border colour by event type
+      const color = TYPE_COLORS[d.type] || '#E6E6E6';
+      bar.style.borderLeftColor = color;
+      bar.style.borderLeftWidth = '3px';
+    }
+
+    function visibleEvents() {
+      return [...timeline.querySelectorAll('.tl-event')]
+        .filter(el => el.style.display !== 'none' && el.dataset.snapDate);
+    }
+
+    function getTopVisibleEvent() {
+      const threshold = bar.getBoundingClientRect().bottom;
+      const events = visibleEvents();
+      // Return the first entry whose top is below the bar — the one the user can see.
+      for (const el of events) {
+        if (el.getBoundingClientRect().top >= threshold) return el;
+      }
+      // All entries have scrolled behind the bar — show the last (oldest) one.
+      return events[events.length - 1] || null;
+    }
+
+    function onScroll() {
+      const events = visibleEvents();
+      if (!events.length) { wrap.classList.remove('visible'); return; }
+
+      // Measure the real bottom edge of the bar from the DOM each frame
+      const barBottom = bar.getBoundingClientRect().bottom;
+      const fadeZone  = 16; // px — fade only in the last 16px before fully behind
+
+      const firstRect = events[0].getBoundingClientRect();
+
+      // Show when the first entry has reached the bar's own bottom edge (not just the header).
+      // bar.offsetHeight is layout height, unaffected by the translateY transition.
+      if (firstRect.top <= HEADER_H + GAP + bar.offsetHeight + 24) {
+        wrap.classList.add('visible');
+        const current = getTopVisibleEvent();
+        if (current) updateBar(current);
+      } else {
+        wrap.classList.remove('visible');
+        // Reset all opacities when bar is not shown
+        events.forEach(el => { el.style.opacity = ''; });
+        return;
+      }
+
+      // Cards must be fully gone before reaching the gap above the bar
+      const barTop = bar.getBoundingClientRect().top;
+      events.forEach(el => {
+        const rect = el.getBoundingClientRect();
+        if (rect.bottom > barTop + fadeZone) {
+          el.style.opacity = '';   // fully visible
+        } else if (rect.bottom <= barTop) {
+          el.style.opacity = '0';  // fully gone before entering the gap
+        } else {
+          el.style.opacity = ((rect.bottom - barTop) / fadeZone).toFixed(3);
+        }
+      });
+    }
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+
+    const filterBar = document.getElementById('filterBar');
+    if (filterBar) {
+      filterBar.addEventListener('click', () => setTimeout(onScroll, 50));
+    }
+
+    // Click a date → snap the bar to that event and scroll to top to reveal it
+    timeline.querySelectorAll('.tl-event').forEach(ev => {
+      const dateEl = ev.querySelector('.tl-date');
+      if (!dateEl || !ev.dataset.snapDate) return;
+      dateEl.classList.add('tl-date--clickable');
+      dateEl.setAttribute('title', 'Click to see balance at this point');
+      dateEl.addEventListener('click', function (e) {
+        e.stopPropagation();
+        // Scroll so this entry lands just below the time machine bar —
+        // the existing onScroll logic will then read it as the topmost visible event.
+        const barBottom = HEADER_H + GAP + bar.offsetHeight;
+        const targetTop = ev.getBoundingClientRect().top + window.scrollY - barBottom - 8;
+        window.scrollTo({ top: Math.max(0, targetTop), behavior: 'smooth' });
+        // Pre-populate the bar immediately for instant feedback
+        updateBar(ev);
+        wrap.classList.add('visible');
+      });
+    });
+  })();
+</script>
+
+<!-- ═══════════════════════════════════════════
+     ADJUST CREDIT DRAWER
+════════════════════════════════════════════ -->
+<div class="drawer-backdrop" id="drawer-backdrop" onclick="closeAdjustDrawer()"></div>
+
+<div class="drawer" id="adjust-drawer" role="dialog" aria-modal="true" aria-labelledby="drawer-title" data-zone="Adjust Credit drawer">
+
+  <div class="drawer-header">
+    <div class="drawer-header-text">
+      <div class="drawer-title" id="drawer-title">Adjust Credit</div>
+      <div class="drawer-subtitle">Mastercard Australia · RWC 2027</div>
+    </div>
+    <button class="drawer-close" onclick="closeAdjustDrawer()" aria-label="Close">
+      <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 4l10 10M14 4L4 14"/></svg>
+    </button>
+  </div>
+
+  <div class="drawer-body">
+
+    <!-- Non-refundable bucket -->
+    <div>
+      <div class="db-section-title">Buckets</div>
+
+      <div class="db-bucket" id="db-nr" style="margin-bottom: var(--sp-3);">
+        <div class="db-bucket-header">
+          <span class="db-bucket-name">Non-refundable</span>
+          <button class="db-lock-btn" id="db-lock-nr" onclick="dbToggleBucket('nr')" aria-label="Edit non-refundable">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" id="db-lock-icon-nr">
+              <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+              <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+            </svg>
+          </button>
+        </div>
+        <div class="db-bucket-stats">
+          <div>
+            <div class="db-stat-label">Remaining</div>
+            <div class="db-stat-value">AUD $52,400</div>
+          </div>
+          <div>
+            <div class="db-stat-label">Total</div>
+            <div class="db-stat-value">AUD $82,500</div>
+          </div>
+          <div>
+            <div class="db-stat-label">Used</div>
+            <div class="db-stat-value">AUD $22,600</div>
+          </div>
+        </div>
+        <div class="db-input-area">
+          <label class="db-label" for="db-amount-nr" style="margin-bottom:var(--sp-1);">Adjust by</label>
+          <div class="db-hint" style="margin-bottom:var(--sp-2);">Use the +/− button to choose whether you're adding or removing credit, then enter the amount.</div>
+          <div class="db-input-wrap" id="db-wrap-nr">
+            <button class="db-sign-btn db-sign-btn--pos" id="db-sign-nr" onclick="dbToggleSign('nr')" type="button" aria-label="Toggle direction">+</button>
+            <span class="db-prefix">AUD</span>
+            <input class="db-input" type="text" id="db-amount-nr" placeholder="0" oninput="dbOnInput('nr')" autocomplete="off">
+          </div>
+          <div class="db-magnitude" id="db-mag-nr"></div>
+          <div class="db-field-error" id="db-err-nr">Cannot decrease below used amount (AUD $22,600)</div>
+          <div id="db-bal-preview-nr" style="display:none;margin-top:var(--sp-2);font-size:12px;color:var(--granite);">New balance after adjustment: <strong id="db-bal-val-nr" style="color:var(--cosmos);">—</strong></div>
+        </div>
+      </div>
+
+      <!-- Refundable bucket -->
+      <div class="db-bucket" id="db-ref">
+        <div class="db-bucket-header">
+          <span class="db-bucket-name">Refundable</span>
+          <button class="db-lock-btn" id="db-lock-ref" onclick="dbToggleBucket('ref')" aria-label="Edit refundable">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" id="db-lock-icon-ref">
+              <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+              <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+            </svg>
+          </button>
+        </div>
+        <div class="db-bucket-stats">
+          <div>
+            <div class="db-stat-label">Remaining</div>
+            <div class="db-stat-value db-stat-value--muted">AUD $0</div>
+          </div>
+          <div>
+            <div class="db-stat-label">Total</div>
+            <div class="db-stat-value db-stat-value--muted">AUD $0</div>
+          </div>
+          <div>
+            <div class="db-stat-label">Used</div>
+            <div class="db-stat-value db-stat-value--muted">AUD $0</div>
+          </div>
+        </div>
+        <div class="db-input-area">
+          <label class="db-label" for="db-amount-ref" style="margin-bottom:var(--sp-1);">Adjust by</label>
+          <div class="db-hint" style="margin-bottom:var(--sp-2);">Use the +/− button to choose whether you're adding or removing credit, then enter the amount.</div>
+          <div class="db-input-wrap" id="db-wrap-ref">
+            <button class="db-sign-btn db-sign-btn--pos" id="db-sign-ref" onclick="dbToggleSign('ref')" type="button" aria-label="Toggle direction">+</button>
+            <span class="db-prefix">AUD</span>
+            <input class="db-input" type="text" id="db-amount-ref" placeholder="0" oninput="dbOnInput('ref')" autocomplete="off">
+          </div>
+          <div class="db-magnitude" id="db-mag-ref"></div>
+          <div class="db-field-error" id="db-err-ref">Cannot decrease below used amount (AUD $0)</div>
+          <div id="db-bal-preview-ref" style="display:none;margin-top:var(--sp-2);font-size:12px;color:var(--granite);">New balance after adjustment: <strong id="db-bal-val-ref" style="color:var(--cosmos);">—</strong></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Reset credit — destructive zone -->
+    <div style="border-top: 1px solid var(--diatomite); padding-top: var(--sp-5); margin-top: var(--sp-2);">
+      <div class="db-label" style="color: var(--mars); margin-bottom: var(--sp-1);">Reset credit</div>
+      <div class="db-hint" style="margin-bottom: var(--sp-3);">Clears all credit balances to zero across both buckets. This cannot be undone and will appear in the audit log.</div>
+      <button class="btn" style="background: none; border: 1px solid var(--mars); color: var(--mars); height: 36px; font-size: 13px;" onclick="dbOpenResetModal()">
+        Reset to zero
+      </button>
+    </div>
+
+    <!-- Reason -->
+    <div style="border-top: 1px solid var(--diatomite); padding-top: var(--sp-5); margin-top: var(--sp-2);">
+      <label class="db-label" for="db-reason" style="display:flex;align-items:baseline;gap:var(--sp-2);">
+        Note <span style="color:var(--color-critical, #D93A3A);" aria-hidden="true">*</span>
+        <span id="db-reason-nudge" style="font-weight:500;color:var(--mars);font-size:12px;display:none;">Required field</span>
+      </label>
+      <div class="db-hint">Visible to all operators in the activity log.</div>
+      <textarea class="db-textarea" id="db-reason" placeholder="e.g. Contractually agreed top-up ahead of Phase 2" oninput="dbCheckSave()" required minlength="10"></textarea>
+      <div id="db-reason-error" style="display:none;margin-top:var(--sp-2);font-size:12px;color:var(--color-critical, #D93A3A);" role="alert">Please enter at least 10 characters.</div>
+    </div>
+
+  </div>
+
+  <div class="drawer-footer">
+    <!-- Change summary — shown once a valid amount is entered -->
+    <div class="db-preview" id="db-preview">
+      <div class="db-preview-label">New usable credit &nbsp;<span id="db-preview-delta" class="db-preview-delta--pos">—</span></div>
+      <div class="db-preview-hero" id="db-preview-remaining">—</div>
+      <div class="db-preview-sub">of <span id="db-preview-total">—</span> total</div>
+    </div>
+    <div class="drawer-footer-actions">
+      <button class="btn btn--secondary" onclick="closeAdjustDrawer()">Cancel</button>
+      <button class="btn btn--primary" id="db-save-btn" data-ready="false" style="opacity:0.4;cursor:not-allowed;" onclick="dbOpenModal()">Save adjustment</button>
+    </div>
+  </div>
+
+</div>
+
+<!-- CONFIRMATION MODAL -->
+<div class="modal-backdrop" id="modal-backdrop" onclick="if(event.target===this)dbCloseModal()">
+  <div class="modal">
+    <div class="modal-body">
+      <div class="modal-confirm-label">
+        New usable credit &nbsp;<span id="modal-delta" class="modal-confirm-delta mdiff-pos"></span>
+      </div>
+      <div class="modal-confirm-hero" id="modal-hero">—</div>
+      <div class="modal-confirm-sub" id="modal-sub"></div>
+      <div class="modal-reason" id="modal-reason"></div>
+      <button class="modal-btn-confirm" onclick="dbConfirm()">Confirm</button>
+      <button class="modal-btn-cancel" onclick="dbCloseModal()">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- RESET CREDIT MODAL -->
+<div class="modal-backdrop" id="reset-modal-backdrop" onclick="if(event.target===this)dbCloseResetModal()">
+  <div class="modal" style="width:400px;">
+    <div class="modal-header">
+      <div class="modal-title" style="color:var(--mars);">Reset credit to zero?</div>
+      <div class="modal-subtitle">This will set both the non-refundable and refundable credit balances to zero. The action will be recorded in the audit log and cannot be undone.</div>
+    </div>
+    <div class="modal-body">
+      <div style="background:#FFF5F5;border:1px solid #FFCDD2;border-radius:var(--radius-md);padding:var(--sp-4);margin-bottom:var(--sp-5);">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--sp-4);">
+          <div>
+            <div class="db-stat-label">Non-refundable total</div>
+            <div style="font-size:15px;font-weight:700;color:var(--cosmos);">AUD $82,500 → $0</div>
+          </div>
+          <div>
+            <div class="db-stat-label">Refundable total</div>
+            <div style="font-size:15px;font-weight:700;color:var(--cosmos);">AUD $0 → $0</div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn--secondary" onclick="dbCloseResetModal()">Cancel</button>
+        <button class="btn btn--destructive" onclick="dbConfirmReset()">Yes, reset to zero</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // ── Drawer open / close ───────────────────────────
+  // ── Focus trap helpers ────────────────────────────
+  const FOCUSABLE = 'a[href],button:not([disabled]),input:not([disabled]),select:not([disabled]),textarea:not([disabled]),[tabindex]:not([tabindex="-1"])';
+  let _drawerOpener = null;
+  let _trapHandler  = null;
+
+  function openAdjustDrawer() {
+    const drawer = document.getElementById('adjust-drawer');
+    _drawerOpener = document.activeElement;
+    drawer.classList.add('open');
+    document.getElementById('drawer-backdrop').classList.add('open');
+    document.body.style.overflow = 'hidden';
+
+    // Move focus to first focusable element inside drawer
+    const focusable = Array.from(drawer.querySelectorAll(FOCUSABLE));
+    if (focusable.length) focusable[0].focus();
+
+    // Trap Tab / Shift+Tab inside drawer
+    _trapHandler = function(e) {
+      if (e.key !== 'Tab') return;
+      const items = Array.from(drawer.querySelectorAll(FOCUSABLE));
+      if (!items.length) return;
+      const first = items[0];
+      const last  = items[items.length - 1];
+      if (e.shiftKey) {
+        if (document.activeElement === first) { e.preventDefault(); last.focus(); }
+      } else {
+        if (document.activeElement === last)  { e.preventDefault(); first.focus(); }
+      }
+    };
+    drawer.addEventListener('keydown', _trapHandler);
+  }
+
+  function closeAdjustDrawer() {
+    const drawer = document.getElementById('adjust-drawer');
+    drawer.classList.remove('open');
+    document.getElementById('drawer-backdrop').classList.remove('open');
+    document.body.style.overflow = '';
+    if (_trapHandler) { drawer.removeEventListener('keydown', _trapHandler); _trapHandler = null; }
+    if (_drawerOpener) { _drawerOpener.focus(); _drawerOpener = null; }
+    dbReset();
+  }
+
+  // ESC key closes drawer from anywhere on the page
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape' && document.getElementById('adjust-drawer').classList.contains('open')) {
+      closeAdjustDrawer();
+    }
+  });
+
+  // ── Data ──────────────────────────────────────────
+  const DB_BUCKETS = {
+    nr:  { total: 82500, used: 22600, remaining: 52400, label: 'Non-refundable' },
+    ref: { total: 0,     used: 0,     remaining: 0,     label: 'Refundable'     },
+  };
+  const dbSigns = { nr: +1, ref: +1 };
+  let dbActive = null;
+
+  // ── Helpers ───────────────────────────────────────
+  function dbFmt(n) {
+    return 'AUD $' + Math.abs(n).toLocaleString('en-AU', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
+  }
+
+  const ONES = ['','one','two','three','four','five','six','seven','eight','nine','ten','eleven','twelve','thirteen','fourteen','fifteen','sixteen','seventeen','eighteen','nineteen'];
+  const TENS = ['','','twenty','thirty','forty','fifty','sixty','seventy','eighty','ninety'];
+  function w1000(n) {
+    if (!n) return '';
+    if (n < 20)  return ONES[n];
+    if (n < 100) return TENS[Math.floor(n/10)] + (n%10 ? '-' + ONES[n%10] : '');
+    return ONES[Math.floor(n/100)] + ' hundred' + (n%100 ? ' and ' + w1000(n%100) : '');
+  }
+  function toWords(n) {
+    if (!n) return 'zero';
+    const p = [];
+    if (n >= 1e6) { p.push(w1000(Math.floor(n/1e6)) + ' million'); n %= 1e6; }
+    if (n >= 1e3) { p.push(w1000(Math.floor(n/1e3)) + ' thousand'); n %= 1e3; }
+    if (n)        { p.push(w1000(n)); }
+    return p.join(', ');
+  }
+  function parseAmt(raw) {
+    // Strip currency symbol, spaces, commas then parse
+    const s = raw.replace(/[$,\s]/g,'').trim().toLowerCase();
+    if (!s) return 0;
+    const m = s.match(/^([\d.]+)\s*([km]?)$/);
+    if (!m) return NaN;
+    let v = parseFloat(m[1]);
+    if (m[2]==='k') v *= 1000;
+    if (m[2]==='m') v *= 1e6;
+    return Math.round(v);
+  }
+
+  // Format raw digits into $1,234,567 as user types
+  function dbFormatInput(el) {
+    const pos = el.selectionStart;
+    const before = el.value.length;
+    const digits = el.value.replace(/[^0-9]/g, '');
+    if (!digits) { el.value = ''; return; }
+    const num = parseInt(digits, 10);
+    el.value = '$' + num.toLocaleString('en-AU');
+    // Restore cursor accounting for added formatting chars
+    const after = el.value.length;
+    el.selectionStart = el.selectionEnd = Math.max(0, pos + (after - before));
+  }
+
+  // ── Bucket toggle ─────────────────────────────────
+  function dbToggleBucket(id) {
+    const wasActive = dbActive === id;
+    if (dbActive) dbLockBucket(dbActive);
+    if (!wasActive) {
+      dbActive = id;
+      document.getElementById('db-' + id).classList.add('db-bucket--active');
+      document.getElementById('db-lock-' + id).classList.add('db-lock-btn--active');
+      document.getElementById('db-lock-icon-' + id).innerHTML =
+        '<path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>';
+      document.getElementById('db-amount-' + id).focus();
+    } else {
+      dbActive = null;
+    }
+    dbUpdatePreview();
+    dbCheckSave();
+  }
+
+  function dbLockBucket(id) {
+    document.getElementById('db-' + id).classList.remove('db-bucket--active');
+    document.getElementById('db-lock-' + id).classList.remove('db-lock-btn--active');
+    document.getElementById('db-lock-icon-' + id).innerHTML =
+      '<path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>';
+    document.getElementById('db-amount-' + id).value = '';
+    document.getElementById('db-mag-' + id).textContent = '';
+    document.getElementById('db-err-' + id).classList.remove('visible');
+    document.getElementById('db-wrap-' + id).classList.remove('db-input-wrap--error');
+    dbSigns[id] = +1;
+    const btn = document.getElementById('db-sign-' + id);
+    btn.textContent = '+'; btn.className = 'db-sign-btn db-sign-btn--pos';
+  }
+
+  // ── Sign toggle ───────────────────────────────────
+  function dbToggleSign(id) {
+    dbSigns[id] *= -1;
+    const btn = document.getElementById('db-sign-' + id);
+    if (dbSigns[id] === +1) { btn.textContent = '+'; btn.className = 'db-sign-btn db-sign-btn--pos'; }
+    else                    { btn.textContent = '−'; btn.className = 'db-sign-btn db-sign-btn--neg'; }
+    dbOnInput(id);
+  }
+
+  // ── Input handler ─────────────────────────────────
+  function dbOnInput(id) {
+    const el = document.getElementById('db-amount-' + id);
+    dbFormatInput(el);
+    const raw    = el.value;
+    const amount = parseAmt(raw);
+    const magEl  = document.getElementById('db-mag-' + id);
+    const errEl  = document.getElementById('db-err-' + id);
+    const wrapEl = document.getElementById('db-wrap-' + id);
+
+    const balPreview = document.getElementById('db-bal-preview-' + id);
+    const balVal     = document.getElementById('db-bal-val-' + id);
+
+    if (!raw || isNaN(amount) || amount === 0) {
+      magEl.textContent = ''; magEl.className = 'db-magnitude';
+      errEl.classList.remove('visible');
+      wrapEl.classList.remove('db-input-wrap--error');
+      if (balPreview) balPreview.style.display = 'none';
+      dbUpdatePreview(); dbCheckSave(); return;
+    }
+
+    const delta    = dbSigns[id] * amount;
+    const b        = DB_BUCKETS[id];
+    const newTotal = b.total + delta;
+
+    magEl.textContent = toWords(amount) + (dbSigns[id] === -1 ? ' — decrease' : '');
+    magEl.className   = 'db-magnitude ' + (dbSigns[id] === -1 ? 'db-magnitude--neg' : 'db-magnitude--pos');
+
+    const invalid = newTotal < b.used;
+    errEl.classList.toggle('visible', invalid);
+    wrapEl.classList.toggle('db-input-wrap--error', invalid);
+
+    // Inline balance preview
+    if (balPreview && balVal) {
+      const newRemain = b.remaining + delta;
+      balVal.textContent = dbFmt(Math.max(0, newRemain));
+      balPreview.style.display = invalid ? 'none' : 'block';
+    }
+
+    dbUpdatePreview(); dbCheckSave();
+  }
+
+  // ── Preview ───────────────────────────────────────
+  function dbUpdatePreview() {
+    const preview = document.getElementById('db-preview');
+    if (!dbActive) { preview.classList.remove('visible'); return; }
+
+    const raw    = document.getElementById('db-amount-' + dbActive).value;
+    const amount = parseAmt(raw);
+    if (!raw || isNaN(amount) || amount === 0) { preview.classList.remove('visible'); return; }
+
+    const delta     = dbSigns[dbActive] * amount;
+    const b         = DB_BUCKETS[dbActive];
+    const newTotal  = b.total + delta;
+    const newRemain = b.remaining + delta;
+
+    preview.classList.add('visible');
+    document.getElementById('db-preview-total').textContent     = dbFmt(newTotal);
+    document.getElementById('db-preview-remaining').textContent = dbFmt(Math.max(0, newRemain));
+
+    const dEl = document.getElementById('db-preview-delta');
+    dEl.textContent = (delta >= 0 ? '+' : '\u2212') + '$' + Math.abs(delta).toLocaleString('en-AU');
+    dEl.className   = delta >= 0 ? 'db-preview-delta--pos' : 'db-preview-delta--neg';
+  }
+
+  // ── Save gating ───────────────────────────────────
+  function dbCheckSave() {
+    const btn      = document.getElementById('db-save-btn');
+    const hasAmount = dbActive && parseAmt(document.getElementById('db-amount-' + dbActive).value) > 0;
+    const hasError  = dbActive && document.getElementById('db-err-' + dbActive).classList.contains('visible');
+    const ok = hasAmount && !hasError;
+    btn.dataset.ready  = ok ? 'true' : 'false';
+    btn.style.opacity  = ok ? '1' : '0.4';
+    btn.style.cursor   = ok ? 'pointer' : 'not-allowed';
+    // Clear reason error as soon as user starts typing
+    const nudge = document.getElementById('db-reason-nudge');
+    const reasonErr = document.getElementById('db-reason-error');
+    if (document.getElementById('db-reason').value.trim().length >= 10) {
+      if (nudge) nudge.style.display = 'none';
+      if (reasonErr) reasonErr.style.display = 'none';
+    }
+  }
+
+  // ── Modal ─────────────────────────────────────────
+  function dbOpenModal() {
+    const btn = document.getElementById('db-save-btn');
+    if (btn.dataset.ready !== 'true') return;
+    // Validate reason before opening modal
+    const reason    = document.getElementById('db-reason').value.trim();
+    const nudge     = document.getElementById('db-reason-nudge');
+    const reasonErr = document.getElementById('db-reason-error');
+    if (reason.length < 10) {
+      if (nudge)     { nudge.textContent = 'Required field'; nudge.style.display = 'inline'; }
+      if (reasonErr) { reasonErr.style.display = 'block'; }
+      document.getElementById('db-reason').focus();
+      return;
+    }
+    if (nudge)     nudge.style.display = 'none';
+    if (reasonErr) reasonErr.style.display = 'none';
+    try {
+      const id        = dbActive;
+      const amount    = parseAmt(document.getElementById('db-amount-' + id).value);
+      const delta     = dbSigns[id] * amount;
+      const b         = DB_BUCKETS[id];
+      const newRemain = Math.max(0, b.remaining + delta);
+      const newTotal  = b.total + delta;
+      const dStr      = (delta >= 0 ? '+' : '\u2212') + '$' + Math.abs(delta).toLocaleString('en-AU');
+      const cls       = delta >= 0 ? 'mdiff-pos' : 'mdiff-neg';
+
+      document.getElementById('modal-delta').textContent  = dStr;
+      document.getElementById('modal-delta').className    = 'modal-confirm-delta ' + cls;
+      document.getElementById('modal-hero').textContent   = dbFmt(newRemain);
+      document.getElementById('modal-sub').textContent    = 'of ' + dbFmt(newTotal) + ' total  \u00B7  was ' + dbFmt(b.remaining);
+      const reasonEl = document.getElementById('modal-reason');
+      reasonEl.textContent   = '\u201C' + reason + '\u201D';
+      reasonEl.style.display = '';
+    } catch(e) {
+      console.error('dbOpenModal error:', e);
+    }
+    document.getElementById('modal-backdrop').classList.add('open');
+  }
+  function dbCloseModal() { document.getElementById('modal-backdrop').classList.remove('open'); }
+  function dbConfirm()    { dbCloseModal(); closeAdjustDrawer(); alert('Adjustment confirmed. (Prototype — no real action.)'); }
+
+  // ── Reset modal ───────────────────────────────────
+  function dbOpenResetModal()  { document.getElementById('reset-modal-backdrop').classList.add('open'); }
+  function dbCloseResetModal() { document.getElementById('reset-modal-backdrop').classList.remove('open'); }
+  function dbConfirmReset()    { dbCloseResetModal(); closeAdjustDrawer(); alert('Credit reset to zero. (Prototype — no real action.)'); }
+
+  // ── Reset drawer state ────────────────────────────
+  function dbReset() {
+    if (dbActive) { dbLockBucket(dbActive); dbActive = null; }
+    document.getElementById('db-reason').value = '';
+    document.getElementById('db-preview').classList.remove('visible');
+    dbCheckSave();
+  }
+</script>
+
+<script>
+  // ── Pin / bookmark ───────────────────────────────
+  const PIN_KEY = 'credits-pinned';
+  const CLIENT_ID = 'mastercard';
+
+  function getPinned() {
+    try { return JSON.parse(localStorage.getItem(PIN_KEY) || '[]'); } catch { return []; }
+  }
+  function setPinned(arr) {
+    localStorage.setItem(PIN_KEY, JSON.stringify(arr));
+  }
+
+  function reflectPin() {
+    const pinned = getPinned().includes(CLIENT_ID);
+    const btn = document.getElementById('bookmark-btn');
+    btn.classList.toggle('obj-icon-btn--pinned', pinned);
+    btn.setAttribute('aria-label', pinned ? 'Unpin from top' : 'Pin to top');
+  }
+
+  function togglePin() {
+    const arr = getPinned();
+    const idx = arr.indexOf(CLIENT_ID);
+    if (idx === -1) { arr.push(CLIENT_ID); } else { arr.splice(idx, 1); }
+    setPinned(arr);
+    reflectPin();
+  }
+
+  reflectPin();
+</script>
+
+<script>
+document.addEventListener('click', function(e) {
+  var node = e.target;
+  while (node && node !== document.body) {
+    if (node.dataset && node.dataset.zone) {
+      window.parent.postMessage({ type: 'wt-zone', page: 'Credit Overview — Mastercard.html', zone: node.dataset.zone }, '*');
+      return;
+    }
+    node = node.parentElement;
+  }
+}, true);
+</script>
+
+</body>
+</html>
