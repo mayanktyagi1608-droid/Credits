@@ -1484,8 +1484,8 @@
               </button>
             </div>
 
-            <!-- Inline extract button — shown only when a file is selected -->
-            <div id="inline-extract-row" style="display:none; padding: 0 var(--sp-6) var(--sp-5);">
+            <!-- Inline extract button -->
+            <div id="inline-extract-row" style="padding: 0 var(--sp-6) var(--sp-5);">
               <button class="footer-extract-btn" id="inline-extract-btn" type="button" onclick="startExtract()" style="width:100%; justify-content:center;">
                 <svg aria-hidden="true" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2l1.5 3.5L13 7l-3.5 1.5L8 12l-1.5-3.5L3 7l3.5-1.5z"/></svg>
                 Extract with AI
@@ -2732,7 +2732,7 @@
 
     setTimeout(() => {
       stopLoadingCopy();
-      buildAiReview();
+      try { buildAiReview(); } catch(e) { console.error('buildAiReview failed:', e); }
       currentView = 'ai-review';
       setAiIndicator(2);
       showView('step-ai-review');
