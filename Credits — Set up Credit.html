@@ -1,0 +1,3189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Set up Credit · Sport XT</title>
+
+  <style>
+    /* ── Averta (Ticketmaster CDN) ─────────────────── */
+    @font-face {
+      font-family: "Averta"; font-style: normal; font-weight: 400; font-display: swap;
+      src: local("Averta Regular"),
+           url(https://www.ticketmaster.com/static/fonts/averta/averta-regular.woff2) format("woff2"),
+           url(https://www.ticketmaster.com/static/fonts/averta/averta-regular.woff) format("woff");
+    }
+    @font-face {
+      font-family: "Averta"; font-style: normal; font-weight: 600; font-display: swap;
+      src: local("Averta Semibold"),
+           url(https://www.ticketmaster.com/static/fonts/averta/averta-semibold.woff2) format("woff2"),
+           url(https://www.ticketmaster.com/static/fonts/averta/averta-semibold.woff) format("woff");
+    }
+    @font-face {
+      font-family: "Averta"; font-style: normal; font-weight: 700; font-display: swap;
+      src: local("Averta Bold"),
+           url(https://www.ticketmaster.com/static/fonts/averta/averta-bold.woff2) format("woff2"),
+           url(https://www.ticketmaster.com/static/fonts/averta/averta-bold.woff) format("woff");
+    }
+
+    /* ── GDS-E V2 Design Tokens ─────────────────────── */
+    :root {
+      --neptune:   #024DFF;
+      --cosmos:    #050505;
+      --granite:   #646464;
+      --spotlight: #FFFFFF;
+      --earth:     #04814D;
+      --mars:      #EB0000;
+      --slate:     #949494;
+      --moonrock:  #BFBFBF;
+      --ammonite:  #D6D6D6;
+      --diatomite: #EBEBEB;
+      --lunar:     #F6F6F6;
+
+      --sp-1:  4px;  --sp-2:  8px;  --sp-3:  12px; --sp-4:  16px;
+      --sp-5:  20px; --sp-6:  24px; --sp-8:  32px;  --sp-10: 40px;
+      --sp-12: 48px; --sp-16: 64px;
+
+      --radius-xs: 0px;  --radius-sm: 4px;  --radius-md: 8px;
+      --radius-lg: 12px; --radius-xl: 16px; --radius-full: 9999px;
+
+      --elev-01: 0px 2px 4px rgba(0,0,0,0.08);
+      --elev-02: 0px 4px 8px rgba(0,0,0,0.12);
+      --elev-03: 0px 8px 16px rgba(0,0,0,0.16);
+      --elev-04: 0px 16px 32px rgba(0,0,0,0.20);
+
+      --btn-h-md: 40px; --btn-h-sm: 32px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      height: 100%;
+      font-family: "Averta", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-size: 14px; line-height: 1.5;
+      color: var(--cosmos); background: var(--lunar);
+    }
+
+    /* ════════════════════════════════════════════════
+       APP SHELL
+    ════════════════════════════════════════════════ */
+    .app-shell { display: flex; min-height: 100vh; }
+
+    /* ════════════════════════════════════════════════
+       SIDENAV
+    ════════════════════════════════════════════════ */
+    .l2-nav {
+      width: 208px; flex-shrink: 0; background: var(--spotlight);
+      border-right: 1px solid var(--diatomite); position: fixed;
+      left: 0; top: 0; bottom: 0; z-index: 200; overflow: hidden;
+      display: flex; flex-direction: column; justify-content: space-between;
+      transition: width 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .l2-nav.collapsed { width: 56px; }
+    .canvas { transition: margin-left 0.22s cubic-bezier(0.4, 0, 0.2, 1); }
+    .l2-logo-row { height: 54px; display: flex; align-items: center; padding: 0 16px; flex-shrink: 0; }
+    .l2-nav.collapsed .l2-logo-row { justify-content: center; padding: 0; }
+    .l2-logo-btn {
+      display: flex; flex-direction: column; justify-content: center; align-items: center;
+      padding: 4px 0; gap: 8px; width: 40px; height: 36px; border-radius: 2px;
+      background: none; border: none; cursor: pointer; flex-shrink: 0; transition: background 0.12s;
+    }
+    .l2-logo-btn:hover { background: var(--lunar); }
+    .l2-tiles { display: flex; flex-direction: column; gap: 4px; padding: 0 12px 24px; flex: 1; }
+    .l2-tile {
+      background: var(--lunar); border-radius: 4px; display: flex; flex-direction: row;
+      align-items: center; padding: 6px 8px; gap: 8px; height: 44px; min-height: 44px;
+      cursor: pointer; border: none; width: 100%; text-align: left; font-family: inherit;
+      white-space: nowrap; overflow: hidden;
+    }
+    .l2-tile:hover { background: #E8E8E8; }
+    .l2-tile-expanded { background: var(--lunar); border-radius: 4px; display: flex; flex-direction: column; overflow: hidden; }
+    .l2-tile-header {
+      display: flex; flex-direction: row; align-items: center; padding: 6px 8px; gap: 8px;
+      height: 44px; min-height: 44px; border-radius: 4px 4px 0 0; white-space: nowrap;
+      cursor: pointer; transition: background 0.12s; background: none; border: none;
+      width: 100%; font-family: inherit; text-align: left;
+    }
+    .l2-tile-header:hover { background: #E8E8E8; }
+    .l2-tile-icon { width: 32px; height: 32px; min-width: 32px; border-radius: 999px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .l2-tile-icon img { width: 16px; height: 16px; display: block; }
+    .l2-tile-icon--inactive { background: var(--lunar); }
+    .l2-tile-icon--active   { background: var(--neptune); }
+    .l2-tile-icon svg { display: block; }
+    .l2-tile-icon--active svg { filter: brightness(0) invert(1); }
+    .l2-tile-label { flex: 1; font-size: 12px; font-weight: 600; letter-spacing: 1.6px; text-transform: uppercase; color: #050505; line-height: 12px; white-space: nowrap; overflow: hidden; opacity: 1; transition: opacity 0.15s; }
+    .l2-tile-chevron { width: 16px; height: 16px; min-width: 16px; flex-shrink: 0; }
+    .l2-tile-subnav { padding: 0 8px 8px; border-radius: 0 0 4px 4px; }
+    .l2-sublink {
+      display: flex; align-items: center; height: 36px; padding: 0 12px;
+      font-size: 12px; font-weight: 600; letter-spacing: 0.01em; color: #050505;
+      text-decoration: none; border-left: 2px solid transparent;
+      cursor: pointer; transition: background 0.12s; white-space: nowrap; overflow: hidden;
+    }
+    .l2-sublink:hover { background: rgba(0,0,0,0.04); border-radius: 0 4px 4px 0; }
+    .l2-sublink--active { background: rgba(2,78,255,0.10); border-left-color: var(--neptune); color: var(--neptune); }
+    .l2-sublink--active:hover { background: rgba(2,78,255,0.14); }
+
+    .l2-nav.collapsed .l2-tile-label,
+    .l2-nav.collapsed .l2-tile-chevron,
+    .l2-nav.collapsed .l2-tile-subnav,
+    .l2-nav.collapsed .l2-account-creds,
+    .l2-nav.collapsed .l2-account-meatball,
+    .l2-nav.collapsed .l2-help-label,
+    .l2-nav.collapsed .l2-help-chevron,
+    .l2-nav.collapsed .l2-collapse-label { display: none; }
+    .l2-nav.collapsed .l2-tiles { padding-left: 0; padding-right: 0; }
+    .l2-nav.collapsed .l2-tile { background: none; justify-content: center; padding-left: 0; padding-right: 0; }
+    .l2-nav.collapsed .l2-tile:hover { background: none; }
+    .l2-nav.collapsed .l2-tile:hover .l2-tile-icon--inactive { background: #E2E2E2; }
+    .l2-nav.collapsed .l2-tile-header:hover .l2-tile-icon--inactive { background: #E2E2E2; }
+    .l2-nav.collapsed .l2-tile-expanded { background: none; }
+    .l2-nav.collapsed .l2-tile-header { background: none; justify-content: center; padding-left: 0; padding-right: 0; }
+    .l2-nav.collapsed .l2-help-row,
+    .l2-nav.collapsed .l2-account-row,
+    .l2-nav.collapsed .l2-collapse-btn { justify-content: center; margin-left: 0; margin-right: 0; padding-left: 0; padding-right: 0; }
+    .l2-nav.collapsed .l2-collapse-btn { width: 100%; }
+    .l2-nav.collapsed .l2-account-row { border: none; background: none; }
+    .l2-nav.collapsed .l2-collapse-icon { transform: scaleX(-1); }
+
+    .l2-bottom { flex-shrink: 0; padding-bottom: 12px; }
+    .l2-bottom-sep { height: 1px; background: var(--diatomite); }
+    .l2-help-row {
+      display: flex; align-items: center; padding: 10px 8px; gap: 10px; height: 44px;
+      margin: 0 12px; border-radius: 4px; cursor: pointer; transition: background 0.12s;
+      white-space: nowrap; overflow: hidden;
+    }
+    .l2-help-row:hover { background: var(--lunar); }
+    .l2-help-row img { width: 24px; height: 24px; flex-shrink: 0; }
+    .l2-help-label { flex: 1; font-size: 14px; font-weight: 600; letter-spacing: 0.01em; color: #050505; }
+    .l2-help-chevron { width: 16px; height: 16px; flex-shrink: 0; }
+    .l2-account-row {
+      display: flex; align-items: center; padding: 6px 10px 6px 6px; gap: 8px; height: 44px;
+      margin: 4px 12px; background: var(--spotlight); border: 1px solid var(--ammonite); border-radius: 6px;
+      cursor: pointer; white-space: nowrap; overflow: hidden;
+    }
+    .l2-account-avatar {
+      width: 32px; height: 32px; min-width: 32px; border-radius: 4px;
+      background: rgba(2,78,255,0.10); border: 1px solid #8F8F8F;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 12px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase;
+      color: #050505; flex-shrink: 0;
+    }
+    .l2-account-creds { display: flex; flex-direction: column; gap: 2px; flex: 1; min-width: 0; overflow: hidden; }
+    .l2-account-name { font-size: 12px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: #050505; line-height: 12px; }
+    .l2-account-org  { font-size: 12px; color: #767676; line-height: 12px; }
+    .l2-account-meatball { flex-shrink: 0; }
+    .l2-collapse-btn {
+      display: flex; align-items: center; padding: 10px 8px; gap: 10px; height: 44px;
+      margin: 4px 12px 0; border-radius: 4px; background: none; border: none;
+      cursor: pointer; width: calc(100% - 24px); font-family: inherit; transition: background 0.12s;
+      white-space: nowrap; overflow: hidden;
+    }
+    .l2-collapse-btn:hover { background: var(--lunar); }
+    .l2-collapse-btn img { width: 24px; height: 24px; flex-shrink: 0; }
+    .l2-collapse-label { font-size: 12px; font-weight: 600; letter-spacing: 0.15em; text-transform: uppercase; color: #050505; }
+
+    /* ════════════════════════════════════════════════
+       CANVAS
+    ════════════════════════════════════════════════ */
+    .canvas { margin-left: 208px; flex: 1; min-height: 100vh; display: flex; flex-direction: column; }
+
+    /* ════════════════════════════════════════════════
+       WORKFLOW HEADER  (GDS — node 12980:16013)
+    ════════════════════════════════════════════════ */
+    .wf-header {
+      background: var(--spotlight);
+      height: 56px;
+      border-bottom: 1px solid #DADADA;
+      display: flex;
+      align-items: center;
+      padding: 0 var(--sp-6);
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      flex-shrink: 0;
+    }
+    .wf-header-title {
+      font-size: 16px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      color: #121212;
+      white-space: nowrap;
+    }
+    .wf-header-breadcrumb {
+      display: flex; align-items: center; gap: 6px;
+      font-size: 13px; font-weight: 600; color: #767676;
+      margin-right: 16px; flex-shrink: 0;
+      text-decoration: none;
+      transition: color 0.12s;
+    }
+    .wf-header-breadcrumb:hover { color: #050505; }
+    .wf-header-breadcrumb svg { flex-shrink: 0; }
+    .wf-header-sep {
+      width: 1px; height: 20px; background: #DADADA; margin-right: 16px; flex-shrink: 0;
+    }
+
+    /* Step indicator in header */
+    .wf-step-indicator {
+      display: flex; align-items: center; gap: var(--sp-2);
+      margin-left: auto;
+    }
+    .wf-step {
+      display: flex; align-items: center; gap: 6px;
+      font-size: 12px; font-weight: 600; color: #9B9B9B;
+    }
+    .wf-step.active { color: #050505; }
+    .wf-step.done   { color: #04814D; }
+    .wf-step-num {
+      width: 20px; height: 20px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 11px; font-weight: 700;
+      background: var(--diatomite); color: #9B9B9B;
+      flex-shrink: 0;
+    }
+    .wf-step.active .wf-step-num { background: #1D2537; color: var(--spotlight); }
+    .wf-step.done   .wf-step-num { background: #04814D; color: var(--spotlight); }
+    .wf-step-divider {
+      width: 24px; height: 1px; background: #DADADA; flex-shrink: 0;
+    }
+
+    /* ════════════════════════════════════════════════
+       CANVAS BODY & STEP VIEWS
+    ════════════════════════════════════════════════ */
+    .canvas-body {
+      padding: var(--sp-6) var(--sp-4) 116px;
+      flex: 1;
+    }
+
+    /* Each step is a full view; only the active one shown */
+    .step-view { display: none !important; }
+    .step-view.active { display: block !important; }
+    .step2-layout.active { display: grid !important; }
+
+    /* Step 1 — full width */
+
+    /* Step 2 — two-column: form left, summary right */
+    .step2-layout {
+      display: grid;
+      grid-template-columns: 1fr 320px;
+      gap: var(--sp-6);
+      align-items: start;
+    }
+
+    @media (max-width: 780px) {
+      .step2-layout {
+        grid-template-columns: 1fr;
+      }
+      .summary-panel {
+        position: static;
+        order: -1;
+      }
+    }
+
+    /* Selected clients summary panel */
+    .summary-panel {
+      position: sticky;
+      top: calc(56px + var(--sp-6));
+      align-self: start;
+      /* push down to align card top with the form card (step label = 24px num + 12px gap + 12px margin) */
+      padding-top: calc(24px + var(--sp-3) + var(--sp-3));
+    }
+    .summary-panel-card {
+      background: var(--spotlight); border-radius: var(--radius-md);
+      box-shadow: var(--elev-01); overflow: hidden;
+    }
+    .summary-panel-header {
+      display: flex; align-items: baseline; gap: var(--sp-2);
+      padding: var(--sp-4) var(--sp-4) var(--sp-3);
+      border-bottom: 1px solid var(--lunar);
+    }
+    .summary-panel-title {
+      font-size: 11px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.08em; color: #767676;
+    }
+    .summary-panel-count {
+      font-size: 11px; font-weight: 600; color: #767676;
+    }
+    .summary-panel-body {
+      max-height: 360px; overflow-y: auto;
+    }
+    .summary-client-row {
+      display: flex; align-items: center; gap: var(--sp-3);
+      padding: var(--sp-3) var(--sp-4);
+      border-bottom: 1px solid var(--lunar);
+    }
+    .summary-client-row:last-child { border-bottom: none; }
+    .summary-client-logo {
+      width: 28px; height: 28px; border-radius: var(--radius-sm);
+      background: var(--lunar); border: 1px solid var(--diatomite);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 9px; font-weight: 800; color: #050505; flex-shrink: 0;
+    }
+    .summary-client-info { flex: 1; min-width: 0; }
+    .summary-client-name { font-size: 13px; font-weight: 600; color: #050505; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .summary-client-sub  { font-size: 11px; color: #767676; }
+    .summary-remove-btn {
+      width: 20px; height: 20px; border-radius: 2px;
+      background: none; border: none; cursor: pointer;
+      color: #9B9B9B; display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; transition: color 0.12s, background 0.12s;
+    }
+    .summary-remove-btn:hover { color: #050505; background: var(--lunar); }
+    .summary-panel-footer {
+      padding: var(--sp-3) var(--sp-4);
+      border-top: 1px solid var(--lunar);
+    }
+    .summary-edit-btn {
+      background: none; border: none; padding: 0;
+      font-family: inherit; font-size: 12px; font-weight: 600;
+      color: var(--neptune); cursor: pointer; text-decoration: underline;
+    }
+    .summary-edit-btn:hover { color: #0049F4; }
+
+    /* ════════════════════════════════════════════════
+       FORM SECTION LABELS
+    ════════════════════════════════════════════════ */
+    .form-section { margin-bottom: var(--sp-4); }
+    .form-section-label {
+      display: flex; align-items: center; gap: var(--sp-3);
+      margin-bottom: var(--sp-3);
+    }
+    .form-step-num {
+      width: 24px; height: 24px; border-radius: 50%;
+      background: #1D2537; color: var(--spotlight);
+      font-size: 12px; font-weight: 700; letter-spacing: 0.02em;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .form-step-num--muted { background: var(--ammonite); color: #767676; }
+    .form-step-title {
+      font-size: 13px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.08em; color: #050505;
+    }
+    .form-step-title--muted { color: #9B9B9B; }
+
+    /* ════════════════════════════════════════════════
+       FORM CARD
+    ════════════════════════════════════════════════ */
+    .form-card {
+      background: var(--spotlight); border-radius: var(--radius-md);
+      box-shadow: var(--elev-01); overflow: hidden;
+    }
+    .form-card--muted { opacity: 0.5; pointer-events: none; }
+    .form-card-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: var(--sp-4) var(--sp-6) var(--sp-3);
+      border-bottom: 1px solid var(--lunar);
+    }
+    .form-card-header-left { display: flex; align-items: center; gap: var(--sp-3); }
+    .form-card-body { padding: var(--sp-6); }
+    .form-card-body--no-top { padding-top: 0; }
+
+    /* ════════════════════════════════════════════════
+       CLIENT SELECTION
+    ════════════════════════════════════════════════ */
+
+    /* Quick-select chip strip */
+    .quick-select-strip {
+      padding: var(--sp-3) var(--sp-6) var(--sp-2);
+      border-bottom: 1px solid var(--lunar);
+      display: flex; flex-direction: column; gap: var(--sp-2);
+    }
+    .quick-select-label {
+      font-size: 11px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.08em; color: #767676;
+    }
+    .quick-chips { display: flex; flex-wrap: wrap; gap: var(--sp-2); }
+    .quick-chip {
+      display: inline-flex; align-items: center; gap: 5px;
+      height: 30px; padding: 0 10px 0 8px;
+      border: 1.5px solid var(--ammonite); border-radius: var(--radius-full);
+      background: var(--spotlight); font-family: inherit; font-size: 12px; font-weight: 600;
+      color: #050505; cursor: pointer; white-space: nowrap;
+      transition: border-color 0.12s, background 0.12s, color 0.12s;
+    }
+    .quick-chip:hover { border-color: #8F8F8F; background: #FAFAFA; }
+    .quick-chip.active {
+      background: #1D2537; border-color: #1D2537; color: var(--spotlight);
+    }
+    .quick-chip-count {
+      display: inline-flex; align-items: center; justify-content: center;
+      min-width: 18px; height: 18px; padding: 0 4px;
+      border-radius: 9px; background: var(--diatomite);
+      font-size: 10px; font-weight: 700; color: #767676;
+      transition: background 0.12s, color 0.12s;
+    }
+    .quick-chip.active .quick-chip-count { background: rgba(255,255,255,0.18); color: #FFFFFF; }
+
+    /* Filter + search bar */
+    .client-search-bar {
+      display: flex; align-items: center; gap: var(--sp-3);
+      padding: var(--sp-3) var(--sp-6); border-bottom: 1px solid var(--lunar);
+    }
+    .search-wrap { position: relative; flex: 1; }
+    .search-wrap svg { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); pointer-events: none; }
+    .search-input {
+      width: 100%; height: 40px; padding: 0 var(--sp-4) 0 36px;
+      border: 1px solid var(--ammonite); border-radius: var(--radius-md);
+      background: var(--spotlight); font-family: inherit; font-size: 14px;
+      color: var(--cosmos); outline: none;
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+    .search-input::placeholder { color: var(--moonrock); }
+    .search-input:hover  { border-color: var(--granite); }
+    .search-input:focus  { border-color: var(--neptune); box-shadow: 0 0 0 3px rgba(2,77,223,0.12); }
+
+    /* Inline filter dropdowns */
+    .fdd { position: relative; }
+    .fdd-btn {
+      height: 40px; padding: 0 var(--sp-3);
+      border: 1px solid var(--ammonite); border-radius: var(--radius-md);
+      background: var(--spotlight); font-family: inherit; font-size: 14px;
+      color: var(--cosmos); cursor: pointer; white-space: nowrap;
+      display: inline-flex; align-items: center; gap: var(--sp-2);
+      transition: border-color 0.15s, background 0.12s, box-shadow 0.15s;
+      outline: none;
+    }
+    .fdd-btn:hover { border-color: var(--granite); background: var(--lunar); }
+    .fdd-btn--active { border-color: var(--neptune); color: var(--neptune); background: rgba(2,77,255,0.06); }
+    .fdd-btn:focus-visible { border-color: var(--neptune); box-shadow: 0 0 0 3px rgba(2,77,223,0.12); }
+    .fdd-chevron { flex-shrink: 0; transition: transform 0.15s; }
+    .fdd.open .fdd-chevron { transform: rotate(180deg); }
+    .fdd-menu {
+      display: none; position: absolute; top: calc(100% + 4px); left: 0;
+      min-width: 180px; background: var(--spotlight);
+      border: 1px solid var(--ammonite); border-radius: var(--radius-md);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.12); z-index: 100;
+      padding: var(--sp-1) 0;
+    }
+    .fdd.open .fdd-menu { display: block; }
+    .fdd-option {
+      display: flex; align-items: center; gap: var(--sp-3);
+      padding: var(--sp-2) var(--sp-4); cursor: pointer;
+      font-size: 14px; color: #050505; transition: background 0.1s; user-select: none;
+    }
+    .fdd-option:hover { background: var(--lunar); }
+    .fdd-checkbox {
+      width: 16px; height: 16px; border-radius: 3px;
+      border: 1.5px solid #8F8F8F; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      transition: background 0.1s, border-color 0.1s;
+    }
+    .fdd-option.selected .fdd-checkbox { background: var(--neptune); border-color: var(--neptune); }
+    .fdd-option.selected .fdd-checkbox::after {
+      content: ''; width: 8px; height: 5px;
+      border-left: 1.5px solid var(--spotlight); border-bottom: 1.5px solid var(--spotlight);
+      transform: rotate(-45deg) translateY(-1px); display: block;
+    }
+    .fdd-footer {
+      border-top: 1px solid var(--diatomite); padding: var(--sp-2) var(--sp-4);
+    }
+    .fdd-clear-btn {
+      background: none; border: none; padding: 0;
+      font-family: inherit; font-size: 12px; font-weight: 600;
+      color: var(--neptune); cursor: pointer;
+    }
+    .fdd-clear-btn:hover { color: #0049F4; }
+    .fdd-clear-btn:disabled { color: #B9B9B9; cursor: default; }
+
+    /* Select-all row */
+    .select-all-row {
+      display: grid; grid-template-columns: 36px 1fr 160px 90px 160px;
+      padding: 0 var(--sp-6); height: 36px; align-items: center;
+      background: #F6F6F6; border-bottom: 1px solid var(--diatomite);
+      cursor: pointer; user-select: none;
+      transition: background 0.1s;
+    }
+    .select-all-row:hover { background: #F0F0F0; }
+    .select-all-label {
+      font-size: 12px; font-weight: 600; color: #050505; grid-column: 2 / -1;
+    }
+    .select-all-checkbox {
+      width: 16px; height: 16px; border-radius: 3px;
+      border: 1.5px solid #8F8F8F;
+      display: flex; align-items: center; justify-content: center;
+      background: var(--spotlight);
+      transition: background 0.1s, border-color 0.1s;
+    }
+    .select-all-checkbox.checked { background: var(--neptune); border-color: var(--neptune); }
+    .select-all-checkbox.checked::after {
+      content: ''; width: 8px; height: 5px;
+      border-left: 1.5px solid var(--spotlight); border-bottom: 1.5px solid var(--spotlight);
+      transform: rotate(-45deg) translateY(-1px); display: block;
+    }
+    .select-all-checkbox.indeterminate { background: var(--neptune); border-color: var(--neptune); }
+    .select-all-checkbox.indeterminate::after {
+      content: ''; width: 8px; height: 1.5px; background: var(--spotlight); display: block;
+    }
+
+    .selection-count-chip {
+      display: inline-flex; align-items: center; gap: 5px;
+      height: 28px; padding: 0 10px; border-radius: var(--radius-full);
+      background: rgba(2,78,255,0.10); border: 1px solid rgba(2,78,255,0.2);
+      font-size: 12px; font-weight: 700; color: var(--neptune);
+      white-space: nowrap; flex-shrink: 0;
+      transition: opacity 0.15s;
+    }
+    .selection-count-chip.hidden { opacity: 0; }
+
+    /* Client table */
+    /* ── shared grid columns ───────────────────────────
+       col 1: checkbox 36px
+       col 2: client   1fr
+       col 3: tier     160px  → hidden ≤640px
+       col 4: region   90px   → hidden ≤780px
+       col 5: credit   160px
+    ──────────────────────────────────────────────── */
+    .client-table-head,
+    .client-row,
+    .select-all-row {
+      grid-template-columns: 36px 3fr 1.5fr 1fr 1.5fr;
+    }
+
+    .client-table-head {
+      display: grid;
+      padding: 0 var(--sp-6); height: 34px; align-items: center;
+      background: #FAFAFA; border-bottom: 1px solid var(--diatomite);
+    }
+    .th { font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #767676; }
+
+    .client-row {
+      display: grid;
+      padding: 0 var(--sp-6); min-height: 60px; align-items: center;
+      border-bottom: 1px solid var(--lunar); cursor: pointer;
+      transition: background 0.1s; user-select: none;
+    }
+    .client-row:last-child { border-bottom: none; }
+    .client-row:hover:not(.client-row--disabled) { background: #FAFAFA; }
+    .client-row--disabled { cursor: default; opacity: 0.55; }
+    .client-row--selected { background: rgba(2,78,255,0.04); }
+    .client-row--selected:hover { background: rgba(2,78,255,0.07); }
+
+    /* ≤ 780px — drop Region column */
+    @media (max-width: 780px) {
+      .client-table-head,
+      .client-row,
+      .select-all-row { grid-template-columns: 36px 3fr 1.5fr 1.5fr; }
+
+      .client-table-head > :nth-child(4),
+      .client-row       > :nth-child(4),
+      .select-all-row   > :nth-child(4) { display: none; }
+    }
+
+    /* ≤ 640px — also drop Tier column */
+    @media (max-width: 640px) {
+      .client-table-head,
+      .client-row,
+      .select-all-row { grid-template-columns: 36px 3fr 1.5fr; }
+
+      .client-table-head > :nth-child(3),
+      .client-row       > :nth-child(3),
+      .select-all-row   > :nth-child(3) { display: none; }
+    }
+
+    /* ≤ 480px — tighten padding */
+    @media (max-width: 480px) {
+      .client-table-head,
+      .client-row,
+      .select-all-row { grid-template-columns: 36px 2fr 1.5fr; padding-left: var(--sp-3); padding-right: var(--sp-3); }
+
+      .client-search-bar  { padding-left: var(--sp-3); padding-right: var(--sp-3); }
+      .quick-select-strip { padding-left: var(--sp-3); padding-right: var(--sp-3); }
+    }
+
+    /* Checkbox cell */
+    .row-checkbox-wrap {
+      display: flex; align-items: center; justify-content: flex-start;
+    }
+    .row-checkbox {
+      width: 16px; height: 16px; border-radius: 3px;
+      border: 1.5px solid #8F8F8F; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      transition: background 0.1s, border-color 0.1s;
+      background: var(--spotlight);
+    }
+    .client-row--selected .row-checkbox {
+      background: var(--neptune); border-color: var(--neptune);
+    }
+    .client-row--selected .row-checkbox::after {
+      content: '';
+      width: 8px; height: 5px;
+      border-left: 1.5px solid var(--spotlight); border-bottom: 1.5px solid var(--spotlight);
+      transform: rotate(-45deg) translateY(-1px);
+      display: block;
+    }
+
+    /* Identity cell */
+    .ci { display: flex; align-items: center; gap: var(--sp-3); }
+    .ci-logo {
+      width: 36px; height: 36px; border-radius: var(--radius-sm);
+      background: var(--lunar); border: 1px solid var(--diatomite);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 11px; font-weight: 800; letter-spacing: 0.04em;
+      color: #050505; flex-shrink: 0;
+    }
+    .ci-name { font-size: 14px; font-weight: 600; color: #050505; }
+    .ci-sub  { font-size: 12px; color: #767676; margin-top: 1px; }
+
+    /* Tier badge */
+    .tier-badge {
+      display: inline-flex; align-items: center;
+      height: 22px; padding: 0 8px; border-radius: var(--radius-full);
+      font-size: 11px; font-weight: 600; white-space: nowrap;
+    }
+    .tier-badge--global   { background: #1D2537; color: #FFFFFF; }
+    .tier-badge--premium  { background: #E5EDFF; color: var(--neptune); }
+    .tier-badge--official { background: var(--lunar); color: #494949; }
+
+    /* Credit status */
+    .credit-none {
+      display: inline-flex; align-items: center; gap: 5px;
+      font-size: 12px; color: #767676;
+    }
+    .credit-none-dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      border: 1.5px solid var(--ammonite); flex-shrink: 0;
+    }
+    .credit-has {
+      display: flex; flex-direction: column;
+    }
+    .credit-has-amount { font-size: 13px; font-weight: 700; color: #050505; }
+    .credit-has-label  { font-size: 11px; color: #767676; }
+
+    /* Top-up indicator for clients with existing credit */
+    .credit-topup { display: flex; flex-direction: column; }
+    .credit-topup-amount { font-size: 13px; font-weight: 700; color: #050505; }
+    .credit-topup-label {
+      display: inline-flex; align-items: center; gap: 3px;
+      font-size: 11px; font-weight: 600; color: #C55B0F;
+    }
+
+    /* Empty state when all clients filtered out */
+    .client-list-empty {
+      display: none; padding: var(--sp-8) var(--sp-6);
+      text-align: center; font-size: 13px; color: #767676;
+    }
+    .client-list-empty.visible { display: block; }
+
+    /* ════════════════════════════════════════════════
+       CREDIT CONFIGURATION
+    ════════════════════════════════════════════════ */
+
+    /* Applies-to callout */
+    .applies-callout {
+      display: flex; align-items: center; gap: var(--sp-3);
+      margin-bottom: var(--sp-5);
+      padding: var(--sp-3) var(--sp-4);
+      background: rgba(2,78,255,0.05);
+      border: 1px solid rgba(2,78,255,0.2);
+      border-radius: var(--radius-md);
+      font-size: 13px; color: #050505;
+    }
+    .applies-callout svg { flex-shrink: 0; color: var(--neptune); }
+    .applies-callout strong { font-weight: 700; color: var(--neptune); }
+
+    /* Fields */
+    .field { margin-bottom: var(--sp-5); }
+    .field:last-child { margin-bottom: 0; }
+
+    .field-label {
+      display: block; font-size: 13px; font-weight: 700;
+      color: #050505; margin-bottom: var(--sp-1);
+    }
+    .field-label span.optional {
+      font-size: 12px; font-weight: 400; color: #767676; margin-left: 5px;
+    }
+    .field-helper { font-size: 12px; color: #767676; margin-bottom: var(--sp-2); }
+
+    .field-input {
+      width: 100%; height: 40px; padding: 0 var(--sp-4);
+      border: 1px solid var(--ammonite); border-radius: var(--radius-md);
+      background: var(--spotlight); font-family: inherit; font-size: 14px;
+      color: var(--cosmos); outline: none;
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+    .field-input::placeholder { color: var(--moonrock); }
+    .field-input:focus { border-color: var(--neptune); box-shadow: 0 0 0 3px rgba(2,77,223,0.12); }
+
+    /* Amount field */
+    .amount-wrap {
+      display: flex; align-items: stretch;
+      border: 1px solid var(--ammonite); border-radius: var(--radius-md);
+      overflow: hidden;
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+    .amount-wrap:focus-within {
+      border-color: var(--neptune);
+      box-shadow: 0 0 0 3px rgba(2,77,223,0.12);
+    }
+    .amount-prefix {
+      padding: 0 var(--sp-3);
+      display: flex; align-items: center;
+      font-size: 14px; font-weight: 600; color: var(--granite);
+      background: var(--lunar); border-right: 1px solid var(--ammonite);
+      flex-shrink: 0; white-space: nowrap;
+    }
+    .amount-input {
+      flex: 1; height: 40px; padding: 0 var(--sp-3);
+      border: none; border-radius: 0; background: transparent; font-family: inherit;
+      font-size: 14px; color: var(--cosmos); outline: none;
+      -moz-appearance: textfield;
+    }
+    .amount-input::-webkit-outer-spin-button,
+    .amount-input::-webkit-inner-spin-button { -webkit-appearance: none; }
+    .amount-input::placeholder { color: var(--moonrock); }
+    .magnitude {
+      font-size: 12px; color: #767676;
+      margin-top: var(--sp-2); min-height: 18px;
+      font-style: italic; transition: color 0.15s;
+    }
+
+    /* Credit type options */
+    .type-options {
+      display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-3);
+    }
+    .type-option {
+      display: flex; align-items: flex-start; gap: var(--sp-3);
+      padding: var(--sp-4); border: 1.5px solid var(--ammonite);
+      border-radius: var(--radius-md); cursor: pointer;
+      transition: border-color 0.12s, background 0.12s;
+    }
+    .type-option:hover { border-color: #8F8F8F; background: #FAFAFA; }
+    .type-option.selected { border-color: var(--neptune); background: rgba(2,78,255,0.04); }
+    .type-option input[type="radio"] { position: absolute; opacity: 0; pointer-events: none; }
+
+    .type-radio-indicator {
+      width: 16px; height: 16px; border-radius: 50%;
+      border: 1.5px solid #8F8F8F; flex-shrink: 0; margin-top: 2px;
+      display: flex; align-items: center; justify-content: center;
+      transition: border-color 0.12s, background 0.12s;
+    }
+    .type-option.selected .type-radio-indicator {
+      border-color: var(--neptune); background: var(--neptune);
+    }
+    .type-radio-indicator::after {
+      content: ''; width: 6px; height: 6px; border-radius: 50%;
+      background: transparent; transition: background 0.12s;
+    }
+    .type-option.selected .type-radio-indicator::after { background: var(--spotlight); }
+
+    .type-option-content { display: flex; flex-direction: column; gap: 3px; }
+    .type-option-title { font-size: 14px; font-weight: 700; color: #050505; }
+    .type-option-desc  { font-size: 12px; color: #767676; line-height: 1.4; }
+
+    /* Date field with two columns */
+    .fields-row {
+      display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-5);
+    }
+
+    /* Notes textarea */
+    .field-textarea {
+      width: 100%; min-height: 80px; padding: var(--sp-3) var(--sp-4);
+      border: 1px solid var(--ammonite); border-radius: var(--radius-md);
+      background: var(--spotlight); font-family: inherit; font-size: 14px;
+      color: var(--cosmos); outline: none; resize: vertical; line-height: 1.5;
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+    .field-textarea::placeholder { color: var(--moonrock); }
+    .field-textarea:focus { border-color: var(--neptune); box-shadow: 0 0 0 3px rgba(2,77,223,0.12); }
+
+    /* ════════════════════════════════════════════════
+       PAGE FOOTER  (GDS — node 12980:16124)
+    ════════════════════════════════════════════════ */
+    .page-footer {
+      position: fixed; bottom: 0; left: 208px; right: 0;
+      background: var(--spotlight);
+      border-top: 1px solid #E5E5E5;
+      height: 84px;
+      padding: 0 var(--sp-6);
+      display: flex; align-items: center; justify-content: space-between;
+      z-index: 100;
+      /* level-3 shadow cast upward */
+      box-shadow:
+        0px -2px 4px rgba(5,5,5,0.04),
+        0px -2px 8px rgba(5,5,5,0.04),
+        0px -4px 16px rgba(5,5,5,0.06),
+        0px -16px 32px rgba(5,5,5,0.08);
+    }
+
+    /* Cancel — lightweight underlined (tertiary) */
+    .footer-cancel-btn {
+      height: 40px; padding: 0 var(--sp-4);
+      border: none; background: transparent;
+      font-family: inherit; font-size: 14px; font-weight: 600;
+      color: var(--neptune); cursor: pointer; white-space: nowrap;
+      text-decoration: underline; border-radius: var(--radius-sm);
+      transition: color 0.12s, background 0.12s;
+    }
+    .footer-cancel-btn:hover { color: #0049F4; background: rgba(2,78,255,0.05); }
+
+    .footer-right { display: flex; align-items: center; gap: var(--sp-2); }
+
+    /* Back — outline */
+    .footer-back-btn {
+      height: 40px; padding: 0 var(--sp-4);
+      border: 1.5px solid #050505; border-radius: var(--radius-sm);
+      background: transparent; font-family: inherit; font-size: 14px; font-weight: 600;
+      color: #050505; cursor: pointer; white-space: nowrap;
+      transition: background 0.12s;
+    }
+    .footer-back-btn:hover { background: var(--lunar); }
+
+    /* Next / Set up credit — solid primary */
+    .footer-next-btn,
+    .footer-confirm-btn {
+      height: 40px; padding: 0 var(--sp-4);
+      border: none; border-radius: var(--radius-sm);
+      background: var(--neptune); font-family: inherit; font-size: 14px; font-weight: 600;
+      color: var(--spotlight); cursor: pointer; white-space: nowrap;
+      transition: background 0.12s;
+    }
+    .footer-next-btn:hover:not(:disabled),
+    .footer-confirm-btn:hover:not(:disabled) { background: #0045E8; }
+    .footer-next-btn:disabled,
+    .footer-confirm-btn:disabled { background: var(--diatomite); color: #9B9B9B; cursor: not-allowed; }
+
+    /* ════════════════════════════════════════════════
+       FOCUS RINGS — all interactive elements
+    ════════════════════════════════════════════════ */
+    .quick-chip:focus-visible {
+      outline: none; border-color: var(--neptune);
+      box-shadow: 0 0 0 3px rgba(2,77,223,0.20);
+    }
+    .client-row:focus-visible,
+    .select-all-row:focus-visible {
+      outline: none; box-shadow: inset 0 0 0 2px var(--neptune);
+    }
+    .type-option:focus-visible {
+      outline: none; box-shadow: 0 0 0 3px rgba(2,77,223,0.20);
+    }
+    .summary-edit-btn:focus-visible {
+      outline: none; border-radius: 2px; box-shadow: 0 0 0 3px rgba(2,77,223,0.20);
+    }
+    .footer-cancel-btn:focus-visible,
+    .footer-back-btn:focus-visible,
+    .footer-next-btn:focus-visible,
+    .footer-confirm-btn:focus-visible {
+      outline: none; box-shadow: 0 0 0 3px rgba(2,77,223,0.30);
+    }
+    .l2-logo-btn:focus-visible,
+    .l2-tile:focus-visible,
+    .l2-tile-header:focus-visible,
+    .l2-collapse-btn:focus-visible,
+    .l2-help-row:focus-visible {
+      outline: none; box-shadow: inset 0 0 0 2px var(--neptune);
+    }
+
+    /* ════════════════════════════════════════════════
+       CONFIRMATION MODAL
+    ════════════════════════════════════════════════ */
+    .modal-backdrop {
+      position: fixed; inset: 0; background: rgba(0,0,0,0.45); z-index: 500;
+      display: none; align-items: center; justify-content: center;
+    }
+    .modal-backdrop.open { display: flex; }
+
+    .modal {
+      background: var(--spotlight); border-radius: var(--radius-lg);
+      box-shadow: var(--elev-04); width: 520px; max-width: calc(100vw - 48px);
+      overflow: hidden;
+    }
+    .modal-header { padding: var(--sp-6) var(--sp-6) var(--sp-4); }
+    .modal-title { font-size: 18px; font-weight: 700; color: #050505; margin-bottom: var(--sp-1); }
+    .modal-subtitle { font-size: 13px; color: #767676; }
+
+    .modal-body { padding: 0 var(--sp-6) var(--sp-6); }
+
+    .modal-section-label {
+      font-size: 11px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.08em; color: #767676;
+      margin-bottom: var(--sp-2); margin-top: var(--sp-4);
+    }
+
+    .modal-client-list {
+      border: 1px solid var(--diatomite); border-radius: var(--radius-md);
+      overflow: hidden; margin-bottom: var(--sp-4);
+    }
+    .modal-client-row {
+      display: flex; align-items: center; gap: var(--sp-3);
+      padding: var(--sp-3) var(--sp-4);
+      border-bottom: 1px solid var(--lunar); font-size: 14px;
+    }
+    .modal-client-row:last-child { border-bottom: none; }
+    .modal-client-logo {
+      width: 28px; height: 28px; border-radius: var(--radius-sm);
+      background: var(--lunar); border: 1px solid var(--diatomite);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 9px; font-weight: 800; color: #050505; flex-shrink: 0;
+    }
+    .modal-client-name { font-weight: 600; color: #050505; flex: 1; }
+    .modal-client-tier { font-size: 11px; color: #767676; }
+
+    .modal-summary-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-2);
+      padding: var(--sp-4); background: #F6F6F6; border-radius: var(--radius-md);
+      margin-bottom: var(--sp-5);
+    }
+    .modal-summary-item { display: flex; flex-direction: column; gap: 2px; }
+    .modal-summary-key   { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.07em; color: #767676; }
+    .modal-summary-val   { font-size: 14px; font-weight: 700; color: #050505; }
+
+    /* AI path: group block inside modal */
+    .modal-group { margin-bottom: var(--sp-5); }
+    .modal-group:last-child { margin-bottom: 0; }
+    .modal-group-head {
+      display: flex; flex-direction: column; gap: var(--sp-2);
+      margin-bottom: var(--sp-2);
+    }
+    .modal-group-title {
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .modal-group-title-text {
+      font-size: 13px; font-weight: 700; color: #050505;
+    }
+    .modal-group-config {
+      display: flex; align-items: center; gap: var(--sp-2); flex-wrap: wrap;
+    }
+    .modal-config-pill {
+      display: inline-flex; align-items: center;
+      height: 24px; padding: 0 var(--sp-3);
+      background: var(--lunar); border-radius: var(--radius-full);
+      font-size: 12px; font-weight: 700; color: #050505; white-space: nowrap;
+    }
+    .modal-config-pill--amount { background: #E5EDFF; color: var(--neptune); }
+    .modal-config-sep { font-size: 12px; color: var(--ammonite); }
+
+    .modal-footer { display: flex; gap: var(--sp-2); justify-content: flex-end; padding: 0 var(--sp-6) var(--sp-6); }
+    .modal-cancel-btn {
+      height: 40px; padding: 0 var(--sp-5);
+      border: 1.5px solid #050505; border-radius: var(--radius-sm);
+      background: transparent; font-family: inherit; font-size: 14px; font-weight: 600;
+      color: #050505; cursor: pointer; transition: background 0.12s;
+    }
+    .modal-cancel-btn:hover { background: var(--lunar); }
+    .modal-confirm-btn {
+      height: 40px; padding: 0 var(--sp-5);
+      border: none; border-radius: var(--radius-sm);
+      background: var(--neptune); font-family: inherit; font-size: 14px; font-weight: 600;
+      color: var(--spotlight); cursor: pointer; transition: background 0.12s;
+    }
+    .modal-confirm-btn:hover:not(:disabled) { background: #0045E8; }
+    .modal-confirm-btn:disabled { background: var(--diatomite); color: #9B9B9B; cursor: not-allowed; }
+    .modal-cancel-btn:focus-visible,
+    .modal-confirm-btn:focus-visible { outline: none; box-shadow: 0 0 0 3px rgba(2,77,223,0.30); }
+
+    /* ════════════════════════════════════════════════
+       STEP 0 — UPLOAD ENTRY
+    ════════════════════════════════════════════════ */
+
+    /* Two-column layout for step 0 */
+    .step0-layout {
+      display: grid;
+      grid-template-columns: 1fr 360px;
+      gap: var(--sp-6);
+      align-items: start;
+    }
+    @media (max-width: 860px) {
+      .step0-layout { grid-template-columns: 1fr; }
+      .step0-help-panel { display: none; }
+    }
+
+    /* Upload card heading */
+    .step0-card-head {
+      padding: var(--sp-6) var(--sp-6) 0;
+    }
+    .step0-title { font-size: 18px; font-weight: 700; color: #050505; margin-bottom: var(--sp-2); }
+    .step0-subtitle { font-size: 14px; color: #767676; line-height: 1.6; }
+
+    /* Drop zone */
+    .drop-zone {
+      margin: var(--sp-5) var(--sp-6);
+      border: 1.5px dashed var(--moonrock); border-radius: var(--radius-sm);
+      padding: var(--sp-8) var(--sp-6);
+      display: flex; flex-direction: column; align-items: center; gap: var(--sp-5);
+      text-align: center; cursor: pointer;
+      transition: border-color 0.15s, background 0.15s;
+    }
+    .drop-zone:hover, .drop-zone.dragover {
+      border-color: var(--neptune); background: rgba(2,77,255,0.03);
+    }
+    .drop-zone-icon {
+      width: 40px; height: 40px;
+      display: flex; align-items: center; justify-content: center; color: #050505;
+    }
+    .drop-zone-heading { font-size: 15px; font-weight: 700; color: #050505; }
+    .drop-zone-sub { font-size: 13px; color: #767676; line-height: 1.5; }
+    .drop-zone-btn {
+      height: 40px; padding: 0 var(--sp-5);
+      border: 1.5px solid #050505; border-radius: var(--radius-sm);
+      background: var(--spotlight); font-family: inherit; font-size: 14px; font-weight: 600;
+      color: #050505; cursor: pointer; white-space: nowrap;
+      transition: background 0.12s;
+    }
+    .drop-zone-btn:hover { background: var(--lunar); }
+    .drop-zone-btn:focus-visible { outline: none; box-shadow: 0 0 0 3px rgba(2,77,223,0.20); }
+    #file-input { display: none; }
+
+    /* Help / tips panel */
+    .step0-help-panel {
+      background: var(--spotlight); border: 1px solid var(--diatomite); border-radius: var(--radius-sm);
+      overflow: hidden;
+    }
+    .help-panel-head {
+      padding: var(--sp-5) var(--sp-6) var(--sp-4);
+      border-bottom: 1px solid var(--lunar);
+    }
+    .help-panel-title { font-size: 16px; font-weight: 700; color: #050505; line-height: 1.4; }
+    .help-tip {
+      display: none; flex-direction: column; gap: var(--sp-4);
+      padding: var(--sp-5) var(--sp-6);
+    }
+    .help-tip.active { display: flex; }
+    .help-tip-card {
+      background: #F6F6F6; border-radius: var(--radius-sm);
+      padding: var(--sp-4) var(--sp-4) var(--sp-8);
+    }
+    .help-tip-label { font-size: 13px; font-weight: 700; color: #050505; margin-bottom: var(--sp-2); }
+    .help-tip-body  { font-size: 13px; color: #767676; line-height: 1.6; }
+    .help-panel-nav {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: var(--sp-3) var(--sp-6);
+      border-top: 1px solid var(--lunar);
+    }
+    .help-nav-btn {
+      background: none; border: none; padding: 0;
+      font-family: inherit; font-size: 13px; color: #050505; cursor: pointer;
+      display: inline-flex; align-items: center; gap: 6px;
+      transition: color 0.12s;
+    }
+    .help-nav-btn:disabled { color: var(--moonrock); cursor: default; }
+    .help-nav-btn:not(:disabled):hover { color: var(--neptune); }
+    .help-nav-count { font-size: 13px; color: #050505; }
+
+    /* File preview */
+    .upload-file-preview {
+      display: none; align-items: center; gap: var(--sp-3);
+      padding: var(--sp-3) var(--sp-4);
+      border: 1px solid var(--ammonite); border-radius: var(--radius-md);
+      background: var(--spotlight); margin-top: var(--sp-3);
+    }
+    .upload-file-preview.visible { display: flex; }
+    .upload-file-icon {
+      width: 32px; height: 32px; border-radius: var(--radius-sm);
+      background: rgba(2,77,255,0.08); border: 1px solid rgba(2,77,255,0.15);
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0; color: var(--neptune);
+    }
+    .upload-file-name { flex: 1; font-size: 13px; font-weight: 600; color: #050505; word-break: break-all; }
+    .upload-file-size { font-size: 12px; color: #767676; flex-shrink: 0; }
+    .upload-remove-btn {
+      width: 24px; height: 24px; border-radius: 2px;
+      background: none; border: none; cursor: pointer;
+      color: #9B9B9B; display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+      transition: color 0.12s, background 0.12s;
+    }
+    .upload-remove-btn:hover { color: #050505; background: var(--lunar); }
+    .upload-remove-btn:focus-visible { outline: none; box-shadow: 0 0 0 2px var(--neptune); border-radius: 2px; }
+
+
+    /* Manual skip */
+    .manual-skip-row {
+      display: flex; align-items: center; justify-content: center; gap: var(--sp-2);
+      margin-top: var(--sp-5); padding: var(--sp-2); font-size: 13px; color: #767676;
+    }
+    .manual-skip-btn {
+      background: none; border: none; padding: 0;
+      font-family: inherit; font-size: 13px; font-weight: 600; color: var(--neptune); cursor: pointer;
+      display: inline-flex; align-items: center; gap: 4px;
+    }
+    .manual-skip-btn:hover { color: #0049F4; }
+    .manual-skip-btn:focus-visible { outline: none; border-radius: 2px; box-shadow: 0 0 0 3px rgba(2,77,223,0.20); }
+
+    /* ════════════════════════════════════════════════
+       LOADING VIEW
+    ════════════════════════════════════════════════ */
+    .loading-view {
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      padding: 96px var(--sp-6) 80px; gap: var(--sp-5); text-align: center;
+    }
+    .loading-spinner {
+      width: 48px; height: 48px;
+      border: 3px solid var(--diatomite); border-top-color: var(--neptune);
+      border-radius: 50%; animation: spin 0.7s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .loading-title { font-size: 16px; font-weight: 700; color: #050505; }
+    .loading-sub   { font-size: 13px; color: #767676; min-height: 20px; }
+
+    /* ════════════════════════════════════════════════
+       AI REVIEW
+    ════════════════════════════════════════════════ */
+    .ai-review-banner {
+      display: flex; align-items: center; gap: var(--sp-3);
+      padding: var(--sp-3) var(--sp-4);
+      background: rgba(2,77,255,0.05); border: 1px solid rgba(2,77,255,0.2);
+      border-radius: var(--radius-md); margin-bottom: var(--sp-4);
+      font-size: 13px; color: #050505;
+    }
+    .ai-review-bar-left { display: flex; align-items: center; gap: var(--sp-3); font-size: 13px; color: #050505; }
+    .ai-review-bar-left strong { font-weight: 700; }
+    .ai-model-badge {
+      display: inline-flex; align-items: center; gap: 5px;
+      height: 22px; padding: 0 8px; border-radius: var(--radius-full);
+      background: rgba(2,77,255,0.10); border: 1px solid rgba(2,77,255,0.20);
+      font-size: 11px; font-weight: 600; color: var(--neptune); white-space: nowrap;
+    }
+
+    /* Inline amount input for review rows */
+    .ai-amount-wrap {
+      display: flex; align-items: stretch;
+      border: 1px solid var(--ammonite); border-radius: var(--radius-sm);
+      overflow: hidden; height: 36px;
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+    .ai-amount-wrap:focus-within { border-color: var(--neptune); box-shadow: 0 0 0 3px rgba(2,77,223,0.12); }
+    .ai-amount-prefix {
+      padding: 0 var(--sp-2);
+      display: flex; align-items: center;
+      font-size: 12px; font-weight: 600; color: var(--granite);
+      background: var(--lunar); border-right: 1px solid var(--ammonite); flex-shrink: 0;
+    }
+    .ai-amount-input {
+      flex: 1; width: 0; padding: 0 var(--sp-2);
+      border: none; background: transparent; font-family: inherit;
+      font-size: 13px; color: var(--cosmos); outline: none;
+    }
+    .ai-amount-input::placeholder { color: var(--moonrock); }
+
+    /* Footer extract button */
+    .footer-extract-btn {
+      height: 40px; padding: 0 var(--sp-4);
+      border: none; border-radius: var(--radius-sm);
+      background: var(--neptune); font-family: inherit; font-size: 14px; font-weight: 600;
+      color: var(--spotlight); cursor: pointer; white-space: nowrap;
+      display: inline-flex; align-items: center; gap: 6px;
+      transition: background 0.12s;
+    }
+    .footer-extract-btn:hover:not(:disabled) { background: #0045E8; }
+    .footer-extract-btn:disabled { background: var(--diatomite); color: #9B9B9B; cursor: not-allowed; }
+    .footer-extract-btn:focus-visible { outline: none; box-shadow: 0 0 0 3px rgba(2,77,223,0.30); }
+
+    /* AI review — confidence badge */
+    .ai-conf-badge {
+      display: inline-flex; align-items: center;
+      height: 22px; padding: 0 8px; border-radius: 4px;
+      font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em;
+      white-space: nowrap; flex-shrink: 0;
+    }
+    .ai-conf-badge--high   { background: #DBFEEF; color: #047A49; }
+    .ai-conf-badge--medium { background: #FDEFED; color: #C55B0F; }
+    .ai-conf-badge--low    { background: #FFE3E3; color: #A50000; }
+
+    /* AI legend popover */
+    .ai-legend-wrap { position: relative; margin-left: auto; flex-shrink: 0; }
+    .ai-legend-btn {
+      display: inline-flex; align-items: center; gap: 5px;
+      height: 28px; padding: 0 var(--sp-3);
+      border: 1px solid rgba(2,77,255,0.25); border-radius: var(--radius-full);
+      background: rgba(2,77,255,0.06); font-family: inherit;
+      font-size: 12px; font-weight: 600; color: var(--neptune); cursor: pointer;
+      transition: background 0.12s, border-color 0.12s;
+    }
+    .ai-legend-btn:hover { background: rgba(2,77,255,0.12); border-color: rgba(2,77,255,0.4); }
+    .ai-legend-btn:focus-visible { outline: none; box-shadow: 0 0 0 3px rgba(2,77,223,0.20); }
+    .ai-legend-popup {
+      display: none; position: absolute; top: calc(100% + 8px); right: 0;
+      width: 340px; background: var(--spotlight);
+      border: 1px solid var(--diatomite); border-radius: var(--radius-md);
+      box-shadow: var(--elev-02); padding: var(--sp-4);
+      z-index: 200;
+      grid-template-columns: 140px 1fr; gap: var(--sp-3) var(--sp-4); align-items: baseline;
+    }
+    .ai-legend-popup.open { display: grid; }
+    .ai-legend-row { display: contents; }
+    .ai-legend-row span:last-child { font-size: 12px; color: #767676; line-height: 1.5; }
+
+    /* AI group accept/edit footer */
+    .ai-group-footer {
+      display: flex; align-items: center; gap: var(--sp-3);
+      padding: var(--sp-3) var(--sp-6);
+      border-top: 1px solid var(--lunar);
+    }
+    .ai-accept-btn {
+      height: 36px; padding: 0 var(--sp-5);
+      border: none; border-radius: var(--radius-sm);
+      background: #050505; font-family: inherit; font-size: 13px; font-weight: 600;
+      color: var(--spotlight); cursor: pointer;
+      transition: background 0.12s;
+    }
+    .ai-accept-btn:hover { background: #2B2B2B; }
+    .ai-accept-btn:focus-visible { outline: none; box-shadow: 0 0 0 3px rgba(2,77,223,0.25); }
+    .ai-edit-btn {
+      height: 36px; padding: 0 var(--sp-4);
+      border: 1.5px solid var(--ammonite); border-radius: var(--radius-sm);
+      background: var(--spotlight); font-family: inherit; font-size: 13px; font-weight: 600;
+      color: var(--cosmos); cursor: pointer;
+      transition: border-color 0.12s, background 0.12s;
+    }
+    .ai-edit-btn:hover { border-color: #8F8F8F; background: #F6F6F6; }
+    .ai-reviewed-badge {
+      display: inline-flex; align-items: center; gap: 5px;
+      font-size: 12px; font-weight: 600; color: #047A49;
+      margin-left: auto;
+    }
+
+    /* Default: fields locked — click Edit to unlock */
+    .ai-group .form-card-body { pointer-events: none; background: #FAFAFA; position: relative; }
+    .ai-group--editing .form-card-body { pointer-events: auto; background: var(--spotlight); }
+    .ai-group--editing .form-card { border-color: var(--neptune); box-shadow: 0 0 0 2px rgba(2,77,255,0.12); }
+
+    /* Floating tooltip (JS-driven, appended to body) */
+    #ai-field-tooltip {
+      position: fixed; z-index: 9999;
+      background: #1D2537; color: #FFFFFF;
+      font-family: "Averta", sans-serif;
+      font-size: 12px; font-weight: 400; white-space: nowrap;
+      padding: 5px 10px; border-radius: 4px;
+      pointer-events: none;
+      opacity: 0; transition: opacity 0.12s;
+    }
+    #ai-field-tooltip.visible { opacity: 1; }
+
+    /* Accepted state: locked but fully readable */
+    .ai-group--accepted .form-card-body { background: #FAFAFA; }
+    .ai-group--accepted .form-card { border-color: var(--ammonite); }
+
+    /* AI review — group layout mirrors Step 2 two-column layout */
+    .ai-group { margin-bottom: var(--sp-6); }
+    .ai-group-layout {
+      display: grid;
+      grid-template-columns: 1fr 280px;
+      gap: var(--sp-6);
+      align-items: start;
+    }
+    @media (max-width: 780px) {
+      .ai-group-layout { grid-template-columns: 1fr; }
+    }
+    /* Summary panel for AI groups (narrower than Step 2) */
+    .ai-group-panel {
+      position: sticky;
+      top: calc(56px + var(--sp-6));
+      align-self: start;
+    }
+    .ai-group-panel-card {
+      background: var(--spotlight); border-radius: var(--radius-md);
+      box-shadow: var(--elev-01); overflow: hidden;
+    }
+    .ai-group-panel-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: var(--sp-3) var(--sp-4);
+      border-bottom: 1px solid var(--lunar);
+    }
+    .ai-group-panel-title {
+      font-size: 11px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.08em; color: #767676;
+    }
+    .ai-group-panel-body { max-height: 260px; overflow-y: auto; }
+
+    /* ════════════════════════════════════════════════
+       SUCCESS TOAST
+    ════════════════════════════════════════════════ */
+    .toast {
+      position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%) translateY(20px);
+      display: flex; align-items: center; gap: var(--sp-3);
+      background: #050505; color: #FFFFFF; border-radius: var(--radius-md);
+      padding: var(--sp-3) var(--sp-5); box-shadow: var(--elev-03);
+      font-size: 14px; font-weight: 600; white-space: nowrap;
+      opacity: 0; transition: opacity 0.2s, transform 0.2s;
+      z-index: 600; pointer-events: none;
+    }
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+    .toast-icon { width: 18px; height: 18px; flex-shrink: 0; }
+
+  </style>
+</head>
+<body>
+
+<div class="app-shell">
+
+  <!-- ═══════════════════════════════════
+       SIDENAV
+  ════════════════════════════════════ -->
+  <nav id="sidenav" class="l2-nav" aria-label="Sport XT navigation">
+    <div>
+      <div class="l2-logo-row">
+        <button class="l2-logo-btn" aria-label="tm/1 home">
+          <svg width="32" height="28" viewBox="0 0 32 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <g clip-path="url(#clip0)">
+              <path fill-rule="evenodd" clip-rule="evenodd" d="M25.205 0.101958L19.3718 28L18.884 27.898L24.7172 -4.00543e-05L25.205 0.101958Z" fill="#050505"/>
+              <path d="M4.82587 11.0638L4.64729 11.9422H2.67458L1.49095 17.4138C1.40166 17.7897 1.38297 18.0783 1.38297 18.5082C1.38297 19.1 1.74221 19.2806 2.24473 19.2806C2.60398 19.2806 2.97983 19.1727 3.33907 19.0294L3.24978 19.9451C2.83655 20.1071 2.3714 20.1777 1.93948 20.1777C1.07772 20.1777 0.396618 19.6212 0.396618 18.6161C0.396618 18.1323 0.431919 17.7191 0.539899 17.2519L1.68822 11.9422H0L0.197271 11.0638H1.86681L2.29665 8.9997L3.35568 8.65915L2.85316 11.0638H4.82587ZM18.0492 13.0552C18.0492 13.3064 18.0139 13.5764 17.96 13.8276L16.6683 19.9825H15.682L16.9196 14.027C16.9736 13.757 17.0089 13.4705 17.0089 13.2026C17.0089 12.2329 16.5064 11.7843 15.5553 11.7843C13.8505 11.7843 12.7562 13.5785 12.4509 15.0673L11.4292 19.9825H10.4429L11.6805 14.027C11.7345 13.757 11.7698 13.4705 11.7698 13.2026C11.7698 12.1976 11.232 11.7843 10.2622 11.7843C8.5574 11.7843 7.51706 13.5972 7.21181 15.0673L6.19015 19.9825H5.2038L6.62207 13.1818C6.76535 12.4821 6.90863 11.7823 6.98131 11.0638H7.87837L7.62711 12.6066C8.3809 11.585 9.29665 10.8852 10.6942 10.8852C11.7698 10.8852 12.6856 11.6577 12.6856 12.7686C13.3314 11.7096 14.515 10.8852 15.79 10.8852C17.1356 10.8852 18.0513 11.6743 18.0513 13.0552H18.0492Z" fill="#050505"/>
+              <path d="M25.7387 11.9069L24.6443 10.202L28.841 7.45684H31.121L28.4112 19.9804H25.8985L28.0332 10.31L25.7387 11.9069Z" fill="#050505"/>
+            </g>
+            <defs><clipPath id="clip0"><rect width="31.121" height="28" fill="white"/></clipPath></defs>
+          </svg>
+        </button>
+      </div>
+
+      <div class="l2-tiles">
+        <button class="l2-tile">
+          <div class="l2-tile-icon l2-tile-icon--inactive">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path fill-rule="evenodd" clip-rule="evenodd" d="M15.6326 9.73662L12.3879 7.7043L8.7759 8.97399L7.51655 12.5896L9.55814 15.8285L13.3633 16.2517L16.0667 13.5406L15.6326 9.73662ZM9.15858 12.4022L9.9462 10.1409L12.2052 9.34686L14.2345 10.6179L14.506 12.9969L12.8152 14.6925L10.4354 14.4278L9.15858 12.4022Z" fill="#050505"/><path fill-rule="evenodd" clip-rule="evenodd" d="M3.56123 4.97368L4.80108 7.54555L4.04244 9.12087L1.265 9.77231L1.26489 14.2669L4.0474 14.8831L4.79739 16.4404L3.53755 18.9932L7.08196 21.8253L9.30811 20.0413L11.008 20.4293L12.2542 23L16.6229 21.9944V19.1467L17.9829 18.0621L20.7638 18.7092L22.7193 14.645L20.4859 12.8676V11.1348L22.7324 9.38143L20.777 5.31768L17.99 5.93719L16.6229 4.84698V1.99494L12.2391 1L11.0052 3.56496L9.30432 3.95318L7.07135 2.17921L3.56123 4.97368ZM5.41883 5.39807L7.07232 4.0817L8.93822 5.56406L12.0361 4.85699L13.0666 2.7147L15.1339 3.18389V5.56406L17.6182 7.54521L19.9473 7.02748L20.8704 8.94584L18.9969 10.4081V13.5856L20.8623 15.0702L19.9393 16.9885L17.6182 16.4484L15.1339 18.4296V20.8092L13.0765 21.2828L12.0361 19.1366L8.93822 18.4296L7.0806 19.9182L5.40303 18.5778L6.45393 16.4484L5.07526 13.5856L2.75394 13.0715L2.75399 10.9525L5.07526 10.4081L6.45393 7.54521L5.41883 5.39807Z" fill="#050505"/></svg>
+          </div>
+          <span class="l2-tile-label">System</span>
+        </button>
+        <button class="l2-tile">
+          <div class="l2-tile-icon l2-tile-icon--inactive">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path fill-rule="evenodd" clip-rule="evenodd" d="M12 1C8.96026 1 6.5 3.46026 6.5 6.5C6.5 9.53974 8.96026 12 12 12C15.0397 12 17.5 9.53974 17.5 6.5C17.5 3.46026 15.0397 1 12 1ZM8 6.5C8 4.28869 9.78869 2.5 12 2.5C14.2113 2.5 16 4.28869 16 6.5C16 8.71131 14.2113 10.5 12 10.5C9.78869 10.5 8 8.71131 8 6.5Z" fill="#050505"/><path fill-rule="evenodd" clip-rule="evenodd" d="M18.4868 13H5.4345L1 16.9066V23H23V16.8789L18.4868 13ZM2.5 17.5842L6.00099 14.5H17.9308L21.5 17.5676V21.5H2.5V17.5842Z" fill="#050505"/></svg>
+          </div>
+          <span class="l2-tile-label">Accounts</span>
+        </button>
+        <button class="l2-tile">
+          <div class="l2-tile-icon l2-tile-icon--inactive">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M14.1811 15.6157L16.4692 17.8308L14.8647 20.4614L11.4144 19.2293L11.2509 16.6582L14.1811 15.6157Z" fill="#050505"/><path d="M17.8304 12.713L14.5912 13.6739L12.319 11.4724L14.1693 8.49136L17.4751 9.47572L17.8304 12.713Z" fill="#050505"/><path fill-rule="evenodd" clip-rule="evenodd" d="M6.77924 10.9396C6.52532 10.9794 6.26507 11 6 11C3.23858 11 1 8.76142 1 6C1 3.23858 3.23858 1 6 1C8.76142 1 11 3.23858 11 6C11 6.26504 10.9794 6.52527 10.9397 6.77916C12.0226 6.27892 13.2287 5.99984 14.5 5.99984C19.1944 5.99984 23 9.80542 23 14.4998C23 19.1943 19.1944 22.9998 14.5 22.9998C9.80556 22.9998 5.99998 19.1943 5.99998 14.4998C5.99998 13.2286 6.27904 12.0226 6.77924 10.9396ZM3.98982 8.86553C4.55866 9.26531 5.25192 9.5 6 9.5C7.933 9.5 9.5 7.933 9.5 6C9.5 5.50496 9.39722 5.03392 9.21184 4.60705C8.99631 4.58503 8.74293 4.57987 8.48097 4.61727C8.14193 4.66568 7.80407 4.78277 7.50724 5.01359C7.21488 5.24095 6.91996 5.61126 6.71147 6.23666C6.42734 7.08894 6.01797 7.71063 5.52507 8.1419C5.03078 8.57439 4.49041 8.78209 3.99829 8.86413L3.98982 8.86553ZM2.76434 7.33675C2.59399 6.92488 2.5 6.47342 2.5 6C2.5 4.067 4.067 2.5 6 2.5C6.76896 2.5 7.48 2.74798 8.05752 3.16833C7.57838 3.26337 7.06244 3.45932 6.58643 3.82949C6.03505 4.25827 5.57997 4.88783 5.28846 5.76227C5.07258 6.40983 4.79445 6.78806 4.53735 7.01301C4.28164 7.23674 4.00951 7.34156 3.75163 7.38455C3.48705 7.42866 3.23542 7.40742 3.04436 7.37162C2.95051 7.35403 2.87615 7.33384 2.82843 7.31926C2.80471 7.31202 2.78802 7.30629 2.77928 7.30319L2.77241 7.30069L2.77375 7.30121L2.77567 7.30196L2.77766 7.30275C2.77766 7.30275 2.77776 7.3028 2.76434 7.33675ZM14.5 21.4998C11.2813 21.4998 8.56999 19.3275 7.75229 16.3689L10.0214 15.1922L10.3969 11.8054L8.98525 10.188C10.2666 8.55153 12.2605 7.49984 14.5 7.49984C17.9136 7.49984 20.7566 9.94337 21.3751 13.1768L18.9136 13.7405L18.5081 17.8276L19.7444 19.1364C18.4618 20.5859 16.5876 21.4998 14.5 21.4998Z" fill="#050505"/><path d="M22 3.5C22 4.88071 20.8807 6 19.5 6C18.1193 6 17 4.88071 17 3.5C17 2.11929 18.1193 1 19.5 1C20.8807 1 22 2.11929 22 3.5Z" fill="#050505"/></svg>
+          </div>
+          <span class="l2-tile-label">Tournament</span>
+        </button>
+        <button class="l2-tile">
+          <div class="l2-tile-icon l2-tile-icon--inactive">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path fill-rule="evenodd" clip-rule="evenodd" d="M3.25 1.72401L4.22763 1L9.40763 2.67167L9.40134 4.12168L4.75 5.57725V7.45224L5.69211 7.04317H16.25V1.72401L17.2276 1L22.4076 2.67167L22.4013 4.12168L17.75 5.57725V7.04317H18.3079L23 9.08049V10.792V11.5912V20.6385L19.2123 23H4.78772L1 20.6385V11.5912V10.792V9.08049L3.25 8.10354V1.72401ZM2.5 12.2425V14.0024L5.65687 15.4016H9.25V15.4015H15.25V15.4016H18.3431L21.5 14.0023V12.2425L18.5909 13.5057L18 13.6285H5.69211L2.5 12.2425ZM2.5 17.0417V15.6611L5.3431 16.9213H9.25V18.441H5.65687L2.5 17.0417ZM2.5 18.7005V19.7893L5.21228 21.4803H9.25V19.9607H5.3431L2.5 18.7005ZM10.75 21.4803V16.9213H13.75V21.4803H10.75ZM15.25 18.441V16.9213H18.5L18.8006 16.8576L21.5 15.6611V17.0417L18.3431 18.441H15.25ZM15.25 19.9607V21.4803H18.7877L21.5 19.7893V18.7005L18.8006 19.897L18.5 19.9607H15.25ZM4.75 3.98671L6.67433 3.38452L4.75 2.76351V3.98671ZM17.75 3.98671L19.6743 3.38452L17.75 2.76351V3.98671ZM18 12.1088H6L2.5 10.5891V10.0826L6 8.56287H18L21.5 10.0826V10.5891L18 12.1088Z" fill="#050505"/></svg>
+          </div>
+          <span class="l2-tile-label">Venue</span>
+        </button>
+
+        <div class="l2-tile-expanded" id="kc-tile">
+          <button class="l2-tile-header" id="kc-tile-btn" onclick="toggleTile()" aria-expanded="true" aria-controls="kc-subnav">
+            <div class="l2-tile-icon l2-tile-icon--active">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M11.25 14.75H5.25V13.25H11.25V14.75Z" fill="#D06010"/><path d="M11.25 9.25H7.75V7.75H11.25V9.25Z" fill="#D06010"/><path fill-rule="evenodd" clip-rule="evenodd" d="M13.75 5.25H5.25V11.75H13.75V5.25ZM6.75 10.25V6.75H12.25V10.25H6.75Z" fill="#D06010"/><path fill-rule="evenodd" clip-rule="evenodd" d="M2.75 1H16.25V3.75H19V6.25H21.25V19.7905L18.3312 22.9925L7.75 23.0007V20.5H5.5V17.75H2.75V1ZM7 17.75V19H15.14L17.5 16.524V5.25H16.25V14.3743L13.2646 17.5065L13.0385 17.75H7ZM4.25 2.5V16.25H12.39L14.75 13.774V2.5H4.25ZM19 17.1243V7.75H19.75V19.2095L17.6688 21.4925L9.25 21.4993V20.5H15.7885L16.0146 20.2565L19 17.1243Z" fill="#D06010"/></svg>
+            </div>
+            <span class="l2-tile-label">Key Clients</span>
+            <svg class="l2-tile-chevron" id="kc-chevron" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#050505" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="transition:transform 0.2s;"><path d="M4 10l4-4 4 4"/></svg>
+          </button>
+          <div class="l2-tile-subnav" id="kc-subnav">
+            <a class="l2-sublink" href="#">Stakeholders</a>
+            <a class="l2-sublink" href="#">Entitlements</a>
+            <a class="l2-sublink l2-sublink--active" href="Credits — Landing.html" aria-current="page">Credits</a>
+            <a class="l2-sublink" href="#">Requests</a>
+            <a class="l2-sublink" href="#">Reports</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="l2-bottom">
+      <div class="l2-bottom-sep"></div>
+      <div class="l2-help-row" role="button" tabindex="0" aria-label="Help" onkeydown="if(event.key===' '||event.key==='Enter'){this.click()}">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M12.2531 8.0003L12.2505 8.00024L12.2469 8.00033C12.2374 8.00065 12.2201 8.0014 12.196 8.00312C12.1476 8.00658 12.0735 8.01386 11.9827 8.029C11.7974 8.05987 11.5619 8.12023 11.3354 8.23346C11.1119 8.34522 10.9112 8.50109 10.7647 8.72085C10.6213 8.93592 10.5 9.25638 10.5 9.75014H9C9 8.9939 9.19121 8.37686 9.51659 7.8888C9.83883 7.40544 10.2631 7.09256 10.6646 6.89182C11.0631 6.69255 11.4526 6.59666 11.7361 6.54941C11.8796 6.52549 12.0008 6.51324 12.0891 6.50693C12.1334 6.50377 12.1698 6.50207 12.1969 6.50117C12.2105 6.50071 12.2218 6.50046 12.2307 6.50031L12.2422 6.50017L12.2466 6.50015L12.2484 6.50014L12.2507 6.50014L12.253 6.50015L12.2569 6.50017L12.2672 6.50028L12.2975 6.50096C12.3218 6.50168 12.3545 6.50303 12.3942 6.50555C12.4735 6.51059 12.5824 6.52037 12.7115 6.53949C12.9658 6.57716 13.3176 6.6539 13.6796 6.81478C14.0423 6.97598 14.4404 7.23314 14.7484 7.64389C15.0634 8.06388 15.25 8.59938 15.25 9.25014C15.25 10.4731 14.5819 11.2802 14.0679 11.9012C14.0295 11.9477 13.9919 11.9931 13.9555 12.0376C13.4143 12.6989 13 13.2744 13 14.2501H11.5C11.5 12.7259 12.2107 11.8013 12.7945 11.0877L12.8343 11.0391C13.4123 10.333 13.75 9.92047 13.75 9.25014C13.75 8.9009 13.6553 8.6864 13.5484 8.54389C13.4346 8.39214 13.2702 8.2743 13.0704 8.1855C12.8699 8.09638 12.6592 8.04812 12.4917 8.02329C12.4098 8.01116 12.3429 8.00532 12.2992 8.00254C12.2774 8.00116 12.2617 8.00056 12.2531 8.0003Z" fill="#050505"/><path d="M11.5 17V15.5H13V17H11.5Z" fill="#050505"/><path fill-rule="evenodd" clip-rule="evenodd" d="M1 12C0.999995 5.92488 5.92486 1 12 1C18.0751 1 23 5.92487 23 12C23 18.0751 18.0751 23 12 23C5.92487 23 1.00001 18.0751 1 12ZM21.5 12C21.5 17.2467 17.2467 21.5 12 21.5C6.7533 21.5 2.50001 17.2467 2.5 12C2.5 6.7533 6.75329 2.5 12 2.5C17.2467 2.5 21.5 6.7533 21.5 12Z" fill="#050505"/></svg>
+        <span class="l2-help-label">Help</span>
+        <svg class="l2-help-chevron" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#050505" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 4l4 4-4 4"/></svg>
+      </div>
+      <div class="l2-account-row" role="button" tabindex="0" aria-label="Account menu — Mayank T., Sport XT" onkeydown="if(event.key===' '||event.key==='Enter'){this.click()}">
+        <div class="l2-account-avatar">MT</div>
+        <div class="l2-account-creds">
+          <span class="l2-account-name">Mayank T.</span>
+          <span class="l2-account-org">Sport XT</span>
+        </div>
+        <svg class="l2-account-meatball" width="16" height="16" viewBox="0 0 16 16" fill="none">
+          <circle cx="3" cy="8" r="1.2" fill="#050505"/>
+          <circle cx="8" cy="8" r="1.2" fill="#050505"/>
+          <circle cx="13" cy="8" r="1.2" fill="#050505"/>
+        </svg>
+      </div>
+      <button id="collapse-btn" class="l2-collapse-btn" onclick="toggleNav()" aria-label="Collapse navigation">
+        <svg class="l2-collapse-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#050505" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0">
+          <line x1="4" y1="5" x2="4" y2="19"/>
+          <path d="M20 12H9"/><path d="M13 8l-4 4 4 4"/>
+        </svg>
+        <span class="l2-collapse-label">Collapse</span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- ═══════════════════════════════════
+       CANVAS
+  ════════════════════════════════════ -->
+  <div class="canvas" id="canvas">
+
+    <!-- WORKFLOW HEADER (GDS) -->
+    <header class="wf-header">
+      <a class="wf-header-breadcrumb" href="Credits — Landing.html" aria-label="Back to Credits">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M10 13L5 8l5-5"/>
+        </svg>
+        Credits
+      </a>
+      <div class="wf-header-sep" aria-hidden="true"></div>
+      <h1 class="wf-header-title">Set up Credit</h1>
+
+      <div class="wf-step-indicator" aria-label="Workflow steps" id="wf-step-indicator">
+        <!-- AI path steps (default) -->
+        <div class="wf-step active" id="wf-step-a1">
+          <span class="wf-step-num" id="wf-step-a1-num">1</span>
+          Upload or describe
+        </div>
+        <div class="wf-step-divider" aria-hidden="true" id="wf-div-a"></div>
+        <div class="wf-step" id="wf-step-a2">
+          <span class="wf-step-num" id="wf-step-a2-num">2</span>
+          Review &amp; confirm
+        </div>
+        <!-- Manual path steps (hidden until manual chosen) -->
+        <div class="wf-step" id="wf-step-m1" style="display:none;">
+          <span class="wf-step-num" id="wf-step-m1-num">1</span>
+          Select clients
+        </div>
+        <div class="wf-step-divider" aria-hidden="true" id="wf-div-m" style="display:none;"></div>
+        <div class="wf-step" id="wf-step-m2" style="display:none;">
+          <span class="wf-step-num">2</span>
+          Configure credit
+        </div>
+      </div>
+    </header>
+
+    <!-- CANVAS BODY -->
+    <div class="canvas-body">
+
+      <!-- ════════════════════ STEP 0 — UPLOAD ENTRY ════════════════════ -->
+      <div class="step-view active" id="step-0" data-zone="Upload">
+        <div class="step0-layout">
+
+          <!-- Left: upload card -->
+          <div class="form-card" style="padding:0; overflow:hidden;">
+
+            <div class="step0-card-head">
+              <div class="step0-title">Upload Credit Assignment File</div>
+              <div class="step0-subtitle">Upload your completed credit assignment file. Credit assignments will appear as drafts for your review before finalising. Matching assignments will be overwritten.</div>
+            </div>
+
+            <!-- Drop zone -->
+            <div class="drop-zone" id="drop-zone"
+              onclick="document.getElementById('file-input').click()"
+              ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" ondrop="handleDrop(event)">
+              <div class="drop-zone-icon">
+                <svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></svg>
+              </div>
+              <div>
+                <div class="drop-zone-heading">Drag &amp; Drop or Select File</div>
+                <div class="drop-zone-sub">PDF, CSV, XLSX — up to 1 GB<br>Once started, upload cannot be cancelled.</div>
+              </div>
+              <button class="drop-zone-btn" type="button"
+                onclick="event.stopPropagation(); document.getElementById('file-input').click()">
+                Select File
+              </button>
+            </div>
+
+            <input type="file" id="file-input" accept=".pdf,.csv,.xlsx,.xls" onchange="handleFileSelect(event)">
+
+            <!-- File preview (shown after selection) -->
+            <div class="upload-file-preview" id="file-preview" style="margin: 0 var(--sp-6) var(--sp-3);">
+              <div class="upload-file-icon">
+                <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+              </div>
+              <span class="upload-file-name" id="preview-name">contract.pdf</span>
+              <span class="upload-file-size" id="preview-size">1.2 MB</span>
+              <button class="upload-remove-btn" onclick="removeFile()" aria-label="Remove file" type="button">
+                <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 3l10 10M13 3L3 13"/></svg>
+              </button>
+            </div>
+
+            <!-- Inline extract button — shown only when a file is selected -->
+            <div id="inline-extract-row" style="display:none; padding: 0 var(--sp-6) var(--sp-5);">
+              <button class="footer-extract-btn" id="inline-extract-btn" type="button" onclick="startExtract()" style="width:100%; justify-content:center;">
+                <svg aria-hidden="true" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2l1.5 3.5L13 7l-3.5 1.5L8 12l-1.5-3.5L3 7l3.5-1.5z"/></svg>
+                Extract with AI
+              </button>
+            </div>
+
+            <div class="manual-skip-row">
+              <span>Prefer to enter details manually?</span>
+              <button class="manual-skip-btn" onclick="goManual()" type="button">
+                Set up manually
+                <svg aria-hidden="true" width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3l5 5-5 5"/></svg>
+              </button>
+            </div>
+
+          </div>
+
+          <!-- Right: help tips panel -->
+          <div class="step0-help-panel">
+            <div class="help-panel-head">
+              <div class="help-panel-title">Tips for Setting Up Credits Using a File</div>
+            </div>
+
+            <div class="help-tip active" id="help-tip-1">
+              <div class="help-tip-card">
+                <div class="help-tip-label">Avoiding Upload Errors</div>
+                <div class="help-tip-body">Keep the file format as provided — avoid adding, removing, or rearranging columns to ensure successful processing.</div>
+              </div>
+            </div>
+
+            <div class="help-tip" id="help-tip-2">
+              <div class="help-tip-card">
+                <div class="help-tip-label">Client Name Matching</div>
+                <div class="help-tip-body">Client names in the file must match exactly as they appear in Sport XT. Use the reference list on the Stakeholders page if unsure.</div>
+              </div>
+            </div>
+
+            <div class="help-tip" id="help-tip-3">
+              <div class="help-tip-card">
+                <div class="help-tip-label">Credit Amounts</div>
+                <div class="help-tip-body">Enter amounts as whole numbers without currency symbols or commas. The system will apply the tournament's default currency (AUD).</div>
+              </div>
+            </div>
+
+            <div class="help-tip" id="help-tip-4">
+              <div class="help-tip-card">
+                <div class="help-tip-label">Overwriting Existing Credits</div>
+                <div class="help-tip-body">If a client already has a credit, uploading a new file will overwrite it after review. Previous credit history is always preserved in the audit log.</div>
+              </div>
+            </div>
+
+            <div class="help-panel-nav">
+              <button class="help-nav-btn" id="help-prev" onclick="helpNav(-1)" type="button" disabled>
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10 12L6 8l4-4"/></svg>
+                Previous
+              </button>
+              <span class="help-nav-count" id="help-count">1 of 4</span>
+              <button class="help-nav-btn" id="help-next" onclick="helpNav(1)" type="button">
+                Next
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 4l4 4-4 4"/></svg>
+              </button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ════════════════════ LOADING VIEW ════════════════════ -->
+      <div class="step-view" id="step-loading">
+        <div class="form-card">
+          <div class="loading-view">
+            <div class="loading-spinner" role="status" aria-label="Extracting credit details"></div>
+            <div class="loading-title">Extracting credit details…</div>
+            <div class="loading-sub" id="loading-sub">Reading document structure</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ════════════════════ AI REVIEW ════════════════════ -->
+      <div class="step-view" id="step-ai-review" data-zone="AI review">
+        <div class="form-section">
+          <div class="form-section-label">
+            <span class="form-step-num" style="background:linear-gradient(135deg,#024DFF,#5E35E8);">
+              <svg aria-hidden="true" width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1.5 6l3 3 6-6"/></svg>
+            </span>
+            <span class="form-step-title">Review &amp; confirm</span>
+          </div>
+
+          <!-- AI banner -->
+          <div class="ai-review-banner">
+            <span class="ai-model-badge">
+              <svg aria-hidden="true" width="10" height="10" viewBox="0 0 16 16" fill="currentColor"><path d="M8 2l1.5 3.5L13 7l-3.5 1.5L8 12l-1.5-3.5L3 7l3.5-1.5z"/></svg>
+              AI extracted
+            </span>
+            <span><strong id="ai-extracted-count">5 credits</strong> extracted and grouped by matching configuration.</span>
+            <div class="ai-legend-wrap">
+              <button class="ai-legend-btn" id="ai-legend-btn" type="button"
+                onclick="toggleLegend()" aria-expanded="false" aria-controls="ai-legend-popup">
+                <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true">
+                  <circle cx="8" cy="8" r="6.5"/>
+                  <path d="M8 7.5v4M8 5h.01"/>
+                </svg>
+                Confidence levels
+              </button>
+              <div class="ai-legend-popup" id="ai-legend-popup" role="tooltip">
+                <div class="ai-legend-row">
+                  <span class="ai-conf-badge ai-conf-badge--low">Low confidence</span>
+                  <span>Values are uncertain — review carefully before confirming.</span>
+                </div>
+                <div class="ai-legend-row">
+                  <span class="ai-conf-badge ai-conf-badge--medium">Medium confidence</span>
+                  <span>Mostly clear — spot-check the values.</span>
+                </div>
+                <div class="ai-legend-row">
+                  <span class="ai-conf-badge ai-conf-badge--high">High confidence</span>
+                  <span>Extraction is reliable — no action needed unless something looks off.</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Per-client form cards injected by JS -->
+          <div id="ai-review-body"></div>
+
+        </div>
+      </div>
+
+      <!-- ════════════════════ STEP 1 ════════════════════ -->
+      <div class="step-view step1-body" id="step-1" data-zone="Client selection">
+
+      <div class="form-section">
+        <div class="form-section-label">
+          <span class="form-step-num">1</span>
+          <span class="form-step-title">Select clients</span>
+        </div>
+
+        <div class="form-card">
+
+          <!-- Quick-select chips -->
+          <div class="quick-select-strip">
+            <span class="quick-select-label">Select by group</span>
+            <div class="quick-chips" id="quick-chips">
+              <button class="quick-chip" id="chip-global"    onclick="quickSelect('tier','Global Sponsor')"   type="button" aria-pressed="false">Global Sponsors   <span class="quick-chip-count" id="qc-global">4</span></button>
+              <button class="quick-chip" id="chip-premium"  onclick="quickSelect('tier','Premium Partner')"  type="button" aria-pressed="false">Premium Partners  <span class="quick-chip-count" id="qc-premium">4</span></button>
+              <button class="quick-chip" id="chip-official" onclick="quickSelect('tier','Official Partner')" type="button" aria-pressed="false">Official Partners <span class="quick-chip-count" id="qc-official">6</span></button>
+              <button class="quick-chip" id="chip-apac"     onclick="quickSelect('region','APAC')"           type="button" aria-pressed="false">All APAC          <span class="quick-chip-count" id="qc-apac">4</span></button>
+              <button class="quick-chip" id="chip-emea"     onclick="quickSelect('region','EMEA')"           type="button" aria-pressed="false">All EMEA          <span class="quick-chip-count" id="qc-emea">6</span></button>
+              <button class="quick-chip" id="chip-mena"     onclick="quickSelect('region','MENA')"           type="button" aria-pressed="false">All MENA          <span class="quick-chip-count" id="qc-mena">2</span></button>
+              <button class="quick-chip" id="chip-americas" onclick="quickSelect('region','Americas')"       type="button" aria-pressed="false">All Americas      <span class="quick-chip-count" id="qc-americas">2</span></button>
+            </div>
+          </div>
+
+          <!-- Search + filter bar -->
+          <div class="client-search-bar">
+            <div class="search-wrap">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#9B9B9B" stroke-width="1.5" stroke-linecap="round"><circle cx="7" cy="7" r="4"/><path d="M10.5 10.5l2.5 2.5"/></svg>
+              <input class="search-input" type="text" id="client-search" placeholder="Search clients" oninput="applyFilters()">
+            </div>
+
+            <!-- Tier filter -->
+            <div class="fdd" id="fdd-tier">
+              <button class="fdd-btn" id="fdd-tier-btn" type="button" onclick="toggleFdd('tier')">
+                Tier
+                <svg class="fdd-chevron" width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M2 4l4 4 4-4"/></svg>
+              </button>
+              <div class="fdd-menu" id="fdd-tier-menu">
+                <div class="fdd-option" data-val="Global Sponsor"   onclick="toggleFilter('tier','Global Sponsor')"   tabindex="0" role="option" aria-selected="false" onkeydown="if(event.key===' '||event.key==='Enter'){toggleFilter('tier','Global Sponsor')}">  <div class="fdd-checkbox" aria-hidden="true"></div>Global Sponsor</div>
+                <div class="fdd-option" data-val="Premium Partner"  onclick="toggleFilter('tier','Premium Partner')"  tabindex="0" role="option" aria-selected="false" onkeydown="if(event.key===' '||event.key==='Enter'){toggleFilter('tier','Premium Partner')}"> <div class="fdd-checkbox" aria-hidden="true"></div>Premium Partner</div>
+                <div class="fdd-option" data-val="Official Partner" onclick="toggleFilter('tier','Official Partner')" tabindex="0" role="option" aria-selected="false" onkeydown="if(event.key===' '||event.key==='Enter'){toggleFilter('tier','Official Partner')}"><div class="fdd-checkbox" aria-hidden="true"></div>Official Partner</div>
+                <div class="fdd-option" data-val="Official Supporter" onclick="toggleFilter('tier','Official Supporter')" tabindex="0" role="option" aria-selected="false" onkeydown="if(event.key===' '||event.key==='Enter'){toggleFilter('tier','Official Supporter')}"><div class="fdd-checkbox" aria-hidden="true"></div>Official Supporter</div>
+                <div class="fdd-footer"><button class="fdd-clear-btn" onclick="clearFilter('tier')" id="fdd-tier-clear">Clear</button></div>
+              </div>
+            </div>
+
+            <!-- Region filter -->
+            <div class="fdd" id="fdd-region">
+              <button class="fdd-btn" id="fdd-region-btn" type="button" onclick="toggleFdd('region')">
+                Region
+                <svg class="fdd-chevron" width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M2 4l4 4 4-4"/></svg>
+              </button>
+              <div class="fdd-menu" id="fdd-region-menu">
+                <div class="fdd-option" data-val="APAC"     onclick="toggleFilter('region','APAC')"     tabindex="0" role="option" aria-selected="false" onkeydown="if(event.key===' '||event.key==='Enter'){toggleFilter('region','APAC')}">    <div class="fdd-checkbox" aria-hidden="true"></div>APAC</div>
+                <div class="fdd-option" data-val="EMEA"     onclick="toggleFilter('region','EMEA')"     tabindex="0" role="option" aria-selected="false" onkeydown="if(event.key===' '||event.key==='Enter'){toggleFilter('region','EMEA')}">    <div class="fdd-checkbox" aria-hidden="true"></div>EMEA</div>
+                <div class="fdd-option" data-val="MENA"     onclick="toggleFilter('region','MENA')"     tabindex="0" role="option" aria-selected="false" onkeydown="if(event.key===' '||event.key==='Enter'){toggleFilter('region','MENA')}">    <div class="fdd-checkbox" aria-hidden="true"></div>MENA</div>
+                <div class="fdd-option" data-val="Americas" onclick="toggleFilter('region','Americas')" tabindex="0" role="option" aria-selected="false" onkeydown="if(event.key===' '||event.key==='Enter'){toggleFilter('region','Americas')}"><div class="fdd-checkbox" aria-hidden="true"></div>Americas</div>
+                <div class="fdd-footer"><button class="fdd-clear-btn" onclick="clearFilter('region')" id="fdd-region-clear">Clear</button></div>
+              </div>
+            </div>
+
+            <div class="selection-count-chip hidden" id="count-chip" aria-live="polite">
+              <svg aria-hidden="true" width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 8l4 4 8-8"/></svg>
+              <span id="count-chip-text">0 selected</span>
+            </div>
+          </div>
+
+          <!-- Table head (visual column labels — rows use role="checkbox") -->
+          <div class="client-table-head" role="presentation">
+            <div></div>
+            <div class="th">Client</div>
+            <div class="th">Tier</div>
+            <div class="th">Region</div>
+            <div class="th">Credit</div>
+          </div>
+
+          <!-- Selectable client list -->
+          <div role="group" aria-label="Select clients">
+
+          <!-- Select-all row -->
+          <div class="select-all-row" id="select-all-row" onclick="toggleSelectAll()" role="checkbox" aria-checked="false" tabindex="0" onkeydown="if(event.key===' '||event.key==='Enter'){toggleSelectAll()}">
+            <div class="row-checkbox-wrap"><div class="select-all-checkbox" id="select-all-cb"></div></div>
+            <span class="select-all-label" id="select-all-label">Select all visible</span>
+          </div>
+
+          <!-- Selectable clients -->
+          <div id="client-list">
+
+            <div class="client-row" id="row-mc" onclick="toggleClient('mc')" data-name="Mastercard" data-tier="Global Sponsor" data-region="APAC" role="checkbox" aria-checked="false" tabindex="0" onkeydown="if(event.key===' '||event.key==='Enter'){toggleClient('mc')}">
+              <div class="row-checkbox-wrap"><div class="row-checkbox" id="cb-mc"></div></div>
+              <div class="ci"><div class="ci-logo">MC</div><div><div class="ci-name">Mastercard</div><div class="ci-sub">Global Sponsor</div></div></div>
+              <div><span class="tier-badge tier-badge--global">Global Sponsor</span></div>
+              <div style="font-size:13px;color:var(--granite);">APAC</div>
+              <div class="credit-topup">
+                <span class="credit-topup-amount">$52,400 AUD</span>
+                <span class="credit-topup-label">
+                  <svg aria-hidden="true" width="10" height="10" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3v10M3 8l5-5 5 5"/></svg>
+                  Top-up available
+                </span>
+              </div>
+            </div>
+
+            <div class="client-row" id="row-vi" onclick="toggleClient('vi')" data-name="Visa" data-tier="Global Sponsor" data-region="APAC" role="checkbox" aria-checked="false" tabindex="0" onkeydown="if(event.key===' '||event.key==='Enter'){toggleClient('vi')}">
+              <div class="row-checkbox-wrap"><div class="row-checkbox" id="cb-vi"></div></div>
+              <div class="ci"><div class="ci-logo">VI</div><div><div class="ci-name">Visa</div><div class="ci-sub">Global Sponsor</div></div></div>
+              <div><span class="tier-badge tier-badge--global">Global Sponsor</span></div>
+              <div style="font-size:13px;color:var(--granite);">APAC</div>
+              <div class="credit-topup">
+                <span class="credit-topup-amount">$31,800 AUD</span>
+                <span class="credit-topup-label">
+                  <svg aria-hidden="true" width="10" height="10" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3v10M3 8l5-5 5 5"/></svg>
+                  Top-up available
+                </span>
+              </div>
+            </div>
+
+            <div class="client-row" id="row-em" onclick="toggleClient('em')" data-name="Emirates" data-tier="Global Sponsor" data-region="MENA" role="checkbox" aria-checked="false" tabindex="0" onkeydown="if(event.key===' '||event.key==='Enter'){toggleClient('em')}">
+              <div class="row-checkbox-wrap"><div class="row-checkbox" id="cb-em"></div></div>
+              <div class="ci"><div class="ci-logo">EM</div><div><div class="ci-name">Emirates</div><div class="ci-sub">Global Sponsor</div></div></div>
+              <div><span class="tier-badge tier-badge--global">Global Sponsor</span></div>
+              <div style="font-size:13px;color:var(--granite);">MENA</div>
+              <div class="credit-topup">
+                <span class="credit-topup-amount">$8,200 AUD</span>
+                <span class="credit-topup-label">
+                  <svg aria-hidden="true" width="10" height="10" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3v10M3 8l5-5 5 5"/></svg>
+                  Top-up available
+                </span>
+              </div>
+            </div>
+
+            <div class="client-row" id="row-sg" onclick="toggleClient('sg')" data-name="Samsung" data-tier="Global Sponsor" data-region="APAC" role="checkbox" aria-checked="false" tabindex="0" onkeydown="if(event.key===' '||event.key==='Enter'){toggleClient('sg')}">
+              <div class="row-checkbox-wrap"><div class="row-checkbox" id="cb-sg"></div></div>
+              <div class="ci"><div class="ci-logo">SG</div><div><div class="ci-name">Samsung</div><div class="ci-sub">Global Sponsor</div></div></div>
+              <div><span class="tier-badge tier-badge--global">Global Sponsor</span></div>
+              <div style="font-size:13px;color:var(--granite);">APAC</div>
+              <div><span class="credit-none"><span class="credit-none-dot"></span>No credit</span></div>
+            </div>
+
+            <div class="client-row" id="row-dh" onclick="toggleClient('dh')" data-name="DHL" data-tier="Premium Partner" data-region="EMEA" role="checkbox" aria-checked="false" tabindex="0" onkeydown="if(event.key===' '||event.key==='Enter'){toggleClient('dh')}">
+              <div class="row-checkbox-wrap"><div class="row-checkbox" id="cb-dh"></div></div>
+              <div class="ci"><div class="ci-logo">DH</div><div><div class="ci-name">DHL</div><div class="ci-sub">Premium Partner</div></div></div>
+              <div><span class="tier-badge tier-badge--premium">Premium Partner</span></div>
+              <div style="font-size:13px;color:var(--granite);">EMEA</div>
+              <div class="credit-topup">
+                <span class="credit-topup-amount">$14,600 AUD</span>
+                <span class="credit-topup-label">
+                  <svg aria-hidden="true" width="10" height="10" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3v10M3 8l5-5 5 5"/></svg>
+                  Top-up available
+                </span>
+              </div>
+            </div>
+
+            <div class="client-row" id="row-dl" onclick="toggleClient('dl')" data-name="Deloitte" data-tier="Premium Partner" data-region="EMEA" role="checkbox" aria-checked="false" tabindex="0" onkeydown="if(event.key===' '||event.key==='Enter'){toggleClient('dl')}">
+              <div class="row-checkbox-wrap"><div class="row-checkbox" id="cb-dl"></div></div>
+              <div class="ci"><div class="ci-logo">DL</div><div><div class="ci-name">Deloitte</div><div class="ci-sub">Premium Partner</div></div></div>
+              <div><span class="tier-badge tier-badge--premium">Premium Partner</span></div>
+              <div style="font-size:13px;color:var(--granite);">EMEA</div>
+              <div class="credit-topup">
+                <span class="credit-topup-amount">$44,000 AUD</span>
+                <span class="credit-topup-label">
+                  <svg aria-hidden="true" width="10" height="10" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3v10M3 8l5-5 5 5"/></svg>
+                  Top-up available
+                </span>
+              </div>
+            </div>
+
+            <div class="client-row" id="row-lr" onclick="toggleClient('lr')" data-name="Land Rover" data-tier="Premium Partner" data-region="EMEA" role="checkbox" aria-checked="false" tabindex="0" onkeydown="if(event.key===' '||event.key==='Enter'){toggleClient('lr')}">
+              <div class="row-checkbox-wrap"><div class="row-checkbox" id="cb-lr"></div></div>
+              <div class="ci"><div class="ci-logo">LR</div><div><div class="ci-name">Land Rover</div><div class="ci-sub">Premium Partner</div></div></div>
+              <div><span class="tier-badge tier-badge--premium">Premium Partner</span></div>
+              <div style="font-size:13px;color:var(--granite);">EMEA</div>
+              <div class="credit-topup">
+                <span class="credit-topup-amount">$26,700 AUD</span>
+                <span class="credit-topup-label">
+                  <svg aria-hidden="true" width="10" height="10" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3v10M3 8l5-5 5 5"/></svg>
+                  Top-up available
+                </span>
+              </div>
+            </div>
+
+            <div class="client-row" id="row-qa" onclick="toggleClient('qa')" data-name="Qatar Airways" data-tier="Premium Partner" data-region="MENA" role="checkbox" aria-checked="false" tabindex="0" onkeydown="if(event.key===' '||event.key==='Enter'){toggleClient('qa')}">
+              <div class="row-checkbox-wrap"><div class="row-checkbox" id="cb-qa"></div></div>
+              <div class="ci"><div class="ci-logo">QA</div><div><div class="ci-name">Qatar Airways</div><div class="ci-sub">Premium Partner</div></div></div>
+              <div><span class="tier-badge tier-badge--premium">Premium Partner</span></div>
+              <div style="font-size:13px;color:var(--granite);">MENA</div>
+              <div><span class="credit-none"><span class="credit-none-dot"></span>No credit</span></div>
+            </div>
+
+            <div class="client-row" id="row-vf" onclick="toggleClient('vf')" data-name="Vodafone" data-tier="Official Partner" data-region="EMEA" role="checkbox" aria-checked="false" tabindex="0" onkeydown="if(event.key===' '||event.key==='Enter'){toggleClient('vf')}">
+              <div class="row-checkbox-wrap"><div class="row-checkbox" id="cb-vf"></div></div>
+              <div class="ci"><div class="ci-logo">VF</div><div><div class="ci-name">Vodafone</div><div class="ci-sub">Official Partner</div></div></div>
+              <div><span class="tier-badge tier-badge--official">Official Partner</span></div>
+              <div style="font-size:13px;color:var(--granite);">EMEA</div>
+              <div class="credit-topup">
+                <span class="credit-topup-amount">$3,100 AUD</span>
+                <span class="credit-topup-label">
+                  <svg aria-hidden="true" width="10" height="10" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3v10M3 8l5-5 5 5"/></svg>
+                  Top-up available
+                </span>
+              </div>
+            </div>
+
+            <div class="client-row" id="row-hk" onclick="toggleClient('hk')" data-name="Heineken" data-tier="Official Partner" data-region="EMEA" role="checkbox" aria-checked="false" tabindex="0" onkeydown="if(event.key===' '||event.key==='Enter'){toggleClient('hk')}">
+              <div class="row-checkbox-wrap"><div class="row-checkbox" id="cb-hk"></div></div>
+              <div class="ci"><div class="ci-logo">HK</div><div><div class="ci-name">Heineken</div><div class="ci-sub">Official Partner</div></div></div>
+              <div><span class="tier-badge tier-badge--official">Official Partner</span></div>
+              <div style="font-size:13px;color:var(--granite);">EMEA</div>
+              <div class="credit-topup">
+                <span class="credit-topup-amount">$19,500 AUD</span>
+                <span class="credit-topup-label">
+                  <svg aria-hidden="true" width="10" height="10" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3v10M3 8l5-5 5 5"/></svg>
+                  Top-up available
+                </span>
+              </div>
+            </div>
+
+            <div class="client-row" id="row-ad" onclick="toggleClient('ad')" data-name="Adidas" data-tier="Official Partner" data-region="EMEA" role="checkbox" aria-checked="false" tabindex="0" onkeydown="if(event.key===' '||event.key==='Enter'){toggleClient('ad')}">
+              <div class="row-checkbox-wrap"><div class="row-checkbox" id="cb-ad"></div></div>
+              <div class="ci"><div class="ci-logo">AD</div><div><div class="ci-name">Adidas</div><div class="ci-sub">Official Partner</div></div></div>
+              <div><span class="tier-badge tier-badge--official">Official Partner</span></div>
+              <div style="font-size:13px;color:var(--granite);">EMEA</div>
+              <div><span class="credit-none"><span class="credit-none-dot"></span>No credit</span></div>
+            </div>
+
+            <div class="client-row" id="row-hb" onclick="toggleClient('hb')" data-name="HSBC" data-tier="Official Partner" data-region="APAC" role="checkbox" aria-checked="false" tabindex="0" onkeydown="if(event.key===' '||event.key==='Enter'){toggleClient('hb')}">
+              <div class="row-checkbox-wrap"><div class="row-checkbox" id="cb-hb"></div></div>
+              <div class="ci"><div class="ci-logo">HB</div><div><div class="ci-name">HSBC</div><div class="ci-sub">Official Partner</div></div></div>
+              <div><span class="tier-badge tier-badge--official">Official Partner</span></div>
+              <div style="font-size:13px;color:var(--granite);">APAC</div>
+              <div><span class="credit-none"><span class="credit-none-dot"></span>No credit</span></div>
+            </div>
+
+            <div class="client-row" id="row-pw" onclick="toggleClient('pw')" data-name="PwC" data-tier="Official Partner" data-region="Americas" role="checkbox" aria-checked="false" tabindex="0" onkeydown="if(event.key===' '||event.key==='Enter'){toggleClient('pw')}">
+              <div class="row-checkbox-wrap"><div class="row-checkbox" id="cb-pw"></div></div>
+              <div class="ci"><div class="ci-logo">PW</div><div><div class="ci-name">PwC</div><div class="ci-sub">Official Partner</div></div></div>
+              <div><span class="tier-badge tier-badge--official">Official Partner</span></div>
+              <div style="font-size:13px;color:var(--granite);">Americas</div>
+              <div><span class="credit-none"><span class="credit-none-dot"></span>No credit</span></div>
+            </div>
+
+            <div class="client-row" id="row-az" onclick="toggleClient('az')" data-name="Amazon" data-tier="Official Supporter" data-region="Americas" role="checkbox" aria-checked="false" tabindex="0" onkeydown="if(event.key===' '||event.key==='Enter'){toggleClient('az')}">
+              <div class="row-checkbox-wrap"><div class="row-checkbox" id="cb-az"></div></div>
+              <div class="ci"><div class="ci-logo">AZ</div><div><div class="ci-name">Amazon</div><div class="ci-sub">Official Supporter</div></div></div>
+              <div><span class="tier-badge tier-badge--official">Official Supporter</span></div>
+              <div style="font-size:13px;color:var(--granite);">Americas</div>
+              <div><span class="credit-none"><span class="credit-none-dot"></span>No credit</span></div>
+            </div>
+
+          </div><!-- /client-list -->
+          </div><!-- /group: select clients -->
+
+          <div class="client-list-empty" id="client-list-empty">No clients match the current filters.</div>
+
+        </div><!-- /form-card -->
+      </div><!-- /form-section -->
+
+      <div class="manual-skip-row" style="justify-content:flex-start; padding-left:0; margin-top:var(--sp-3);">
+        <button class="manual-skip-btn" onclick="goAi()" type="button">
+          <svg aria-hidden="true" width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13L5 8l5-5"/></svg>
+          Use AI instead
+        </button>
+      </div>
+
+      </div><!-- /step-1 -->
+
+
+      <!-- ════════════════════ STEP 2 ════════════════════ -->
+      <div class="step-view" id="step-2" data-zone="Amount field">
+
+        <!-- Section label — full width -->
+        <div class="form-section-label" style="margin-bottom: var(--sp-3);">
+          <span class="form-step-num">2</span>
+          <span class="form-step-title">Configure credit</span>
+        </div>
+
+        <!-- Two-column row: form card + summary panel -->
+        <div class="step2-layout">
+
+          <!-- Left: credit config -->
+          <div class="form-card">
+            <div class="form-card-body">
+
+              <div class="applies-callout" id="applies-callout" style="display:none;">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="8" r="6"/><path d="M8 7v4M8 5.5v.5"/></svg>
+                This configuration will apply to <strong><span id="callout-count">0</span> selected clients</strong>. Each will receive the same amount, type, and expiry.
+              </div>
+
+              <div class="field">
+                <label class="field-label" for="credit-amount">Credit amount</label>
+                <div class="field-helper">Enter the total flat credit amount agreed in the client's contract.</div>
+                <div class="amount-wrap" id="amount-wrap">
+                  <span class="amount-prefix">AUD</span>
+                  <input type="text" id="credit-amount" class="amount-input" placeholder="$0" oninput="onAmountInput()" autocomplete="off">
+                </div>
+                <div class="magnitude" id="amount-magnitude"></div>
+              </div>
+
+              <div class="field">
+                <label class="field-label" id="credit-type-label">Credit type</label>
+                <div class="field-helper">Determines what happens to unused balance at expiry.</div>
+                <div class="type-options" role="radiogroup" aria-labelledby="credit-type-label">
+                  <div class="type-option" id="type-nr" onclick="selectType('non-refundable')" role="radio" aria-checked="false" tabindex="0" onkeydown="if(event.key===' '||event.key==='Enter'){selectType('non-refundable')}">
+                    <input type="radio" name="credit-type" value="non-refundable" style="display:none;">
+                    <div class="type-radio-indicator"></div>
+                    <div class="type-option-content">
+                      <span class="type-option-title">Non-refundable</span>
+                      <span class="type-option-desc">Unused balance is forfeited at expiry. Most common for sponsorship credits.</span>
+                    </div>
+                  </div>
+                  <div class="type-option" id="type-r" onclick="selectType('refundable')" role="radio" aria-checked="false" tabindex="0" onkeydown="if(event.key===' '||event.key==='Enter'){selectType('refundable')}">
+                    <input type="radio" name="credit-type" value="refundable" style="display:none;">
+                    <div class="type-radio-indicator"></div>
+                    <div class="type-option-content">
+                      <span class="type-option-title">Refundable</span>
+                      <span class="type-option-desc">Unused balance is returned to the client at expiry per contract terms.</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="field">
+                <label class="field-label" for="credit-expiry">Expiry date <span class="optional">Optional</span></label>
+                <div class="field-helper">After this date, unused credit cannot be drawn. Leave blank for no expiry.</div>
+                <input type="date" id="credit-expiry" class="field-input" onchange="validateForm()">
+              </div>
+
+              <div class="field">
+                <label class="field-label" for="credit-notes">Note <span style="color:var(--color-critical,#D93A3A);font-weight:700;" aria-hidden="true">*</span></label>
+                <div class="field-helper">Visible to all operators in the activity log.</div>
+                <textarea id="credit-notes" class="field-textarea" rows="3" placeholder="Additional context — e.g. rationale for amount, approval reference, linked entitlement notes" required oninput="notesCheckError()"></textarea>
+                <div id="credit-notes-error" style="display:none;margin-top:4px;font-size:12px;color:var(--color-critical,#D93A3A);" role="alert">A note is required before saving.</div>
+              </div>
+
+            </div><!-- /form-card-body -->
+          </div><!-- /form-card -->
+
+          <!-- Right: selected clients summary -->
+          <div class="summary-panel-card">
+            <div class="summary-panel-header">
+              <span class="summary-panel-title">Selected clients</span>
+              <span class="summary-panel-count" id="summary-count"></span>
+            </div>
+            <div class="summary-panel-body" id="summary-panel-body"></div>
+            <div class="summary-panel-footer">
+              <button class="summary-edit-btn" onclick="goToStep(1)">Edit selection</button>
+            </div>
+          </div><!-- /summary-panel-card -->
+
+        </div><!-- /step2-layout -->
+      </div><!-- /step-2 -->
+
+    </div><!-- /canvas-body -->
+
+    <!-- PAGE FOOTER (GDS) -->
+    <div class="page-footer" id="page-footer">
+      <button class="footer-cancel-btn" id="footer-cancel" onclick="handleCancel()">Cancel</button>
+      <div class="footer-right" id="footer-right">
+        <!-- AI entry: Extract button -->
+        <button class="footer-next-btn" id="footer-extract" onclick="goManual()">
+          Continue
+        </button>
+        <!-- Manual step 1: Next -->
+        <button class="footer-next-btn" id="footer-next" disabled style="display:none;" onclick="goToStep(2)">
+          Next
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-left:4px;vertical-align:-2px;"><path d="M6 3l5 5-5 5"/></svg>
+        </button>
+        <!-- Step 2 / AI review: Back + Confirm -->
+        <button class="footer-back-btn" id="footer-back" style="display:none;" onclick="handleBack()">
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:4px;vertical-align:-2px;"><path d="M10 13L5 8l5-5"/></svg>
+          Back
+        </button>
+        <button class="footer-confirm-btn" id="confirm-btn" style="display:none;" disabled onclick="handleConfirm()">Set up credit</button>
+      </div>
+    </div>
+
+  </div><!-- /canvas -->
+</div><!-- /app-shell -->
+
+<!-- ─── Confirmation Modal ─── -->
+<div class="modal-backdrop" id="modal-backdrop" onclick="handleBackdropClick(event)">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title" data-zone="Confirmation modal">
+    <div class="modal-header">
+      <div class="modal-title" id="modal-title">Confirm credit setup</div>
+      <div class="modal-subtitle" id="modal-subtitle"></div>
+    </div>
+    <div class="modal-body" id="modal-body" style="max-height:60vh;overflow-y:auto;"></div>
+    <div class="modal-footer">
+      <button class="modal-cancel-btn" onclick="closeModal()">Go back</button>
+      <button class="modal-confirm-btn" id="modal-confirm-btn" onclick="confirmSetup()">Confirm setup</button>
+    </div>
+  </div>
+</div>
+
+<!-- Success toast -->
+<div class="toast" id="toast" role="status" aria-live="polite">
+  <svg class="toast-icon" aria-hidden="true" viewBox="0 0 20 20" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M3 10l5 5 9-9"/>
+  </svg>
+  <span id="toast-text">Credit set up successfully</span>
+</div>
+
+<script>
+  // ── View state ──
+  // Possible values: 'ai-entry', 'loading', 'ai-review', 'manual-1', 'manual-2'
+  let currentView = 'ai-entry';
+  let flowMode = 'ai'; // 'ai' | 'manual'
+
+  const VIEWS = ['step-0', 'step-loading', 'step-ai-review', 'step-1', 'step-2'];
+
+  function showView(id) {
+    VIEWS.forEach(v => {
+      const el = document.getElementById(v);
+      if (!el) return;
+      el.classList.toggle('active', v === id);
+    });
+    window.scrollTo(0, 0);
+  }
+
+  // ── AI path step indicator ──
+  function setAiIndicator(step) {
+    // Show AI indicators, hide manual
+    ['wf-step-a1','wf-div-a','wf-step-a2'].forEach(id => document.getElementById(id).style.display = '');
+    ['wf-step-m1','wf-div-m','wf-step-m2'].forEach(id => document.getElementById(id).style.display = 'none');
+
+    const s1 = document.getElementById('wf-step-a1');
+    const s2 = document.getElementById('wf-step-a2');
+    const s1num = document.getElementById('wf-step-a1-num');
+
+    if (step === 1) {
+      s1.className = 'wf-step active'; s1num.textContent = '1';
+      s2.className = 'wf-step';
+    } else {
+      s1.className = 'wf-step done';
+      s1num.innerHTML = '<svg aria-hidden="true" width="10" height="10" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1.5 6l3 3 6-6"/></svg>';
+      s2.className = 'wf-step active';
+    }
+  }
+
+  // ── Manual path step indicator ──
+  function setManualIndicator(step) {
+    // Show manual indicators, hide AI
+    ['wf-step-m1','wf-div-m','wf-step-m2'].forEach(id => document.getElementById(id).style.display = '');
+    ['wf-step-a1','wf-div-a','wf-step-a2'].forEach(id => document.getElementById(id).style.display = 'none');
+
+    const s1 = document.getElementById('wf-step-m1');
+    const s2 = document.getElementById('wf-step-m2');
+    const s1num = document.getElementById('wf-step-m1-num');
+
+    if (step === 1) {
+      s1.className = 'wf-step active'; s1num.textContent = '1';
+      s2.className = 'wf-step';
+    } else {
+      s1.className = 'wf-step done';
+      s1num.innerHTML = '<svg aria-hidden="true" width="10" height="10" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1.5 6l3 3 6-6"/></svg>';
+      s2.className = 'wf-step active';
+    }
+  }
+
+  // ── Footer button state ──
+  function setFooter(view) {
+    const next    = document.getElementById('footer-next');
+    const back    = document.getElementById('footer-back');
+    const confirm = document.getElementById('confirm-btn');
+    const extract = document.getElementById('footer-extract');
+
+    [next, back, confirm, extract].forEach(el => { if (el) el.style.display = 'none'; });
+
+    if (view === 'ai-entry') {
+      extract.style.display = '';
+      updateExtractBtn();
+    } else if (view === 'ai-review') {
+      back.style.display = '';
+      confirm.style.display = '';
+      // AI review uses a fixed confirm label
+      confirm.textContent = 'Confirm setup';
+      confirm.disabled = false;
+    } else if (view === 'manual-1') {
+      next.style.display = '';
+      next.disabled = selected.size === 0;
+    } else if (view === 'manual-2') {
+      back.style.display = '';
+      confirm.style.display = '';
+      validateForm();
+    }
+    // loading: no footer buttons
+  }
+
+  function goManual() {
+    flowMode = 'manual';
+    currentView = 'manual-1';
+    setManualIndicator(1);
+    showView('step-1');
+    setFooter('manual-1');
+  }
+
+  function goToStep(n) {
+    if (flowMode === 'manual') {
+      currentView = n === 1 ? 'manual-1' : 'manual-2';
+      setManualIndicator(n);
+      showView(n === 1 ? 'step-1' : 'step-2');
+      setFooter(currentView);
+      if (n === 2) { buildSummaryPanel(); updateCallout(); validateForm(); }
+    }
+  }
+
+  function handleCancel() {
+    if (currentView === 'manual-2') {
+      goToStep(1);
+    } else if (currentView === 'ai-review' || currentView === 'loading') {
+      currentView = 'ai-entry';
+      flowMode = 'ai';
+      setAiIndicator(1);
+      showView('step-0');
+      setFooter('ai-entry');
+    } else if (currentView === 'manual-1') {
+      currentView = 'ai-entry';
+      flowMode = 'ai';
+      setAiIndicator(1);
+      showView('step-0');
+      setFooter('ai-entry');
+    } else {
+      window.location.href = 'Credits — Landing.html';
+    }
+  }
+
+  // ── Sidenav ──
+  function toggleNav() {
+    const nav = document.getElementById('sidenav');
+    const canvas = document.getElementById('canvas');
+    const footer = document.getElementById('page-footer');
+    const collapsed = nav.classList.toggle('collapsed');
+    canvas.style.marginLeft = collapsed ? '56px' : '208px';
+    footer.style.left = collapsed ? '56px' : '208px';
+  }
+  function toggleTile() {
+    const subnav = document.getElementById('kc-subnav');
+    const chevron = document.getElementById('kc-chevron');
+    const btn = document.getElementById('kc-tile-btn');
+    const open = subnav.style.display !== 'none';
+    subnav.style.display = open ? 'none' : 'block';
+    chevron.style.transform = open ? 'rotate(180deg)' : '';
+    btn.setAttribute('aria-expanded', String(!open));
+  }
+
+  // ── Client data ──
+  const clients = {
+    mc: { name: 'Mastercard',    tier: 'Global Sponsor',     region: 'APAC',     logo: 'MC', credit: '$52,400 AUD'  },
+    vi: { name: 'Visa',          tier: 'Global Sponsor',     region: 'APAC',     logo: 'VI', credit: '$31,800 AUD'  },
+    em: { name: 'Emirates',      tier: 'Global Sponsor',     region: 'MENA',     logo: 'EM', credit: '$8,200 AUD'   },
+    sg: { name: 'Samsung',       tier: 'Global Sponsor',     region: 'APAC',     logo: 'SG', credit: null           },
+    dh: { name: 'DHL',           tier: 'Premium Partner',    region: 'EMEA',     logo: 'DH', credit: '$14,600 AUD'  },
+    dl: { name: 'Deloitte',      tier: 'Premium Partner',    region: 'EMEA',     logo: 'DL', credit: '$44,000 AUD'  },
+    lr: { name: 'Land Rover',    tier: 'Premium Partner',    region: 'EMEA',     logo: 'LR', credit: '$26,700 AUD'  },
+    qa: { name: 'Qatar Airways', tier: 'Premium Partner',    region: 'MENA',     logo: 'QA', credit: null           },
+    vf: { name: 'Vodafone',      tier: 'Official Partner',   region: 'EMEA',     logo: 'VF', credit: '$3,100 AUD'   },
+    hk: { name: 'Heineken',      tier: 'Official Partner',   region: 'EMEA',     logo: 'HK', credit: '$19,500 AUD'  },
+    ad: { name: 'Adidas',        tier: 'Official Partner',   region: 'EMEA',     logo: 'AD', credit: null           },
+    hb: { name: 'HSBC',          tier: 'Official Partner',   region: 'APAC',     logo: 'HB', credit: null           },
+    pw: { name: 'PwC',           tier: 'Official Partner',   region: 'Americas', logo: 'PW', credit: null           },
+    az: { name: 'Amazon',        tier: 'Official Supporter', region: 'Americas', logo: 'AZ', credit: null           },
+  };
+
+  // ── State ──
+  const selected = new Set();
+  let creditType = null;
+
+  // Filter state: sets of active values per dimension
+  const filters = { tier: new Set(), region: new Set() };
+
+  // ── Visibility ──
+  function isVisible(id) {
+    const row = document.getElementById('row-' + id);
+    return row && row.style.display !== 'none';
+  }
+
+  function visibleIds() {
+    return Object.keys(clients).filter(id => isVisible(id));
+  }
+
+  // ── Toggle client ──
+  function toggleClient(id) {
+    const row = document.getElementById('row-' + id);
+    if (selected.has(id)) {
+      selected.delete(id);
+      row.classList.remove('client-row--selected');
+      row.setAttribute('aria-checked', 'false');
+    } else {
+      selected.add(id);
+      row.classList.add('client-row--selected');
+      row.setAttribute('aria-checked', 'true');
+    }
+    updateSelectionUI();
+    validateForm();
+  }
+
+  // ── Select-all (visible rows) ──
+  function toggleSelectAll() {
+    const visible = visibleIds();
+    const allSelected = visible.every(id => selected.has(id));
+    visible.forEach(id => {
+      const row = document.getElementById('row-' + id);
+      if (allSelected) {
+        selected.delete(id);
+        row.classList.remove('client-row--selected');
+        row.setAttribute('aria-checked', 'false');
+      } else {
+        selected.add(id);
+        row.classList.add('client-row--selected');
+        row.setAttribute('aria-checked', 'true');
+      }
+    });
+    updateSelectionUI();
+    validateForm();
+  }
+
+  function updateSelectAllState() {
+    const visible = visibleIds();
+    const cb = document.getElementById('select-all-cb');
+    const row = document.getElementById('select-all-row');
+    const lbl = document.getElementById('select-all-label');
+    const selVisible = visible.filter(id => selected.has(id));
+    cb.className = 'select-all-checkbox';
+    if (visible.length === 0) {
+      lbl.textContent = 'Select all visible';
+      row.setAttribute('aria-checked', 'false');
+    } else if (selVisible.length === 0) {
+      lbl.textContent = 'Select all visible (' + visible.length + ')';
+      row.setAttribute('aria-checked', 'false');
+    } else if (selVisible.length === visible.length) {
+      cb.classList.add('checked');
+      lbl.textContent = 'Deselect all (' + visible.length + ')';
+      row.setAttribute('aria-checked', 'true');
+    } else {
+      cb.classList.add('indeterminate');
+      lbl.textContent = selVisible.length + ' of ' + visible.length + ' selected';
+      row.setAttribute('aria-checked', 'mixed');
+    }
+  }
+
+  // ── Quick-select chips ──
+  // chip key → { dim, val }
+  const chipDefs = {
+    'chip-global':    { dim: 'tier',   val: 'Global Sponsor' },
+    'chip-premium':   { dim: 'tier',   val: 'Premium Partner' },
+    'chip-official':  { dim: 'tier',   val: 'Official Partner' },
+    'chip-apac':      { dim: 'region', val: 'APAC' },
+    'chip-emea':      { dim: 'region', val: 'EMEA' },
+    'chip-mena':      { dim: 'region', val: 'MENA' },
+    'chip-americas':  { dim: 'region', val: 'Americas' },
+  };
+
+  function quickSelect(dim, val) {
+    const matching = Object.keys(clients).filter(id => clients[id][dim] === val
+      || (dim === 'tier' && val === 'Official Partner' && clients[id].tier === 'Official Supporter'));
+
+    // If all matching are already selected → deselect them; otherwise select all
+    const allAlreadySelected = matching.every(id => selected.has(id));
+    matching.forEach(id => {
+      const row = document.getElementById('row-' + id);
+      if (!row) return;
+      if (allAlreadySelected) {
+        selected.delete(id);
+        row.classList.remove('client-row--selected');
+        row.setAttribute('aria-checked', 'false');
+      } else {
+        selected.add(id);
+        row.classList.add('client-row--selected');
+        row.setAttribute('aria-checked', 'true');
+      }
+    });
+    updateChipActiveStates();
+    updateSelectionUI();
+    validateForm();
+  }
+
+  function updateChipActiveStates() {
+    Object.entries(chipDefs).forEach(([chipId, { dim, val }]) => {
+      const matching = Object.keys(clients).filter(id =>
+        clients[id][dim] === val ||
+        (dim === 'tier' && val === 'Official Partner' && clients[id].tier === 'Official Supporter')
+      );
+      const allSelected = matching.length > 0 && matching.every(id => selected.has(id));
+      const el = document.getElementById(chipId);
+      el.classList.toggle('active', allSelected);
+      el.setAttribute('aria-pressed', allSelected ? 'true' : 'false');
+    });
+  }
+
+  // ── Filters ──
+  function toggleFdd(dim) {
+    const other = dim === 'tier' ? 'region' : 'tier';
+    document.getElementById('fdd-' + other).classList.remove('open');
+    document.getElementById('fdd-' + dim).classList.toggle('open');
+  }
+
+  function toggleFilter(dim, val) {
+    const optEl = document.querySelector(`#fdd-${dim}-menu .fdd-option[data-val="${val}"]`);
+    if (filters[dim].has(val)) {
+      filters[dim].delete(val);
+      optEl.classList.remove('selected');
+      optEl.setAttribute('aria-selected', 'false');
+    } else {
+      filters[dim].add(val);
+      optEl.classList.add('selected');
+      optEl.setAttribute('aria-selected', 'true');
+    }
+    const btn = document.getElementById('fdd-' + dim + '-btn');
+    btn.classList.toggle('fdd-btn--active', filters[dim].size > 0);
+    applyFilters();
+  }
+
+  function clearFilter(dim) {
+    filters[dim].clear();
+    document.querySelectorAll(`#fdd-${dim}-menu .fdd-option`).forEach(el => el.classList.remove('selected'));
+    document.getElementById('fdd-' + dim + '-btn').classList.remove('fdd-btn--active');
+    applyFilters();
+  }
+
+  function applyFilters() {
+    const q = document.getElementById('client-search').value.toLowerCase().trim();
+    let anyVisible = false;
+    Object.keys(clients).forEach(id => {
+      const c = clients[id];
+      const row = document.getElementById('row-' + id);
+      const nameMatch = !q || c.name.toLowerCase().includes(q);
+      const tierMatch = filters.tier.size === 0 || filters.tier.has(c.tier);
+      const regionMatch = filters.region.size === 0 || filters.region.has(c.region);
+      const visible = nameMatch && tierMatch && regionMatch;
+      row.style.display = visible ? '' : 'none';
+      if (visible) anyVisible = true;
+    });
+    document.getElementById('client-list-empty').classList.toggle('visible', !anyVisible);
+    updateSelectAllState();
+  }
+
+  // ── Selection UI ──
+  function updateSelectionUI() {
+    const count = selected.size;
+    const chip = document.getElementById('count-chip');
+    const chipText = document.getElementById('count-chip-text');
+
+    if (count > 0) {
+      chip.classList.remove('hidden');
+      chipText.textContent = count === 1 ? '1 selected' : count + ' selected';
+    } else {
+      chip.classList.add('hidden');
+    }
+
+    // Next button enabled only when ≥1 client selected
+    document.getElementById('footer-next').disabled = count === 0;
+
+    updateSelectAllState();
+    updateChipActiveStates();
+  }
+
+  function updateCallout() {
+    const count = selected.size;
+    const callout = document.getElementById('applies-callout');
+    const calloutCount = document.getElementById('callout-count');
+    callout.style.display = count > 1 ? 'flex' : 'none';
+    if (count > 1) calloutCount.textContent = count;
+  }
+
+  function buildSummaryPanel() {
+    const body = document.getElementById('summary-panel-body');
+    const countEl = document.getElementById('summary-count');
+    countEl.textContent = selected.size + ' client' + (selected.size !== 1 ? 's' : '');
+    body.innerHTML = '';
+    selected.forEach(id => {
+      const c = clients[id];
+      const topup = c.credit
+        ? `<div style="font-size:11px;color:#C55B0F;font-weight:600;">Top-up · ${c.credit} existing</div>`
+        : '';
+      body.innerHTML += `
+        <div class="summary-client-row">
+          <div class="summary-client-logo">${c.logo}</div>
+          <div class="summary-client-info">
+            <div class="summary-client-name">${c.name}</div>
+            <div class="summary-client-sub">${c.tier}${topup ? '' : ''}</div>
+            ${topup}
+          </div>
+          <button class="summary-remove-btn" onclick="removeClient('${id}')" aria-label="Remove ${c.name}" title="Remove">
+            <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 3l10 10M13 3L3 13"/></svg>
+          </button>
+        </div>`;
+    });
+  }
+
+  function removeClient(id) {
+    selected.delete(id);
+    const row = document.getElementById('row-' + id);
+    if (row) { row.classList.remove('client-row--selected'); row.setAttribute('aria-checked','false'); }
+    buildSummaryPanel();
+    updateCallout();
+    validateForm();
+    updateSelectionUI();
+    // If no clients left, bounce back to step 1
+    if (selected.size === 0) goToStep(1);
+  }
+
+  // ── Amount helpers ──
+  const ONES = ['','one','two','three','four','five','six','seven','eight','nine',
+                'ten','eleven','twelve','thirteen','fourteen','fifteen','sixteen',
+                'seventeen','eighteen','nineteen'];
+  const TENS = ['','','twenty','thirty','forty','fifty','sixty','seventy','eighty','ninety'];
+
+  function wordsUnder1000(n) {
+    if (n === 0) return '';
+    if (n < 20)  return ONES[n];
+    if (n < 100) return TENS[Math.floor(n/10)] + (n%10 ? '-' + ONES[n%10] : '');
+    return ONES[Math.floor(n/100)] + ' hundred' + (n%100 ? ' and ' + wordsUnder1000(n%100) : '');
+  }
+
+  function toWords(n) {
+    if (n === 0) return 'zero';
+    const parts = [];
+    if (n >= 1000000) { parts.push(wordsUnder1000(Math.floor(n/1000000)) + ' million'); n %= 1000000; }
+    if (n >= 1000)    { parts.push(wordsUnder1000(Math.floor(n/1000)) + ' thousand'); n %= 1000; }
+    if (n > 0)        { parts.push(wordsUnder1000(n)); }
+    return parts.join(', ');
+  }
+
+  function parseShorthand(raw) {
+    const s = raw.trim().toLowerCase().replace(/[$,]/g, '');
+    if (!s) return 0;
+    const m = s.match(/^([\d.]+)\s*([km]?)$/);
+    if (!m) return NaN;
+    let v = parseFloat(m[1]);
+    if (m[2] === 'k') v *= 1000;
+    if (m[2] === 'm') v *= 1000000;
+    return Math.round(v);
+  }
+
+  function onAmountInput() {
+    const el = document.getElementById('credit-amount');
+    const raw = el.value;
+    const magEl = document.getElementById('amount-magnitude');
+
+    // Strip everything except digits, dots, k/m shorthand
+    const stripped = raw.replace(/[$,]/g, '');
+    const amount = parseShorthand(stripped);
+
+    if (!stripped || isNaN(amount) || amount === 0) {
+      magEl.textContent = '';
+      validateForm();
+      return;
+    }
+
+    // Reformat: $1,000,000
+    const formatted = '$' + amount.toLocaleString('en-AU');
+    // Only rewrite if it would change (avoids cursor jump on every keystroke)
+    if (el.value !== formatted) {
+      el.value = formatted;
+    }
+
+    magEl.textContent = toWords(amount);
+    validateForm();
+  }
+
+  // ── Credit type ──
+  function selectType(type) {
+    creditType = type;
+    document.getElementById('type-nr').classList.toggle('selected', type === 'non-refundable');
+    document.getElementById('type-r').classList.toggle('selected', type === 'refundable');
+    document.getElementById('type-nr').setAttribute('aria-checked', type === 'non-refundable' ? 'true' : 'false');
+    document.getElementById('type-r').setAttribute('aria-checked', type === 'refundable' ? 'true' : 'false');
+    validateForm();
+  }
+
+  function validateForm() {
+    const amount = parseShorthand(document.getElementById('credit-amount').value);
+    const valid = amount > 0 && !isNaN(amount) && creditType !== null;
+    const btn = document.getElementById('confirm-btn');
+    btn.disabled = !valid;
+    const n = selected.size;
+    btn.textContent = n > 1 ? 'Set up credit for ' + n + ' clients' : 'Set up credit';
+  }
+
+  // ── Bulk pre-selection from landing page (runs after init) ──
+  function applyBulkPreSelection() {
+    const raw = sessionStorage.getItem('bulkSelectedClients');
+    if (!raw) return;
+    sessionStorage.removeItem('bulkSelectedClients');
+    let names;
+    try { names = JSON.parse(raw); } catch (e) { return; }
+    if (!Array.isArray(names) || !names.length) return;
+
+    names.forEach(function (name) {
+      const firstWord = name.split(' ')[0].toLowerCase();
+      Object.keys(clients).forEach(function (id) {
+        const cName = clients[id].name.toLowerCase();
+        if (cName.startsWith(firstWord) || cName.includes(firstWord)) {
+          if (!selected.has(id)) {
+            selected.add(id);
+            const row = document.getElementById('row-' + id);
+            if (row) {
+              row.classList.add('client-row--selected');
+              row.setAttribute('aria-checked', 'true');
+            }
+          }
+        }
+      });
+    });
+
+    if (!selected.size) return;
+
+    flowMode = 'manual';
+    updateSelectionUI();
+    goToStep(2);
+  }
+
+  // ── Modal helpers ──
+  function modalClientRowHtml(c, rightContent) {
+    return `
+      <div class="modal-client-row">
+        <div class="modal-client-logo">${c.logo}</div>
+        <div style="flex:1;min-width:0;">
+          <div class="modal-client-name">${c.name}</div>
+          <div class="modal-client-tier">${c.tier}</div>
+        </div>
+        ${rightContent || ''}
+      </div>`;
+  }
+
+  function openModal() {
+    const amount  = parseShorthand(document.getElementById('credit-amount').value);
+    const expiry  = document.getElementById('credit-expiry').value;
+    const formatted   = '$' + amount.toLocaleString('en-AU') + ' AUD';
+    const dateLabel   = expiry
+      ? new Date(expiry).toLocaleDateString('en-AU', { day: 'numeric', month: 'short', year: 'numeric' })
+      : 'No expiry';
+    const typeLabel   = creditType === 'non-refundable' ? 'Non-refundable' : 'Refundable';
+    const clientCount = selected.size;
+
+    document.getElementById('modal-subtitle').textContent =
+      `${clientCount} client${clientCount !== 1 ? 's' : ''} · ${formatted} · ${typeLabel}`;
+
+    let clientRowsHtml = '';
+    selected.forEach(id => {
+      const c = clients[id];
+      const topup = c.credit
+        ? `<span style="font-size:11px;color:#C55B0F;font-weight:600;">Top-up · ${c.credit} existing</span>`
+        : '';
+      clientRowsHtml += modalClientRowHtml(c, topup);
+    });
+
+    document.getElementById('modal-body').innerHTML = `
+      <div class="modal-section-label" style="margin-top:0;">Credit configuration</div>
+      <div class="modal-summary-grid" style="margin-bottom:var(--sp-4);">
+        <div class="modal-summary-item">
+          <span class="modal-summary-key">Amount</span>
+          <span class="modal-summary-val">${formatted}</span>
+        </div>
+        <div class="modal-summary-item">
+          <span class="modal-summary-key">Type</span>
+          <span class="modal-summary-val">${typeLabel}</span>
+        </div>
+        <div class="modal-summary-item">
+          <span class="modal-summary-key">Expiry date</span>
+          <span class="modal-summary-val" style="${!expiry ? 'color:#767676;font-weight:400;' : ''}">${dateLabel}</span>
+        </div>
+      </div>
+      <div class="modal-section-label">Clients</div>
+      <div class="modal-client-list">${clientRowsHtml}</div>`;
+
+    document.getElementById('modal-backdrop').classList.add('open');
+    requestAnimationFrame(() => document.querySelector('.modal-cancel-btn').focus());
+  }
+
+  function closeModal() {
+    document.getElementById('modal-backdrop').classList.remove('open');
+    // Restore focus to the trigger button
+    const trigger = document.getElementById('confirm-btn');
+    if (trigger) trigger.focus();
+  }
+
+  function handleBackdropClick(e) {
+    if (e.target === document.getElementById('modal-backdrop')) closeModal();
+  }
+
+  function confirmSetup() {
+    closeModal();
+    let toastText;
+    if (currentView === 'ai-review') {
+      toastText = 'Credit set up for ' + aiExtracted.length + ' clients';
+    } else {
+      const n = selected.size;
+      toastText = n === 1
+        ? 'Credit set up for ' + clients[[...selected][0]].name
+        : 'Credit set up for ' + n + ' clients';
+    }
+    showToast(toastText);
+    setTimeout(() => { window.location.href = 'Credits — Landing.html'; }, 1800);
+  }
+
+  function showToast(msg) {
+    const toast = document.getElementById('toast');
+    document.getElementById('toast-text').textContent = msg;
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 3000);
+  }
+
+  function goAi() {
+    flowMode = 'ai';
+    currentView = 'ai-entry';
+    setAiIndicator(1);
+    showView('step-0');
+    setFooter('ai-entry');
+  }
+
+  // ── File handling ──
+  let uploadedFile = null;
+
+  function handleFileSelect(e) {
+    const file = e.target.files[0];
+    if (file) setFile(file);
+  }
+  function handleDragOver(e) {
+    e.preventDefault();
+    const zone = document.getElementById('drop-zone');
+    if (zone) zone.classList.add('dragover');
+  }
+  function handleDragLeave() {
+    const zone = document.getElementById('drop-zone');
+    if (zone) zone.classList.remove('dragover');
+  }
+  function handleDrop(e) {
+    e.preventDefault();
+    const zone = document.getElementById('drop-zone');
+    if (zone) zone.classList.remove('dragover');
+    const file = e.dataTransfer.files[0];
+    if (file) setFile(file);
+  }
+  function setFile(file) {
+    uploadedFile = file;
+    document.getElementById('preview-name').textContent = file.name;
+    document.getElementById('preview-size').textContent = formatBytes(file.size);
+    document.getElementById('file-preview').classList.add('visible');
+    document.getElementById('inline-extract-row').style.display = '';
+    updateExtractBtn();
+  }
+  function removeFile() {
+    uploadedFile = null;
+    document.getElementById('file-input').value = '';
+    document.getElementById('file-preview').classList.remove('visible');
+    document.getElementById('inline-extract-row').style.display = 'none';
+    updateExtractBtn();
+  }
+  function formatBytes(b) {
+    if (b < 1024) return b + ' B';
+    if (b < 1048576) return (b/1024).toFixed(1) + ' KB';
+    return (b/1048576).toFixed(1) + ' MB';
+  }
+
+  // ── Extract button enabled state ──
+  function updateExtractBtn() {
+    const btn = document.getElementById('footer-extract');
+    if (!btn) return;
+    btn.disabled = false;
+  }
+
+  // ── Help panel carousel ──
+  let helpCurrent = 1;
+  const HELP_TOTAL = 4;
+  function helpNav(dir) {
+    document.getElementById('help-tip-' + helpCurrent).classList.remove('active');
+    helpCurrent = Math.max(1, Math.min(HELP_TOTAL, helpCurrent + dir));
+    document.getElementById('help-tip-' + helpCurrent).classList.add('active');
+    document.getElementById('help-count').textContent = helpCurrent + ' of ' + HELP_TOTAL;
+    document.getElementById('help-prev').disabled = helpCurrent === 1;
+    document.getElementById('help-next').disabled = helpCurrent === HELP_TOTAL;
+  }
+
+  // ── Loading copy rotation ──
+  const loadingCopies = [
+    'Reading document structure',
+    'Identifying client names',
+    'Extracting credit amounts',
+    'Parsing dates and types',
+    'Checking confidence scores',
+  ];
+  let loadingCopyIdx = 0;
+  let loadingInterval = null;
+
+  function startLoadingCopy() {
+    loadingCopyIdx = 0;
+    document.getElementById('loading-sub').textContent = loadingCopies[0];
+    loadingInterval = setInterval(() => {
+      loadingCopyIdx = (loadingCopyIdx + 1) % loadingCopies.length;
+      document.getElementById('loading-sub').textContent = loadingCopies[loadingCopyIdx];
+    }, 900);
+  }
+  function stopLoadingCopy() {
+    if (loadingInterval) { clearInterval(loadingInterval); loadingInterval = null; }
+  }
+
+  // ── Simulated AI extraction ──
+  // Grouped: clients sharing identical config are one segment.
+  // 'medium' confidence groups surface first (need review).
+  const aiExtracted = [
+    { id: 'ci',  amount: '$30,000',  type: 'refundable',     expiry: '',           confidence: 'low'    },
+    { id: 'br',  amount: '$30,000',  type: 'refundable',     expiry: '',           confidence: 'low'    },
+    { id: 'sa',  amount: '$50,000',  type: 'non-refundable', expiry: '2027-06-30', confidence: 'medium' },
+    { id: 'qa',  amount: '$50,000',  type: 'non-refundable', expiry: '2027-06-30', confidence: 'medium' },
+    { id: 'lr',  amount: '$50,000',  type: 'non-refundable', expiry: '2027-06-30', confidence: 'medium' },
+    { id: 'mc',  amount: '$120,000', type: 'non-refundable', expiry: '2026-12-31', confidence: 'high'   },
+    { id: 'vi',  amount: '$120,000', type: 'non-refundable', expiry: '2026-12-31', confidence: 'high'   },
+    { id: 'cc',  amount: '$120,000', type: 'non-refundable', expiry: '2026-12-31', confidence: 'high'   },
+  ];
+
+  function startExtract() {
+    currentView = 'loading';
+    setAiIndicator(1);
+    showView('step-loading');
+    setFooter('loading');
+    startLoadingCopy();
+
+    setTimeout(() => {
+      stopLoadingCopy();
+      buildAiReview();
+      currentView = 'ai-review';
+      setAiIndicator(2);
+      showView('step-ai-review');
+      setFooter('ai-review');
+    }, 2200);
+  }
+
+  function buildAiReview() {
+    const body = document.getElementById('ai-review-body');
+    const countEl = document.getElementById('ai-extracted-count');
+    countEl.textContent = aiExtracted.length + ' credit' + (aiExtracted.length !== 1 ? 's' : '');
+    body.innerHTML = '';
+
+    // Group rows that share identical amount + type + expiry + confidence
+    const groupKey = r => `${r.amount}|${r.type}|${r.expiry}|${r.confidence}`;
+    const groupMap = new Map();
+    aiExtracted.forEach(row => {
+      const k = groupKey(row);
+      if (!groupMap.has(k)) groupMap.set(k, []);
+      groupMap.get(k).push(row);
+    });
+
+    // Sort: review groups first, then matched
+    const groups = [...groupMap.values()].sort((a, b) => {
+      const order = { low: 0, medium: 1, high: 2 };
+      return order[a[0].confidence] - order[b[0].confidence];
+    });
+
+    groups.forEach((groupRows, gi) => {
+      const rep = groupRows[0]; // representative row — all share same config
+      const nrSel = rep.type === 'non-refundable' ? 'selected' : '';
+      const rSel  = rep.type === 'refundable'     ? 'selected' : '';
+      const nrChk = rep.type === 'non-refundable' ? 'true' : 'false';
+      const rChk  = rep.type === 'refundable'     ? 'true' : 'false';
+      const confBadge = {
+        low:    `<span class="ai-conf-badge ai-conf-badge--low">Low confidence</span>`,
+        medium: `<span class="ai-conf-badge ai-conf-badge--medium">Medium confidence</span>`,
+        high:   `<span class="ai-conf-badge ai-conf-badge--high">High confidence</span>`,
+      }[rep.confidence] || '';
+      const isReview = rep.confidence !== 'high';
+      const numBg    = '#050505';
+      const numColor = '#FFFFFF';
+
+      // Client rows for the summary panel
+      const clientRowsHtml = groupRows.map(row => {
+        const c = clients[row.id];
+        const topup = c.credit
+          ? `<div style="font-size:11px;color:#C55B0F;font-weight:600;">Top-up · ${c.credit} existing</div>`
+          : '';
+        return `
+          <div class="summary-client-row">
+            <div class="summary-client-logo">${c.logo}</div>
+            <div class="summary-client-info">
+              <div class="summary-client-name">${c.name}</div>
+              <div class="summary-client-sub">${c.tier}</div>
+              ${topup}
+            </div>
+          </div>`;
+      }).join('');
+
+      const clientCount = groupRows.length;
+      const panelTitle = clientCount === 1
+        ? groupRows.map(r => clients[r.id].name)[0]
+        : clientCount + ' clients';
+
+      body.innerHTML += `
+        <div class="ai-group" id="ai-group-${gi}">
+
+          <!-- Group label row: step-style numbering + confidence badge -->
+          <div class="form-section-label" id="ai-group-label-${gi}">
+            <span class="form-step-num" id="ai-group-num-${gi}"
+              style="background:${numBg};color:${numColor};">${gi + 1}</span>
+            <span class="form-step-title">
+              ${panelTitle}
+            </span>
+            ${confBadge}
+            <span class="ai-reviewed-badge" id="ai-label-reviewed-${gi}" style="display:none;margin-left:auto;">
+              <svg aria-hidden="true" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 8l4 4 8-8"/></svg>
+              Reviewed
+            </span>
+          </div>
+
+          <!-- Two-column: form card left, clients panel right -->
+          <div class="ai-group-layout">
+
+            <!-- Left: credit config fields -->
+            <div class="form-card">
+              <div class="form-card-body">
+
+                <div class="field">
+                  <label class="field-label" for="ai-amount-${gi}">Credit amount</label>
+                  <div class="amount-wrap">
+                    <span class="amount-prefix">AUD</span>
+                    <input type="text" id="ai-amount-${gi}" class="amount-input"
+                      value="${rep.amount}" data-group="${gi}"
+                      oninput="onAiAmountInput(this)" autocomplete="off"
+                      aria-label="Credit amount for group ${gi + 1}">
+                  </div>
+                </div>
+
+                <div class="field">
+                  <span class="field-label" id="ai-type-label-${gi}">Credit type</span>
+                  <div class="type-options" role="radiogroup" aria-labelledby="ai-type-label-${gi}">
+                    <div class="type-option ${nrSel}" id="ai-type-nr-${gi}"
+                      onclick="selectAiType(${gi},'non-refundable')" role="radio"
+                      aria-checked="${nrChk}" tabindex="0"
+                      onkeydown="if(event.key===' '||event.key==='Enter'){selectAiType(${gi},'non-refundable')}">
+                      <input type="radio" name="ai-credit-type-${gi}" value="non-refundable" style="display:none;">
+                      <div class="type-radio-indicator"></div>
+                      <div class="type-option-content">
+                        <span class="type-option-title">Non-refundable</span>
+                        <span class="type-option-desc">Unused balance is forfeited at expiry.</span>
+                      </div>
+                    </div>
+                    <div class="type-option ${rSel}" id="ai-type-r-${gi}"
+                      onclick="selectAiType(${gi},'refundable')" role="radio"
+                      aria-checked="${rChk}" tabindex="0"
+                      onkeydown="if(event.key===' '||event.key==='Enter'){selectAiType(${gi},'refundable')}">
+                      <input type="radio" name="ai-credit-type-${gi}" value="refundable" style="display:none;">
+                      <div class="type-radio-indicator"></div>
+                      <div class="type-option-content">
+                        <span class="type-option-title">Refundable</span>
+                        <span class="type-option-desc">Unused balance is returned at expiry.</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="field" style="margin-bottom:0;">
+                  <label class="field-label" for="ai-expiry-${gi}">Expiry date <span class="optional">Optional</span></label>
+                  <input type="date" id="ai-expiry-${gi}" class="field-input"
+                    value="${rep.expiry}" data-group="${gi}"
+                    aria-label="Expiry date for group ${gi + 1}">
+                </div>
+
+              </div>
+              <div class="ai-group-footer" id="ai-group-footer-${gi}">
+                <button class="ai-edit-btn" id="ai-edit-btn-${gi}"
+                  onclick="editAiGroup(${gi})" type="button">Edit</button>
+                <button class="ai-accept-btn" id="ai-accept-btn-${gi}"
+                  onclick="acceptAiGroup(${gi})" type="button">Accept</button>
+              </div>
+            </div>
+
+            <!-- Right: clients in this group -->
+            <div class="ai-group-panel">
+              <div class="ai-group-panel-card">
+                <div class="ai-group-panel-header">
+                  <span class="ai-group-panel-title">Clients</span>
+                  <span class="summary-panel-count">${clientCount} client${clientCount !== 1 ? 's' : ''}</span>
+                </div>
+                <div class="ai-group-panel-body">${clientRowsHtml}</div>
+              </div>
+            </div>
+
+          </div>
+        </div>`;
+    });
+
+    // Store group count for modal use
+    window._aiGroupCount = groups.length;
+    window._aiGroups = groups;
+
+    // Inject real overlay divs so mousemove fires on locked fields
+    groups.forEach((_, gi) => {
+      const cardBody = document.querySelector(`#ai-group-${gi} .form-card-body`);
+      if (!cardBody) return;
+      const overlay = document.createElement('div');
+      overlay.id = 'ai-lock-overlay-' + gi;
+      overlay.style.cssText = 'position:absolute;inset:0;z-index:1;cursor:default;pointer-events:auto;';
+      overlay.addEventListener('mousemove', e => showAiTooltip(e, 'Click Edit to change these values'));
+      overlay.addEventListener('mouseleave', hideAiTooltip);
+      cardBody.appendChild(overlay);
+    });
+  }
+
+  function onAiAmountInput(el) {
+    const raw = el.value.replace(/[$,]/g, '');
+    const amount = parseShorthand(raw);
+    if (!raw || isNaN(amount) || amount === 0) return;
+    const formatted = '$' + amount.toLocaleString('en-AU');
+    if (el.value !== formatted) el.value = formatted;
+  }
+
+  function selectAiType(rowIdx, type) {
+    const nr = document.getElementById('ai-type-nr-' + rowIdx);
+    const r  = document.getElementById('ai-type-r-'  + rowIdx);
+    nr.classList.toggle('selected', type === 'non-refundable');
+    r.classList.toggle('selected',  type === 'refundable');
+    nr.setAttribute('aria-checked', type === 'non-refundable' ? 'true' : 'false');
+    r.setAttribute('aria-checked',  type === 'refundable'     ? 'true' : 'false');
+  }
+
+  // keep legacy name in case old inline handlers fire
+  function toggleAiType(btn, type) {
+    const rowIdx = btn.dataset.row;
+    if (rowIdx !== undefined) selectAiType(parseInt(rowIdx), type);
+  }
+
+  // ── Back handler ──
+  function handleBack() {
+    if (currentView === 'ai-review') {
+      currentView = 'ai-entry';
+      flowMode = 'ai';
+      setAiIndicator(1);
+      showView('step-0');
+      setFooter('ai-entry');
+    } else if (currentView === 'manual-2') {
+      goToStep(1);
+    }
+  }
+
+  // ── Confirm handler — dispatches by flow mode ──
+  function notesCheckError() {
+    const val = document.getElementById('credit-notes').value.trim();
+    const err = document.getElementById('credit-notes-error');
+    if (err) err.style.display = (val.length > 0 && val.length < 10) ? 'block' : 'none';
+  }
+
+  function handleConfirm() {
+    if (currentView !== 'ai-review') {
+      const noteEl = document.getElementById('credit-notes');
+      const err    = document.getElementById('credit-notes-error');
+      if (noteEl && noteEl.value.trim().length === 0) {
+        if (err) err.style.display = 'block';
+        noteEl.focus();
+        return;
+      }
+      if (err) err.style.display = 'none';
+    }
+    if (currentView === 'ai-review') {
+      openAiModal();
+    } else {
+      openModal();
+    }
+  }
+
+  window._aiReviewed = new Set();
+
+  function acceptAiGroup(gi) {
+    window._aiReviewed.add(gi);
+    const groupEl = document.getElementById('ai-group-' + gi);
+    if (groupEl) {
+      groupEl.classList.remove('ai-group--editing');
+      groupEl.classList.add('ai-group--accepted');
+    }
+
+    // Restore overlay so tooltip works again
+    const overlay = document.getElementById('ai-lock-overlay-' + gi);
+    if (overlay) overlay.style.display = '';
+
+    document.getElementById('ai-accept-btn-' + gi).style.display = 'none';
+    document.getElementById('ai-label-reviewed-' + gi).style.display = '';
+
+    const numEl = document.getElementById('ai-group-num-' + gi);
+    if (numEl) {
+      numEl.style.background = '#050505';
+      numEl.style.color = '#FFFFFF';
+    }
+  }
+
+  function editAiGroup(gi) {
+    window._aiReviewed.delete(gi);
+    const groupEl = document.getElementById('ai-group-' + gi);
+    if (groupEl) {
+      groupEl.classList.remove('ai-group--accepted');
+      groupEl.classList.add('ai-group--editing');
+    }
+
+    // Hide overlay so fields are directly clickable
+    const overlay = document.getElementById('ai-lock-overlay-' + gi);
+    if (overlay) overlay.style.display = 'none';
+    hideAiTooltip();
+
+    document.getElementById('ai-accept-btn-' + gi).style.display = '';
+    document.getElementById('ai-label-reviewed-' + gi).style.display = 'none';
+
+    const numEl = document.getElementById('ai-group-num-' + gi);
+    if (numEl) {
+      const groups = window._aiGroups || [];
+      const conf = groups[gi] ? groups[gi][0].confidence : 'high';
+      numEl.style.background = '#050505';
+      numEl.style.color = '#FFFFFF';
+    }
+
+    const amtEl = document.getElementById('ai-amount-' + gi);
+    if (amtEl) amtEl.focus();
+  }
+
+  function openAiModal() {
+    const groups = window._aiGroups || [];
+    const totalClients = aiExtracted.length;
+
+    const reviewedCount    = (window._aiReviewed || new Set()).size;
+    const notReviewedCount = groups.length - reviewedCount;
+    const reviewSummary = notReviewedCount === 0
+      ? 'All groups reviewed.'
+      : `${notReviewedCount} group${notReviewedCount !== 1 ? 's' : ''} not yet reviewed.`;
+    const groupCount = groups.length;
+    document.getElementById('modal-subtitle').textContent =
+      `${totalClients} client${totalClients !== 1 ? 's' : ''} · ${groupCount} credit group${groupCount !== 1 ? 's' : ''} · ${reviewSummary}`;
+
+    let bodyHtml = '';
+    groups.forEach((groupRows, gi) => {
+      const amtEl    = document.getElementById('ai-amount-' + gi);
+      const expiryEl = document.getElementById('ai-expiry-' + gi);
+      const nrEl     = document.getElementById('ai-type-nr-' + gi);
+      const amtVal    = amtEl    ? amtEl.value    : groupRows[0].amount;
+      const expiryVal = expiryEl ? expiryEl.value : groupRows[0].expiry;
+      const typeVal   = (nrEl && nrEl.classList.contains('selected')) ? 'non-refundable' : 'refundable';
+      const typeLabel = typeVal === 'non-refundable' ? 'Non-refundable' : 'Refundable';
+      const dateLabel = expiryVal
+        ? new Date(expiryVal).toLocaleDateString('en-AU', { day: 'numeric', month: 'short', year: 'numeric' })
+        : 'No expiry';
+      const reviewed = (window._aiReviewed || new Set()).has(gi);
+      const reviewBadge = reviewed
+        ? `<span class="ai-reviewed-badge" style="font-size:12px;font-weight:600;color:#047A49;display:inline-flex;align-items:center;gap:4px;">
+             <svg width="13" height="13" viewBox="0 0 13 13" fill="none" xmlns="http://www.w3.org/2000/svg">
+               <path d="M2.5 6.5L5.5 9.5L10.5 4" stroke="#047A49" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+             </svg>Reviewed</span>`
+        : `<span style="font-size:12px;font-weight:600;color:#8C8C8C;">Not reviewed</span>`;
+
+      const groupLabel = groupRows.length === 1
+        ? clients[groupRows[0].id].name
+        : groupRows.length + ' clients';
+
+      const clientRowsHtml = groupRows.map(row => {
+        const c = clients[row.id];
+        const topup = c.credit
+          ? `<span style="font-size:11px;color:#C55B0F;font-weight:600;display:block;">Top-up · ${c.credit} existing</span>`
+          : '';
+        return modalClientRowHtml(c, topup);
+      }).join('');
+
+      bodyHtml += `
+        <div class="modal-group">
+          <div class="modal-group-head">
+            <div class="modal-group-title">
+              <span class="modal-group-title-text">${groupLabel}</span>
+              ${reviewBadge}
+            </div>
+            <div class="modal-group-config">
+              <span class="modal-config-pill modal-config-pill--amount">${amtVal} AUD</span>
+              <span class="modal-config-sep">·</span>
+              <span class="modal-config-pill">${typeLabel}</span>
+              <span class="modal-config-sep">·</span>
+              <span class="modal-config-pill">${dateLabel}</span>
+            </div>
+          </div>
+          <div class="modal-client-list">${clientRowsHtml}</div>
+        </div>`;
+    });
+
+    document.getElementById('modal-body').innerHTML = bodyHtml;
+
+    const allReviewed = (window._aiReviewed || new Set()).size >= groups.length;
+    const confirmBtn = document.getElementById('modal-confirm-btn');
+    confirmBtn.disabled = !allReviewed;
+
+    // Tooltip wrapper so hover fires on a disabled button
+    const existingWrap = document.getElementById('modal-confirm-wrap');
+    if (!existingWrap) {
+      const wrap = document.createElement('span');
+      wrap.id = 'modal-confirm-wrap';
+      wrap.style.cssText = 'display:inline-block;position:relative;';
+      confirmBtn.parentNode.insertBefore(wrap, confirmBtn);
+      wrap.appendChild(confirmBtn);
+    }
+    const wrap = document.getElementById('modal-confirm-wrap');
+    if (!allReviewed) {
+      wrap.addEventListener('mouseenter', _onConfirmHover);
+      wrap.addEventListener('mousemove',  _onConfirmMove);
+      wrap.addEventListener('mouseleave', _onConfirmLeave);
+    } else {
+      wrap.removeEventListener('mouseenter', _onConfirmHover);
+      wrap.removeEventListener('mousemove',  _onConfirmMove);
+      wrap.removeEventListener('mouseleave', _onConfirmLeave);
+      hideAiTooltip();
+    }
+
+    document.getElementById('modal-backdrop').classList.add('open');
+    requestAnimationFrame(() => document.querySelector('.modal-cancel-btn').focus());
+  }
+
+  function _onConfirmHover(e) {
+    const remaining = (window._aiGroups || []).length - (window._aiReviewed || new Set()).size;
+    showAiTooltip(e, `Review all groups first — ${remaining} remaining`);
+  }
+  function _onConfirmMove(e) { _onConfirmHover(e); }
+  function _onConfirmLeave()  { hideAiTooltip(); }
+
+  // Close dropdowns on outside click
+  function toggleLegend() {
+    const popup = document.getElementById('ai-legend-popup');
+    const btn   = document.getElementById('ai-legend-btn');
+    const open  = popup.classList.toggle('open');
+    btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+  }
+
+  document.addEventListener('click', e => {
+    ['tier', 'region'].forEach(dim => {
+      const fdd = document.getElementById('fdd-' + dim);
+      if (fdd && !fdd.contains(e.target)) fdd.classList.remove('open');
+    });
+    // Close legend popup on outside click
+    const popup = document.getElementById('ai-legend-popup');
+    const btn   = document.getElementById('ai-legend-btn');
+    if (popup && btn && !btn.contains(e.target) && !popup.contains(e.target)) {
+      popup.classList.remove('open');
+      btn.setAttribute('aria-expanded', 'false');
+    }
+  });
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') { closeModal(); }
+  });
+
+  // Floating tooltip for locked AI fields
+  const _tt = document.createElement('div');
+  _tt.id = 'ai-field-tooltip';
+  _tt.textContent = '';
+  document.body.appendChild(_tt);
+
+  function showAiTooltip(e, text) {
+    _tt.textContent = text;
+    _tt.style.left = (e.clientX + 12) + 'px';
+    _tt.style.top  = (e.clientY - 32) + 'px';
+    _tt.classList.add('visible');
+  }
+  function hideAiTooltip() {
+    _tt.classList.remove('visible');
+  }
+
+  // Init — show AI entry, set footer
+  setAiIndicator(1);
+  setFooter('ai-entry');
+  updateSelectAllState();
+  applyBulkPreSelection();
+</script>
+<script>
+document.addEventListener('click', function(e) {
+  var node = e.target;
+  while (node && node !== document.body) {
+    if (node.dataset && node.dataset.zone) {
+      window.parent.postMessage({ type: 'wt-zone', page: 'Credits — Set up Credit.html', zone: node.dataset.zone }, '*');
+      return;
+    }
+    node = node.parentElement;
+  }
+}, true);
+</script>
+
+</body>
+</html>
