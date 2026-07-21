@@ -2443,10 +2443,11 @@
     rows.forEach(r => tbody.insertBefore(r, empty));
   }
 
-  // ── Pin state from localStorage ──────────────────
+  // ── Pin state from localStorage — mastercard always pinned ──
   (function applyPinned() {
     try {
       const pinned = JSON.parse(localStorage.getItem('credits-pinned') || '[]');
+      if (!pinned.includes('mastercard')) pinned.push('mastercard');
       document.querySelectorAll('#list-view .table-row').forEach(row => {
         const isPinned = pinned.includes(row.dataset.name);
         row.classList.toggle('table-row--pinned', isPinned);
