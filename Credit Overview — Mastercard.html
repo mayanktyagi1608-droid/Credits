@@ -1277,16 +1277,63 @@
       pointer-events: auto;
     }
 
-    /* Time machine — same anatomy as .tl-card */
+    /* Time machine — horizontal single-row layout */
     .timemachine-bar {
       margin: 0 16px 0 44px;
       background: var(--spotlight);
       border: 1px solid var(--diatomite);
       border-left: 4px solid var(--neptune);
       border-radius: var(--radius-md);
-      padding: var(--auditorium);
+      padding: 10px 16px 13px;
       box-shadow: var(--elev-02);
       outline: none;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .tm-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: nowrap;
+    }
+
+    .tm-context {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-shrink: 0;
+    }
+
+    .tm-balance-group {
+      display: flex;
+      align-items: baseline;
+      gap: 6px;
+      flex-shrink: 0;
+    }
+
+    .tm-bal-label { font-size: 12px; color: var(--granite); }
+    .tm-bal-value { font-size: 16px; font-weight: 700; color: var(--cosmos); }
+    .tm-bal-sub   { font-size: 12px; color: var(--granite); }
+
+    .tm-breakdown {
+      display: flex;
+      align-items: baseline;
+      gap: 5px;
+    }
+
+    .tm-bk-label { font-size: 12px; color: var(--granite); }
+    .tm-bk-value { font-size: 13px; font-weight: 600; color: var(--cosmos); }
+    .tm-bk-sep   { font-size: 12px; color: var(--moonrock); }
+    .tm-bk-value--held { color: #D97706; }
+
+    /* Thin progress strip pinned to bottom edge */
+    .tm-progress-strip {
+      position: absolute;
+      bottom: 0; left: 4px; right: 0;
+      height: 3px;
+      margin-top: 0;
+      border-radius: 0;
     }
     .timemachine-wrap { outline: none; }
 
@@ -2319,36 +2366,38 @@
     <!-- TIME MACHINE WRAP — fixed float, appears when timeline scrolls past fold -->
     <div class="timemachine-wrap" id="timemachineWrap" data-zone="Time machine">
       <div class="timemachine-bar" id="timemachineBar" aria-live="polite" role="status" aria-label="Running balance snapshot — updates as you navigate the credit history">
-        <!-- Context row: date · phase · actors -->
-        <div class="tm-meta">
-          <span class="badge badge--grey">
-            <svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="margin-right:3px"><circle cx="8" cy="8" r="6"/><path d="M8 5v3.5L10 10"/></svg>
-            Balance as of&nbsp;<span id="tmDate">—</span>
-          </span>
-          <span id="tmPhaseBadge" class="badge badge--grey" style="display:none"></span>
-          <div class="tm-meta-right">
-            <div class="tm-actors" id="tmActors"></div>
+        <div class="tm-row">
+          <!-- Date + phase -->
+          <div class="tm-context">
+            <span class="badge badge--grey">
+              <svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="margin-right:3px"><circle cx="8" cy="8" r="6"/><path d="M8 5v3.5L10 10"/></svg>
+              Balance as of&nbsp;<span id="tmDate">—</span>
+            </span>
+            <span id="tmPhaseBadge" class="badge badge--grey" style="display:none"></span>
           </div>
+          <div class="tm-vsep"></div>
+          <!-- Remaining balance -->
+          <div class="tm-balance-group">
+            <span class="tm-bal-label">Remaining</span>
+            <span class="tm-bal-value" id="tmRemFull">—</span>
+            <span class="tm-bal-sub" id="tmTotalLine">—</span>
+          </div>
+          <div class="tm-vsep"></div>
+          <!-- Used · Held -->
+          <div class="tm-breakdown">
+            <span class="tm-bk-label">Used</span>
+            <span class="tm-bk-value" id="tmUsedFull">—</span>
+            <span class="tm-bk-sep">·</span>
+            <span class="tm-bk-label">Held</span>
+            <span class="tm-bk-value tm-bk-value--held" id="tmHeldFull">—</span>
+          </div>
+          <!-- Actors — pushed to right -->
+          <div class="tm-actors" id="tmActors" style="margin-left:auto;"></div>
         </div>
-        <!-- Overview-style stat block -->
-        <div style="margin-top:var(--sp-3);">
-          <div class="stat-label">Remaining credit</div>
-          <div class="stat-value stat-value--md" id="tmRemFull">—</div>
-          <div class="stat-sub" id="tmTotalLine">—</div>
-          <div class="stat-progress" style="margin-top:var(--sp-2);">
-            <div class="stat-progress-fill" id="tmProgressFill" style="width:0%"></div>
-            <div class="stat-progress-held" id="tmProgressHeld" style="width:0%"></div>
-          </div>
-          <div class="bucket-sub-row" style="grid-template-columns:1fr 1fr;margin-top:var(--sp-3);padding-top:var(--sp-3);">
-            <div>
-              <div class="bucket-sub-label">Used</div>
-              <div class="bucket-sub-value" id="tmUsedFull">—</div>
-            </div>
-            <div>
-              <div class="bucket-sub-label">Held</div>
-              <div class="bucket-sub-value" id="tmHeldFull">—</div>
-            </div>
-          </div>
+        <!-- Thin progress strip at bottom -->
+        <div class="stat-progress tm-progress-strip">
+          <div class="stat-progress-fill" id="tmProgressFill" style="width:0%"></div>
+          <div class="stat-progress-held" id="tmProgressHeld" style="width:0%"></div>
         </div>
       </div>
       <div class="timemachine-scrim"></div>
